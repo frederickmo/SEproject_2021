@@ -5,9 +5,16 @@
     <va-button @click="toLogin">to-login</va-button>
     <a-button shape="round" @click="toSignup">to-signup</a-button>
   </div> -->
-  <div>
-    Is this the real header?<br/><br><br>
+  <!-- <div> -->
+<!-- <el-header>
+  element plus header
+</el-header> -->
+      <a-layout-header style="padding-left: 20px;">
+        111
+      </a-layout-header >
+
 <a-layout class="layout-demo">
+  
     <a-layout-sider collapsible breakpoint="xl">
       <div class="logo" />
       <a-menu
@@ -57,40 +64,39 @@
             <span><IconCalendar />Exit</span>
           </template>
           <a-menu-item>
-            <va-button @click="toLogin">to-login</va-button>
+            <router-link :to="{name: 'Auth', params: {tabValue: 0}}">to log in</router-link>
           </a-menu-item>
           <a-menu-item>
-            <a-button shape="round" @click="toSignup">to-signup</a-button>
+            <router-link :to="{name: 'Auth', params: {tabValue: 1}}">to sign up</router-link>
           </a-menu-item>
           <a-menu-item>
-            <va-button @click="this.$router.push({name: 'About'})">About</va-button>
+            <router-link to="/about">to about</router-link>
           </a-menu-item>
         </a-sub-menu>
       </a-menu>
       <!-- trigger -->
       <template #trigger="{ collapsed }">
-        <!-- <IconCaretRight v-if="collapsed" /> -->
-        <icon-forward v-if="collapsed"/>
-        <!-- <IconCaretLeft v-else /> -->
-        <icon-backward v-else />
+        <!-- <icon-forward v-if="collapsed"/> -->
+        <icon-to-right v-if="collapsed"/>
+        <icon-to-left v-else />
+        <!-- <icon-backward v-else /> -->
       </template>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header style="padding-left: 20px;">
-        Header
-      </a-layout-header >
       <a-layout style="padding: 0 24px;">
         <a-breadcrumb :style="{ margin: '16px 0' }">
           <a-breadcrumb-item>Home</a-breadcrumb-item>
           <a-breadcrumb-item>List</a-breadcrumb-item>
           <a-breadcrumb-item>App</a-breadcrumb-item>
         </a-breadcrumb>
-        <a-layout-content>Content</a-layout-content>
-        <a-layout-footer>Footer</a-layout-footer>
+        <a-layout-content>
+          啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>
+          </a-layout-content>
       </a-layout>
     </a-layout>
   </a-layout>
-  </div>
+        <!-- <a-layout-footer>Footer</a-layout-footer> -->
+  <!-- </div> -->
 </template>
 
 <script>
@@ -137,8 +143,14 @@ export default {
 </script>
 
 <style>
+#root, body, html {
+  height: 100%
+}
+
 .layout-demo {
+  display: flex;
   height: 100%;
+  min-height: 100%;
   background: var(--color-fill-2);
   border: 1px solid var(--color-border);
   /* width: 15% */

@@ -13,20 +13,24 @@
         style="margin-top: 10px"
         />
     <div style="margin-top: 15px">
-        <va-button @click="onsubmit">Login</va-button>
-        <!-- <va-button @click="toSignUp">to sign up</va-button> -->
+        <va-button @click="onsubmit">Log in</va-button>
+        <va-button flat style="margin-left: 10px" @click="this.$router.push({name: 'RecoverPassword', params: {email: this.email}})">Forget password?</va-button>
     </div>
     </form>
 </template>
 
 <script>
 export default {
-    name: 'Login',
+    name: 'LogIn',
     data() {
         return {
             email: '',
             password: '',
         }
+    },
+    mounted () {
+        console.log('params from the last page:')
+        console.log(this.$route.params.email, this.$route.params.password)
     },
     methods: {
         onsubmit () {

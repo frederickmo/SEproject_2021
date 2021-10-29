@@ -16,8 +16,8 @@
               </a-tabs> -->
 
               <el-tabs v-model="activeName" @tab-click="handleClick">
-                  <el-tab-pane label="Log in" name="login" />
-                  <el-tab-pane label="Sign up" name="signup" />
+                  <el-tab-pane label="LOG IN" name="login" />
+                  <el-tab-pane label="SIGN UP" name="signup" />
 
               </el-tabs>
 
@@ -130,6 +130,10 @@ export default {
 </script>
 
 <style>
+html, body {
+    width: 100%;
+}
+
 .auth-box {
     width: 35%;
     height: 40%;
@@ -137,8 +141,7 @@ export default {
     margin: auto;
     left: 0;
     right: 0;
-    top: 0;
-    bottom: 0;
+    top: 30%;
 }
 
 </style>

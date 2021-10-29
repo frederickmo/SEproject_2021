@@ -13,7 +13,7 @@
         style="margin-top: 10px"
         />
     <div style="margin-top: 15px">
-        <va-button @click="onsubmit">Signup</va-button>
+        <va-button @click="onsubmit">Sign up</va-button>
         <!-- <va-button @click="toLogIn">to log in</va-button> -->
     </div>
     </form>
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-    name: 'Signup',
+    name: 'SignUp',
     data () {
         return {
             email: '',
