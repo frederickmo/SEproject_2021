@@ -10,12 +10,12 @@
 
 ```
 # installation
-$ npm install element-plus --save
+npm install element-plus --save
 # or
-$ yarn add element-plus
+yarn add element-plus
 
 # add to vue prject
-$ vue add element-plus
+vue add element-plus
 ```
 
 ###### **vuestic-ui**
