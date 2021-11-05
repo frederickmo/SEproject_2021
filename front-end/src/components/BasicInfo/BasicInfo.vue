@@ -1,0 +1,27 @@
+<template>
+  <div>
+      <div style="margin-bottom: 10px">
+        <va-breadcrumbs separator=">">
+            <va-breadcrumbs-item label="基本信息" disabled />
+            <va-breadcrumbs-item label="查看基本信息" to="/home/basicinfo" />
+        </va-breadcrumbs>
+      </div>
+    <va-card>
+      <va-card-title style="font-size: 20px">基本信息</va-card-title>
+        <va-card-content>
+            暂无信息
+        </va-card-content>
+    </va-card>
+    <va-button flat :to="{name: 'Information'}">information</va-button>
+  </div>
+</template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style>
+
+</style>

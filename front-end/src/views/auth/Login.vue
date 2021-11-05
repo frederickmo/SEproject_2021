@@ -35,7 +35,13 @@ export default {
     methods: {
         onsubmit () {
             console.log(this.email, this.password)
-            this.$router.push({name: 'Home'});
+            this.$router.push({
+                name: 'Home',
+                params: {
+                    email: this.email,
+                    password: this.password
+                }
+            });
         },
         toSignUp () {
             console.log('Now switch to Signup page.')

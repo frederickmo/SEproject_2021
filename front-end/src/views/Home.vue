@@ -1,150 +1,273 @@
 <template>
-  <!-- <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <va-button @click="toLogin">to-login</va-button>
-    <a-button shape="round" @click="toSignup">to-signup</a-button>
-  </div> -->
-  <!-- <div> -->
-<!-- <el-header>
-  element plus header
-</el-header> -->
-      <a-layout-header style="padding-left: 20px;">
-        111
-      </a-layout-header >
+<!-- <div style="height: 100%"> -->
 
-<a-layout class="layout-demo">
-  
-    <a-layout-sider collapsible breakpoint="xl">
-      <div class="logo" />
-      <a-menu
-        :defaultOpenKeys="['1']"
-        :defaultSelectedKeys="['0_3']"
-        :style="{ width: '100%' }"
-        @menuItemClick="onClickMenuItem"
-      >
-        <a-menu-item key="0_1" disabled>
-          <icon-link />
-          Menu 1
-        </a-menu-item>
-        <a-menu-item key="0_2">
-          <IconCalendar />
-          Menu 2
-        </a-menu-item>
-        <a-menu-item key="0_3">
-          <IconCalendar />
-          Menu 3
-        </a-menu-item>
-        <a-sub-menu key="1">
-          <template #title>
-            <span><IconCalendar />Navigation 1</span>
-          </template>
-          <a-menu-item key="1_1">Menu 1</a-menu-item>
-          <a-menu-item key="1_2">Menu 2</a-menu-item>
-          <a-sub-menu key="2" title="Navigation 2">
-            <a-menu-item key="2_1">Menu 1</a-menu-item>
-            <a-menu-item key="2_2">Menu 2</a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="3" title="Navigation 3">
-            <a-menu-item key="3_1">Menu 1</a-menu-item>
-            <a-menu-item key="3_2">Menu 2</a-menu-item>
-            <a-menu-item key="3_3">Menu 3</a-menu-item>
-          </a-sub-menu>
-        </a-sub-menu>
-        <a-sub-menu key="4">
-          <template #title>
-            <span><IconCalendar />Navigation 4</span>
-          </template>
-          <a-menu-item key="4_1">Menu 1</a-menu-item>
-          <a-menu-item key="4_2">Menu 2</a-menu-item>
-          <a-menu-item key="4_3">Menu 3</a-menu-item>
-        </a-sub-menu>
-        <a-sub-menu key="5">
-          <template #title>
-            <span><IconCalendar />Exit</span>
-          </template>
-          <a-menu-item>
-            <router-link :to="{name: 'Auth', params: {tabValue: 0}}">to log in</router-link>
-          </a-menu-item>
-          <a-menu-item>
-            <router-link :to="{name: 'Auth', params: {tabValue: 1}}">to sign up</router-link>
-          </a-menu-item>
-          <a-menu-item>
-            <router-link to="/about">to about</router-link>
-          </a-menu-item>
-        </a-sub-menu>
-      </a-menu>
-      <!-- trigger -->
-      <template #trigger="{ collapsed }">
-        <!-- <icon-forward v-if="collapsed"/> -->
-        <icon-to-right v-if="collapsed"/>
-        <icon-to-left v-else />
-        <!-- <icon-backward v-else /> -->
-      </template>
-    </a-layout-sider>
-    <a-layout>
-      <a-layout style="padding: 0 24px;">
-        <a-breadcrumb :style="{ margin: '16px 0' }">
-          <a-breadcrumb-item>Home</a-breadcrumb-item>
-          <a-breadcrumb-item>List</a-breadcrumb-item>
-          <a-breadcrumb-item>App</a-breadcrumb-item>
-        </a-breadcrumb>
-        <a-layout-content>
-          啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>啊？<br>
-          </a-layout-content>
-      </a-layout>
-    </a-layout>
-  </a-layout>
-        <!-- <a-layout-footer>Footer</a-layout-footer> -->
-  <!-- </div> -->
+  <!-- <a-layout-header style="padding-left: 20px; height: 10%; min-height: 60px;">
+    111
+  </a-layout-header > -->
+
+  <va-navbar style="height: 8%; min-height: 60px;">
+    <template v-slot:left>
+      <va-checkbox v-model="minimized" label="Minimized(暂时还没实现)" />
+    </template>
+    <template v-slot:center>
+      实验教学管理系统
+    </template>
+    <template v-slot:right>
+      <va-avatar>头像</va-avatar>
+    </template>
+  </va-navbar>
+
+<el-container style="width: 100%; height: 92%; border: 1px solid #eee">
+
+  <va-sidebar
+textColor="dark"
+width="12rem"
+minimizedWidth="0">
+
+  <va-accordion
+  v-model="value"
+  multiply
+  inset>
+    <va-collapse
+    key="0"
+    header="通知公告"
+    icon="notifications">
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="this.$router.push({name: 'Announcement'})">
+        <va-sidebar-item-title>通知公告</va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+
+    <va-collapse
+    key="1"
+    header="基本信息"
+    icon="person_outline">
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="this.$router.push({name: 'BasicInfo'})">
+          <va-sidebar-item-title>
+            查看基本信息
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="this.$router.push({name: 'EditBasicInfo'})">
+          <va-sidebar-item-title>
+            修改基本信息
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+    <va-collapse
+    key="2"
+    header="课程资源"
+    icon="attach_file">
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="this.$router.push({name: 'CourseResources'})">
+          <va-sidebar-item-title>
+            课程资源
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+    <va-collapse
+    key="3"
+    header="课程管理"
+    icon="source">
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="this.$router.push({name: 'MyCourses'})">
+          <va-sidebar-item-title>
+            查看所有课程
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="onClickCourseManagement()">
+          <va-sidebar-item-title>
+            课程管理
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+    <va-collapse
+    key="4"
+    header="考试管理"
+    icon="mode">
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="this.$router.push({name: 'MyExams'})">
+          <va-sidebar-item-title>
+            我的考试
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="onClickExamManagement()">
+          <va-sidebar-item-title>
+            考试管理
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+    <va-collapse
+    key="5"
+    header="成绩管理"
+    icon="emoji_events">
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="this.$router.push({name: 'MyGrades'})">
+          <va-sidebar-item-title>
+            我的成绩
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="onClickGradeManagement()">
+          <va-sidebar-item-title>
+            成绩管理
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+    <va-sidebar-item>
+      <va-sidebar-item-content
+      style="text-align: center;" 
+      @click="this.$router.push({name: 'Auth', params: {tabValue: 0}})">
+        <va-sidebar-item-title>
+          退出登录
+        </va-sidebar-item-title>
+      </va-sidebar-item-content>
+    </va-sidebar-item>
+    <va-sidebar-item>
+      <va-sidebar-item-content
+      style="text-align: center;" 
+      @click="this.$router.push({name: 'About'})">
+        <va-sidebar-item-title>
+          About
+        </va-sidebar-item-title>
+      </va-sidebar-item-content>
+    </va-sidebar-item>
+  </va-accordion>
+</va-sidebar>
+
+
+  <el-container>
+
+    <el-main>
+      <!-- <Announcement v-if="mainIndex==0" />
+      <PersonalInfo v-if="mainIndex==1" />
+      <EditPersonalInfo v-if="mainIndex==2" /> -->
+
+      <!-- 这里改成了嵌套路由 -->
+      <router-view />
+
+    </el-main>
+
+  </el-container>
+
+</el-container>
+
+
+<!-- </div> -->
+
 </template>
 
 <script>
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
 
+// import Announcement from '../components/Announcement.vue'
+// import PersonalInfo from '../components/PersonalInfo.vue'
+// import EditPersonalInfo from '../components/EditPersonalInfo.vue'
+
 export default {
   name: 'Home',
   components: {
     // HelloWorld
+    // Announcement,
+    // PersonalInfo,
+    // EditPersonalInfo,
   },
   data () {
     return {
+      minimized: false,
+      mainIndex: 0,
 
+      identity: 0,
     }
   },
+  mounted () {
+    this.$router.push({name: 'Announcement'})
+    console.log('从上一个页面传过来的数据：', this.$route.params.email, this.$route.params.password)
+  },
   methods: {
-    toLogin () {
-      this.$router.push({
-        name: 'Auth',
-        params: {
-          tabValue: 0
-        }
-      })
-      console.log(this.$route)
-    },
-    toSignup () {
-      this.$router.push({
-        name: 'Auth',
-        params: {
-          tabValue: 1
-        }
-      })
-      console.log(this.$route)
-    },
     onClickMenuItem() {
       this.$vaToast.init({
         message: 'ありがとうございます',
         color: 'primary'
       })
-    }
+    },
+    onClickCourseManagement () {
+      if (this.identity == 0 || this.identity == 1) {
+        this.$notification.warning('无操作权限')
+      } else {
+        this.$router.push({name: 'CourseManagement'})
+      }
+    },
+    onClickExamManagement () {
+      if (this.identity == 0 || this.identity == 1) {
+        this.$notification.warning('无操作权限')
+      } else {
+        this.$router.push({name: 'ExamManagement'})
+      }
+    },
+    onClickGradeManagement () {
+      if (this.identity == 0 || this.identity == 1) {
+        this.$notification.warning('无操作权限')
+      } else {
+        this.$router.push({name: 'GradeManagement'})
+      }
+    },
   }
 }
 </script>
 
 <style>
-#root, body, html {
+
+html,
+body,
+#app {
+  padding: 0;
+  margin: 0;
   height: 100%
+}
+
+.el-container {
+  /*设置内部填充为0，几个布局元素之间没有间距*/
+  padding: 0px;
+  /*外部间距也是如此设置*/
+  margin: 0px;
+  /*统一设置高度为100%*/
+  height: 100%;
+}
+
+
+
+/* #root, body, html {
+  height: 100%
+}
+
+.a-layout {
+  display: flex;
+  min-height: 100%;
 }
 
 .layout-demo {
@@ -153,7 +276,6 @@ export default {
   min-height: 100%;
   background: var(--color-fill-2);
   border: 1px solid var(--color-border);
-  /* width: 15% */
 }
 .layout-demo :deep(.arco-layout-sider) .logo {
   height: 32px;
@@ -190,5 +312,5 @@ export default {
   font-size: 16px;
   font-stretch: condensed;
   text-align: center;
-}
+} */
 </style>
