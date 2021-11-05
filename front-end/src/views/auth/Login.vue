@@ -13,8 +13,8 @@
         style="margin-top: 10px"
         />
     <div style="margin-top: 15px">
-        <va-button @click="onsubmit">Log in</va-button>
-        <va-button flat style="margin-left: 10px" @click="this.$router.push({name: 'RecoverPassword', params: {email: this.email}})">Forget password?</va-button>
+        <va-button @click="onsubmit">登录</va-button>
+        <va-button flat style="margin-left: 10px" @click="this.$router.push({name: 'RecoverPassword', params: {email: this.email}})">忘记密码？</va-button>
     </div>
     </form>
 </template>

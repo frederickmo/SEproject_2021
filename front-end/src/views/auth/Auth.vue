@@ -1,71 +1,32 @@
 <template>
   <div>
       <va-card class="auth-box">
-          <!-- <div>This is the params transferred here: {{this.$route.params.tabValue}}</div> -->
-          <!-- <va-card-title style="height: 20%;">Log in</va-card-title> -->
-          <!-- <div style="text-align: center">Log in</div>
-          <va-divider /> -->
           <va-card-content>
-
-
-              <!-- <a-tabs center  @change="onChangeTab">
-                  <a-tab-pane key='login' title="LOG IN">
-                  </a-tab-pane>
-                  <a-tab-pane key='signup' title="SIGN UP">
-                  </a-tab-pane>
-              </a-tabs> -->
-
-              <el-tabs v-model="activeName" @tab-click="handleClick">
-                  <el-tab-pane label="LOG IN" name="login" />
-                  <el-tab-pane label="SIGN UP" name="signup" />
-
-              </el-tabs>
-
-
-
-              <div>
-                  <Login v-if="tabValue==0" />
-                  <Signup v-else />
-              </div>
-
-
-              <!-- <va-tabs center v-model="tabIndex">
+              <va-tabs style="font-size: 16px" center v-model="tabIndex">
                   <template #tabs>
-                  <va-tab name="login">Login</va-tab>
-                  <va-tab name="signup">Signup</va-tab>
+                  <va-tab name="Login">登录</va-tab>
+                  <va-tab name="Signup">注册</va-tab>
                   </template>
               </va-tabs>
-              <va-separator /> -->
-              <!-- <div>
-                  <Login v-if="tabValue==0" />
-                  <Signup v-else />
-              </div> -->
-
-
+              <va-separator />
+              <div>
+                  <router-view />
+              </div>
           </va-card-content>
       </va-card>
-      <!-- <va-card>
-          <va-card-content>
-              <va-tabs v-model="value">
-                      <va-tab key="one">1</va-tab>
-                      <va-tab key="two">2</va-tab>
-                      <va-tab key="three">3</va-tab>
-              </va-tabs>
-          </va-card-content>
-      </va-card> -->
   </div>
 
 </template>
 
 <script>
-import Login from './Login.vue'
-import Signup from './Signup.vue'
+// import Login from './Login.vue'
+// import Signup from './Signup.vue'
 
 export default {
     name: 'Auth',
     components: {
-        Login,
-        Signup,
+        // Login,
+        // Signup,
     },
     data () {
         return {
@@ -77,12 +38,7 @@ export default {
     computed: {
         tabIndex: {
             set(tabName) {
-                if (tabName == 'login') {
-                    this.tabValue = 0
-                }
-                else {
-                    this.tabValue = 1
-                }
+                this.$router.push({name: tabName})
             },
             get() {
                 return this.$route.name
@@ -91,39 +47,14 @@ export default {
     },
     mounted() {
         console.log("tabValue transferred here: ", this.$route.params.tabValue)
-        this.tabValue = this.$route.params.tabValue
-        if (this.tabValue == 0) {
-            this.activeName = "login"
-        } else {
-            this.activeName = "signup"
-        }
+        this.$router.push({name: 'Login'})
+        this.activeName = 'login'
     },
     methods: {
-        onTouchTabLogin () {
-            this.tabValue = 0
-            console.log('tabValue: ', this.tabValue)
-        },
-        onTouchTabSignup () {
-            this.tabValue = 1
-            console.log('tabValue: ', this.tabValue)
-        },
-        onChangeTab (tabValue) {
-            console.log('tabValue: ' , tabValue)
-            if (tabValue == 'login') {
-                this.tabValue = 0
-            }
-            else {
-                this.tabValue = 1
-            }
-        },
         handleClick(tab, event) {
             console.log(tab, event)
             console.log('activeName: ', this.activeName)
-            if (this.activeName == 'login') {
-                this.tabValue = 0
-            } else {
-                this.tabValue = 1
-            }
+            this.$router.push({name: this.activeName})
         }
     }
 }

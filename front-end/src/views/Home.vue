@@ -140,7 +140,7 @@ minimizedWidth="0">
     <va-sidebar-item>
       <va-sidebar-item-content
       style="text-align: center;" 
-      @click="this.$router.push({name: 'Auth', params: {tabValue: 0}})">
+      @click="this.$router.push({name: 'Login', params: {tabValue: 0}})">
         <va-sidebar-item-title>
           退出登录
         </va-sidebar-item-title>

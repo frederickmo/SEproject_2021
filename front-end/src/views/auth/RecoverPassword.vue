@@ -3,7 +3,7 @@
       <ca-card-content>
           RECOVER PASSWORD
           <va-divider />
-          <va-button @click="this.$router.push({name: 'Auth', params: {tabValue: 0, email: this.email, password: this.password}})">to log in</va-button>
+          <va-button @click="this.$router.push({name: 'Login', params: {tabValue: 0, email: this.email, password: this.password}})">to log in</va-button>
       </ca-card-content>
   </va-card>
 </template>
