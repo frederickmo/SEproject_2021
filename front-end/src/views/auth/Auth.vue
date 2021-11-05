@@ -67,7 +67,8 @@ html, body {
 
 .auth-box {
     width: 35%;
-    height: 40%;
+    height: 30%;
+    min-height: 240px;
     position: fixed;
     margin: auto;
     left: 0;

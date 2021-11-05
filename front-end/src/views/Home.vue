@@ -1,19 +1,23 @@
 <template>
-<!-- <div style="height: 100%"> -->
-
-  <!-- <a-layout-header style="padding-left: 20px; height: 10%; min-height: 60px;">
-    111
-  </a-layout-header > -->
 
   <va-navbar style="height: 8%; min-height: 60px;">
     <template v-slot:left>
       <va-checkbox v-model="minimized" label="Minimized(暂时还没实现)" />
     </template>
     <template v-slot:center>
-      实验教学管理系统
+      <span style="font-weight: bold; font-size: 18px">Ex-M 实验教学管理系统</span>
     </template>
     <template v-slot:right>
-      <va-avatar>头像</va-avatar>
+      <div style="height: 60px; min-height: 60px; display: flex">
+        <div style="height: 60px">
+          <va-button style="top: 12px" round @click="this.$router.push({name: 'BasicInfo'})">
+          <va-avatar src="https://avatars.githubusercontent.com/u/58105082?v=4" />
+          </va-button>
+        </div>
+      <div style="line-height: 60px; margin-left: 20px">
+        欢迎，{{this.userInfo.name}}
+      </div>
+      </div>
     </template>
   </va-navbar>
 
@@ -26,6 +30,7 @@ minimizedWidth="0">
 
   <va-accordion
   v-model="value"
+  style="font-weight: bold"
   multiply
   inset>
     <va-collapse
@@ -46,7 +51,7 @@ minimizedWidth="0">
     icon="person_outline">
       <va-sidebar-item>
         <va-sidebar-item-content
-        @click="this.$router.push({name: 'BasicInfo'})">
+        @click="onClickBasicInfo()">
           <va-sidebar-item-title>
             查看基本信息
           </va-sidebar-item-title>
@@ -54,7 +59,7 @@ minimizedWidth="0">
       </va-sidebar-item>
       <va-sidebar-item>
         <va-sidebar-item-content
-        @click="this.$router.push({name: 'EditBasicInfo'})">
+        @click="onClickEditBasicInfo()">
           <va-sidebar-item-title>
             修改基本信息
           </va-sidebar-item-title>
@@ -67,7 +72,7 @@ minimizedWidth="0">
     icon="attach_file">
       <va-sidebar-item>
         <va-sidebar-item-content
-        @click="this.$router.push({name: 'CourseResources'})">
+        @click="onClickCourseResources()">
           <va-sidebar-item-title>
             课程资源
           </va-sidebar-item-title>
@@ -80,7 +85,7 @@ minimizedWidth="0">
     icon="source">
       <va-sidebar-item>
         <va-sidebar-item-content
-        @click="this.$router.push({name: 'MyCourses'})">
+        @click="onClickMyCourses()">
           <va-sidebar-item-title>
             查看所有课程
           </va-sidebar-item-title>
@@ -101,7 +106,7 @@ minimizedWidth="0">
     icon="mode">
       <va-sidebar-item>
         <va-sidebar-item-content
-        @click="this.$router.push({name: 'MyExams'})">
+        @click="onClickMyExams()">
           <va-sidebar-item-title>
             我的考试
           </va-sidebar-item-title>
@@ -122,7 +127,7 @@ minimizedWidth="0">
     icon="emoji_events">
       <va-sidebar-item>
         <va-sidebar-item-content
-        @click="this.$router.push({name: 'MyGrades'})">
+        @click="onClickMyGrades()">
           <va-sidebar-item-title>
             我的成绩
           </va-sidebar-item-title>
@@ -157,8 +162,6 @@ minimizedWidth="0">
     </va-sidebar-item>
   </va-accordion>
 </va-sidebar>
-
-
   <el-container>
 
     <el-main>
@@ -170,14 +173,8 @@ minimizedWidth="0">
       <router-view />
 
     </el-main>
-
   </el-container>
-
 </el-container>
-
-
-<!-- </div> -->
-
 </template>
 
 <script>
@@ -202,17 +199,68 @@ export default {
       mainIndex: 0,
 
       identity: 0,
+
+      email: '',
+      password: '',
+      activated: 0,
+      status: 0,
+
+      userInfo: {
+        email: this.email,
+        password: this.password,
+        name: 'John Doe',
+        gender: 0,
+        activated: this.activated,
+        status: this.status,
+      }
     }
   },
   mounted () {
     this.$router.push({name: 'Announcement'})
     console.log('从上一个页面传过来的数据：', this.$route.params.email, this.$route.params.password)
+
+    this.email = this.$route.params.email
+    this.password = this.$route.params.password
   },
   methods: {
-    onClickMenuItem() {
-      this.$vaToast.init({
-        message: 'ありがとうございます',
-        color: 'primary'
+    onClickAnnouncement () {
+      this.$router.push({
+        name: 'Announcement',
+        params: {
+          email: this.email
+        }
+      })
+    },
+    onClickBasicInfo () {
+      this.$router.push({
+        name: 'BasicInfo',
+        params: {
+          email: this.email
+        }
+      })
+    },
+    onClickEditBasicInfo () {
+      this.$router.push({
+        name: 'EditBasicInfo',
+        params: {
+          email: this.email
+        }
+      })
+    },
+    onClickCourseResources () {
+      this.$router.push({
+        name: 'CourseResources',
+        params: {
+          email: this.email
+        }
+      })
+    },
+    onClickMyCourses () {
+      this.$router.push({
+        name: 'MyCourses',
+        params: {
+          email: this.email,
+        }
       })
     },
     onClickCourseManagement () {
@@ -222,12 +270,28 @@ export default {
         this.$router.push({name: 'CourseManagement'})
       }
     },
+    onClickMyExams () {
+      this.$router.push({
+        name: 'MyExams',
+        params: {
+          email: this.email
+        }
+      })
+    },
     onClickExamManagement () {
       if (this.identity == 0 || this.identity == 1) {
         this.$notification.warning('无操作权限')
       } else {
         this.$router.push({name: 'ExamManagement'})
       }
+    },
+    onClickMyGrades () {
+      this.$router.push({
+        name: 'MyGrades',
+        params: {
+          email: this.email
+        }
+      })
     },
     onClickGradeManagement () {
       if (this.identity == 0 || this.identity == 1) {
@@ -259,58 +323,4 @@ body,
   height: 100%;
 }
 
-
-
-/* #root, body, html {
-  height: 100%
-}
-
-.a-layout {
-  display: flex;
-  min-height: 100%;
-}
-
-.layout-demo {
-  display: flex;
-  height: 100%;
-  min-height: 100%;
-  background: var(--color-fill-2);
-  border: 1px solid var(--color-border);
-}
-.layout-demo :deep(.arco-layout-sider) .logo {
-  height: 32px;
-  margin: 12px 8px;
-  background: rgba(255, 255, 255, 0.2);
-}
-.layout-demo :deep(.arco-layout-sider-light) .logo{
-  background: var(--color-fill-2);
-}
-.layout-demo :deep(.arco-layout-header)  {
-  height: 64px;
-  line-height: 64px;
-  background: var(--color-bg-3);
-}
-.layout-demo :deep(.arco-layout-footer) {
-  height: 48px;
-  color: var(--color-text-2);
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 48px;
-}
-.layout-demo :deep(.arco-layout-content) {
-  color: var(--color-text-2);
-  font-weight: 400;
-  font-size: 14px;
-  background: var(--color-bg-3);
-}
-.layout-demo :deep(.arco-layout-footer),
-.layout-demo :deep(.arco-layout-content)  {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  color: var(--color-white);
-  font-size: 16px;
-  font-stretch: condensed;
-  text-align: center;
-} */
 </style>
