@@ -15,7 +15,7 @@
           </va-button>
         </div>
       <div style="line-height: 60px; margin-left: 20px">
-        欢迎，{{this.userInfo.name}}
+        欢迎，{{this.name}}
       </div>
       </div>
     </template>
@@ -87,7 +87,7 @@ minimizedWidth="0">
         <va-sidebar-item-content
         @click="onClickMyCourses()">
           <va-sidebar-item-title>
-            查看所有课程
+            我的课程
           </va-sidebar-item-title>
         </va-sidebar-item-content>
       </va-sidebar-item>
@@ -200,8 +200,10 @@ export default {
 
       identity: 0,
 
-      email: '',
-      password: '',
+      name: '',
+      gender: 2,
+      email: 'admin@gmail.com',
+      password: 'admin',
       activated: 0,
       status: 0,
 
@@ -209,25 +211,57 @@ export default {
         email: this.email,
         password: this.password,
         name: 'John Doe',
-        gender: 0,
+        gender: 1,
         activated: this.activated,
         status: this.status,
       }
     }
   },
   mounted () {
-    this.$router.push({name: 'Announcement'})
-    console.log('从上一个页面传过来的数据：', this.$route.params.email, this.$route.params.password)
+      console.log("this.$URL: ", this.$URL)
 
-    this.email = this.$route.params.email
-    this.password = this.$route.params.password
+
+    fetch(this.$URL + "/user/info?username=" + this.email + "&password=" + this.password, {
+      method: "GET",
+    }).then((res) => {
+      console.log("this.$URL: ", this.$URL)
+      console.log('this is the response line')
+      console.log(res)
+      console.log('222')
+      var result = res.json()
+      result.then((result) => {
+        console.log(result)
+      })
+    })
+
+    // const data = {
+    //   username: "2323",
+    //   password: "1234",
+    // }
+
+    // fetch(this.$URL + "/api/login", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(data)
+    // }).then((res) => {
+    //   console.log(res)
+    //   let result = res.json()
+    //   result.then((res) => {
+    //     console.log(res)
+    //   })
+    // })
+
+    this.$router.push({
+      name: 'BasicInfo'
+    })
+
   },
   methods: {
     onClickAnnouncement () {
       this.$router.push({
         name: 'Announcement',
         params: {
-          email: this.email
+          userInfo: this.userInfo
         }
       })
     },
@@ -235,7 +269,7 @@ export default {
       this.$router.push({
         name: 'BasicInfo',
         params: {
-          email: this.email
+          userInfo: this.userInfo
         }
       })
     },
@@ -243,7 +277,7 @@ export default {
       this.$router.push({
         name: 'EditBasicInfo',
         params: {
-          email: this.email
+          userInfo: this.userInfo
         }
       })
     },
@@ -251,7 +285,7 @@ export default {
       this.$router.push({
         name: 'CourseResources',
         params: {
-          email: this.email
+          userInfo: this.userInfo
         }
       })
     },
@@ -259,7 +293,7 @@ export default {
       this.$router.push({
         name: 'MyCourses',
         params: {
-          email: this.email,
+          userInfo: this.userInfo
         }
       })
     },
@@ -267,14 +301,18 @@ export default {
       if (this.identity == 0 || this.identity == 1) {
         this.$notification.warning('无操作权限')
       } else {
-        this.$router.push({name: 'CourseManagement'})
+        this.$router.push({
+          name: 'CourseManagement',
+          params: {
+            userInfo: this.userInfo
+          }})
       }
     },
     onClickMyExams () {
       this.$router.push({
         name: 'MyExams',
         params: {
-          email: this.email
+          userInfo: this.userInfo
         }
       })
     },
@@ -282,14 +320,18 @@ export default {
       if (this.identity == 0 || this.identity == 1) {
         this.$notification.warning('无操作权限')
       } else {
-        this.$router.push({name: 'ExamManagement'})
+        this.$router.push({
+          name: 'ExamManagement',
+          params: {
+            userInfo: this.userInfo
+          }})
       }
     },
     onClickMyGrades () {
       this.$router.push({
         name: 'MyGrades',
         params: {
-          email: this.email
+          userInfo: this.userInfo
         }
       })
     },
@@ -297,7 +339,11 @@ export default {
       if (this.identity == 0 || this.identity == 1) {
         this.$notification.warning('无操作权限')
       } else {
-        this.$router.push({name: 'GradeManagement'})
+        this.$router.push({
+          name: 'GradeManagement',
+          params: {
+            userInfo: this.userInfo
+          }})
       }
     },
   }

@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="onsubmit">
+    <form @submit.prevent="onSubmit">
         <va-input
         v-model="email"
         type="email"
@@ -17,7 +17,7 @@
         style="margin-top: 10px"
         />
     <div style="margin-top: 15px">
-        <va-button @click="onsubmit">登录</va-button>
+        <va-button @click="onSubmit">登录</va-button>
         <va-button flat style="margin-left: 10px" @click="this.$router.push({name: 'RecoverPassword', params: {email: this.email}})">忘记密码？</va-button>
     </div>
     </form>
@@ -46,33 +46,73 @@ export default {
         this.password = this.$route.params.password
     },
     methods: {
-        onsubmit () {
+        onSubmit () {
             let myReg=/^(\w|(\.\w+))+@([a-zA-Z0-9_-]+\.)+(com|org|cn|net)+$/
             console.log(this.email, this.password)
             if (!this.email) {
-                this.emailErrors = ['email不能为空！']
+                this.emailErrors = ['email不能为空']
             } else if (!myReg.test(this.email)) {
-                this.emailErrors = ['请填入正确格式的email!']
+                this.emailErrors = ['请填入正确格式的email']
             } else {
                 this.emailErrors = []
             }
-            this.passwordErrors = this.password ? [] : ['密码不能为空！']
+            this.passwordErrors = this.password ? [] : ['密码不能为空']
             if (!this.formReady) {
                 return
             } else {
-                this.$router.push({
-                    name: 'Home',
-                    params: {
-                        email: this.email,
-                        password: this.password
-                    }
+                const req = {
+                    username: this.email,
+                    password: this.password
+                }
+
+                fetch(this.$URL + "/login", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"},
+                    body: JSON.stringify(req),
+                }).then((res) => {
+                    console.log(res)
+                    console.log()
+                    let response = res.json()
+                    response.then((response) => {
+                        console.log(response)
+                    })
+
+
                 })
+
+                // fetch(this.$URL + "/login?username=" + this.email + "&password=" + this.password)
+                // .then((res) => {
+                //     console.log(res)
+                //     console.log(res.status)
+                //     if (res.status == 200) {
+                //         this.$notification.success('登陆成功')
+                //         this.$router.push({
+                //             name: 'Home',
+                //             params: {
+                //                 email: this.email,
+                //                 password: this.password
+                //             }
+                //         })
+                //     }
+                //     else {
+                //         this.$notification.error('登录失败')
+                //         return
+                //     }
+                // })
+
+
+
+
+
+                // this.$router.push({
+                //     name: 'Home',
+                //     params: {
+                //         email: this.email,
+                //         password: this.password
+                //     }
+                // })
             }
         },
-        toSignUp () {
-            console.log('Now switch to Signup page.')
-            this.$router.push({name: 'Signup'})
-        }
     }
 }
 </script>

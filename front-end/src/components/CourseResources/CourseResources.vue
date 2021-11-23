@@ -3,7 +3,7 @@
     <div style="margin-bottom: 10px">
         <va-breadcrumbs separator=">">
             <va-breadcrumbs-item label="课程资源" disabled />
-            <va-breadcrumbs-item label="资源列表" to="/home/courseresources" />
+            <va-breadcrumbs-item label="课程资源" to="/home/courseresources" />
         </va-breadcrumbs>
     </div>
   <va-card>

@@ -43,7 +43,7 @@
                 </tr>
                 <tr>
                   <td class="head">姓名</td>
-                  <td>{{this.userInfo.name}}</td>
+                  <td>{{this.name}}</td>
                 </tr>
                 <tr>
                   <td class="head">E-mail</td>
@@ -51,11 +51,15 @@
                 </tr>
                 <tr>
                   <td class="head">性别</td>
-                  <td>{{this.userInfo.gender==0?'男':'女'}}</td>
+                  <td>{{myGender()}}</td>
+                </tr>
+                <tr>
+                  <td class="head">身份</td>
+                  <td>{{myStatus()}}</td>
                 </tr>
                 <tr>
                   <td class="head">账号激活状态</td>
-                  <td>{{this.activated==0?'已激活':'未激活'}}</td>
+                  <td>{{this.activated==1?'已激活':'未激活'}}</td>
                 </tr>
               </tbody>
             </table>
@@ -68,25 +72,70 @@
 <script>
 export default {
   data () {
+    // let myStatus = () => {
+    //   if (this.status == 0) {
+    //     return "学生"
+    //   } else if (this.status == 1) {
+    //     return ""
+    //   } else if (this.status == 2) {
+    //     return ""
+    //   } else if (this. status == 3) {
+    //     return ""
+    //   } else {
+    //     return ""
+    //   }
+    // }
     return {
       showAvatar: false,
 
+      name: '',
+      gender: 2,
       email: '123@gmail.com',
       password: '12345',
-      activated: 0,
+      activated: 1,
       status: 0,
       userInfo: {
         email: this.email,
         password: this.password,
         name: 'John Doe',
-        gender: 0,
+        gender: 1,
         activated: this.activated,
         status: this.status
       }
     }
   },
   mounted () {
-    this.email = this.$route.params.email
+    // console.log(this.$route.params.userInfo.email)
+    // this.userInfo = this.$route.params.userInfo ? this.$route.params.userInfo : this.userInfo
+    // this.email = this.$route.params.userInfo ? this.$route.params.userInfo.email : this.email
+    // console.log(localStorage.getItem('userInfo'))
+    // this.userInfo = localStorage.getItem('userInfo')
+    this.name = localStorage.getItem('name')
+    this.gender = localStorage.getItem('gender')
+  },
+  methods: {
+    myGender () {
+      if (this.gender == 1) {
+        return "男"
+      } else if (this.gender == 2) {
+        return "女"
+      } else {
+        return "未知"
+      }
+    },
+    myStatus () {
+      if (this.status == 0) {
+        return "学生"
+      } else if (this.status == 1) {
+        return "助教"
+      } else if (this.status == 2) {
+        return "教师"
+      } else if (this.status == 3) {
+        return "责任教师"
+      } else {
+        return "未知"
+      }
+    }
   }
 }
 </script>
