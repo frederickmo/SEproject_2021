@@ -26,124 +26,143 @@ import Home from '../views/Home.vue'
 
 import Information from '../components/Information.vue'
 
-const routes = [
-  {
-    path: '/home',
-    name: 'Home',
-    component: Home,
-    children: [
-      {
-        path: '/home/announcement',
-        name: 'Announcement',
-        component: () => import('../components/Announcement/Announcement.vue')
-      },
-      {
-        path: '/home/basicinfo',
-        name: 'BasicInfo',
-        component: () => import('../components/BasicInfo/BasicInfo.vue')
-      },
-      {
-        path: '/home/editbasicinfo',
-        name: 'EditBasicInfo',
-        component: () => import('../components/BasicInfo/EditBasicInfo.vue')
-      },
-      {
-        path: '/home/courseresources',
-        name: 'CourseResources',
-        component: () => import('../components/CourseResources/CourseResources.vue')
-      },
-      {
-        path: '/home/mycourses',
-        name: 'MyCourses',
-        component: () => import('../components/CourseManagement/MyCourses.vue')
-      },
-      {
-        path: '/home/coursemanagement',
-        name: 'CourseManagement',
-        component: () => import('../components/CourseManagement/CourseManagement.vue')
-      },
-      {
-        path: '/home/myexams',
-        name: 'MyExams',
-        component: () => import('../components/ExamManagement/MyExams.vue')
-      },
-      {
-        path: '/home/exammanagement',
-        name: 'ExamManagement',
-        component: () => import('../components/ExamManagement/ExamManagement.vue')
-      },
-      {
-        path: '/home/mygrades',
-        name: 'MyGrades',
-        component: () => import('../components/GradeManagement/MyGrades.vue')
-      },
-      {
-        path: '/home/grademanagement',
-        name: 'GradeManagement',
-        component: () => import('../components/GradeManagement/GradeManagement.vue')
-      },
-    ]
-  },
-  {
-    path: '/auth',
-    name: 'Auth',
-    component: () => import('../views/auth/Auth.vue'),
-    children: [
-      {
-        path: '/auth/login',
-        name: 'Login',
-        component: () => import('../views/auth/Login.vue')
-      },
-      {
-        path: '/auth/signup',
-        name: 'Signup',
-        component: () => import('../views/auth/Signup.vue')
-      },
-      {
-        path: '/auth/recoverpassword',
-        name: 'RecoverPassword',
-        component: () => import('../views/auth/RecoverPassword.vue')
-      },
-    ]
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  },
-  {
-    path: '/auth/signupsuccess',
-    name: 'SignupSuccess',
-    component: () => import('../components/Notifications/SignupSuccess.vue')
-  },
-  // {
-  //   path: '/personalinfo',
-  //   name: 'PersonalInfo',
-  //   component: PersonalInfo
-  // },
-  // {
-  //   path: '/editpersonalinfo',
-  //   name: 'EditPersonalInfo',
-  //   component: EditPersonalInfo
-  // },
-  // {
-  //   path: '/announcement',
-  //   name: 'Announcement',
-  //   component: Announcement
-  // },
-  {
-    path: '/information',
-    name: 'Information',
-    component: Information
-  }
+const routes = [{
+        path: '/home',
+        name: 'Home',
+        component: Home,
+        children: [{
+                path: '/home/announcement',
+                name: 'Announcement',
+                component: () =>
+                    import ('../components/Announcement/Announcement.vue')
+            },
+            {
+                path: '/home/basicinfo',
+                name: 'BasicInfo',
+                component: () =>
+                    import ('../components/BasicInfo/BasicInfo.vue')
+            },
+            {
+                path: '/home/editbasicinfo',
+                name: 'EditBasicInfo',
+                component: () =>
+                    import ('../components/BasicInfo/EditBasicInfo.vue')
+            },
+            {
+                path: '/home/courseresources',
+                name: 'CourseResources',
+                component: () =>
+                    import ('../components/CourseResources/CourseResources.vue')
+            },
+            {
+                path: '/home/mycourses',
+                name: 'MyCourses',
+                component: () =>
+                    import ('../components/CourseManagement/MyCourses.vue')
+            },
+            {
+                path: '/home/coursemanagement',
+                name: 'CourseManagement',
+                component: () =>
+                    import ('../components/CourseManagement/CourseManagement.vue')
+            },
+            {
+                path: '/home/myexams',
+                name: 'MyExams',
+                component: () =>
+                    import ('../components/ExamManagement/MyExams.vue')
+            },
+            {
+                path: '/home/exam',
+                name: 'Exam',
+                component: () =>
+                    import ('../components/ExamManagement/Exam.vue')
+            },
+            {
+                path: '/home/exammanagement',
+                name: 'ExamManagement',
+                component: () =>
+                    import ('../components/ExamManagement/ExamManagement.vue')
+            },
+            {
+                path: '/home/mygrades',
+                name: 'MyGrades',
+                component: () =>
+                    import ('../components/GradeManagement/MyGrades.vue')
+            },
+            {
+                path: '/home/grademanagement',
+                name: 'GradeManagement',
+                component: () =>
+                    import ('../components/GradeManagement/GradeManagement.vue')
+            },
+        ]
+    },
+    {
+        path: '/auth',
+        name: 'Auth',
+        component: () =>
+            import ('../views/auth/Auth.vue'),
+        children: [{
+                path: '/auth/login',
+                name: 'Login',
+                component: () =>
+                    import ('../views/auth/Login.vue')
+            },
+            {
+                path: '/auth/signup',
+                name: 'Signup',
+                component: () =>
+                    import ('../views/auth/Signup.vue')
+            },
+            {
+                path: '/auth/recoverpassword',
+                name: 'RecoverPassword',
+                component: () =>
+                    import ('../views/auth/RecoverPassword.vue')
+            },
+        ]
+    },
+    {
+        path: '/about',
+        name: 'About',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+            import ( /* webpackChunkName: "about" */ '../views/About.vue')
+    },
+    {
+        path: '/auth/signupsuccess',
+        name: 'SignupSuccess',
+        component: () =>
+            import ('../components/Notifications/SignupSuccess.vue')
+    },
+    // {
+    //   path: '/personalinfo',
+    //   name: 'PersonalInfo',
+    //   component: PersonalInfo
+    // },
+    // {
+    //   path: '/editpersonalinfo',
+    //   name: 'EditPersonalInfo',
+    //   component: EditPersonalInfo
+    // },
+    // {
+    //   path: '/announcement',
+    //   name: 'Announcement',
+    //   component: Announcement
+    // },
+    {
+        path: '/information',
+        name: 'Information',
+        component: Information
+    }
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+    history: createWebHistory(process.env.BASE_URL),
+    routes
 })
 
 export default router
