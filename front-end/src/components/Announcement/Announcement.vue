@@ -49,9 +49,9 @@ export default {
             notifications: [
                 { title: '考试通知', abstract: '这是一条占位置的通知', date: '2021-11-4'},
                 {title: '实验通知', abstract: '这是一条假装有用的通知', date: '2021-10-5'},
-                {title: '实验结束通知', abstract: '快去做吧，虽然现在没有任何实验可以做', date: '2021-12-31'},
+                {title: '实验结束通知', abstract: '虽然现在没有任何实验可以做', date: '2021-12-31'},
                 {title: '课程结束预告', abstract: '这是一条没有用的通知', date: '2021-11-20'},
-                {title: '开课预告', abstract: '这是一门选了必挂的课，慎选', date: '2021-12-15'},
+                {title: '开课预告', abstract: '这是一门挂科率90%的课', date: '2021-12-15'},
             ],
             userInfo: {}
         }

@@ -5,7 +5,7 @@
       <va-checkbox v-model="minimized" label="Minimized(暂时还没实现)" />
     </template>
     <template v-slot:center>
-      <span style="font-weight: bold; font-size: 18px">Ex-M 实验教学管理系统</span>
+      <span style="font-weight: bold; font-size: 18px">实验教学管理系统</span>
     </template>
     <template v-slot:right>
       <div style="height: 60px; min-height: 60px; display: flex">
@@ -200,7 +200,7 @@ export default {
 
       identity: 0,
 
-      name: '',
+      name: 'Admin',
       gender: 2,
       email: 'admin@gmail.com',
       password: 'admin',

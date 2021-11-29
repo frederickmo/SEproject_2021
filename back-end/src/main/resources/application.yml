@@ -1,0 +1,50 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  datasource:
+    url: jdbc:mysql://124.71.154.121:3306/backend_demo
+    username: user
+    password: 12345
+
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+  jackson:
+    serialization:
+      indent_output: false
+
+  output:
+    ansi:
+      enabled: detect
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+# Sa-Token Configuration
+sa-token:
+  # token name (also figured as cookie name)
+  token-name: satoken
+  # token term of validity: unit :seconds / 30days default / -1 means no expiration
+  timeout: 2592000
+  # token temporary term of validity (validity expires when no operations during a certain period of time) unit: second
+  activity-timeout: -1
+  # ???????????? (?true???????, ?false?????????)
+  is-concurrent: true
+  # ?????????????????token (?true?????????token, ?false?????????token)
+  is-share: false
+  # token??
+  token-style: uuid
+  # ????????
+  is-log: true
