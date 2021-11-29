@@ -32,6 +32,14 @@ public class UserService {
         }
     }
 
+    public int isLogin() {
+        if (StpUtil.isLogin()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     public String login(Integer id, String password) {
         Optional<UserEntity> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()) {

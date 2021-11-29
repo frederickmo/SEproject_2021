@@ -40,10 +40,29 @@ export default {
         }
     },
     mounted () {
+
+        this.id = 1852461
+        this.password = 12345
+
+        fetch(this.$URL + "/user/isLogin", {
+            method: "GET"
+        }).then((res) => {
+            let result = res.text()
+            result.then(res => {
+                console.log(res)
+                if (res == 1) {
+                    this.$notification.success("当前用户已登录")
+                    this.$router.push({name: 'Home'})
+                } else {
+                    return
+                }
+            })
+        })
+
         console.log('params from the last page:')
         console.log(this.$route.params.id, this.$route.params.password)
-        this.id = this.$route.params.id
-        this.password = this.$route.params.password
+        this.id = this.$route.params.id ? this.$route.params.id : 1852461
+        this.password = this.$route.params.password ? this.$route.params.password : 12345
     },
     methods: {
         onSubmit () {
@@ -66,6 +85,8 @@ export default {
                     result.then((res) => {
                         if (res=='登陆成功') {
                             this.$notification.success("登录成功")
+                            localStorage.setItem("id", this.id)
+                            localStorage.setItem("password", this.password)
                             this.$router.push({name: 'Home'})
                         } else {
                             this.$notification.error("用户不存在或密码错误")

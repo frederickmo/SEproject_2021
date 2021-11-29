@@ -212,8 +212,10 @@ export default {
   mounted () {
       console.log("this.$URL: ", this.$URL)
 
+      this.id = localStorage.getItem("id")
 
-    fetch(this.$URL + "/user/get?id=" + 1852461, {
+
+    fetch(this.$URL + "/user/get?id=" + this.id, {
       method: "GET",
     }).then((res) => {
       console.log(res)

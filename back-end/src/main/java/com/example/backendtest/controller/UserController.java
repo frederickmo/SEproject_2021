@@ -48,4 +48,10 @@ public class UserController {
         return userService.login(id, password);
     }
 
+    @ApiOperation("获取当前登录状态")
+    @GetMapping("isLogin")
+    public int isLogin() {
+        return userService.isLogin();
+    }
+
 }

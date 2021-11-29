@@ -36,7 +36,7 @@ export default {
     name: 'SignUp',
     data () {
         return {
-            id: 0,
+            id: '',
             email: '',
             password: '',
             idErrors: [],
