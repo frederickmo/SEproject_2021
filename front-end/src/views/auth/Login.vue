@@ -1,11 +1,11 @@
 <template>
     <form @submit.prevent="onSubmit">
         <va-input
-        v-model="email"
-        type="email"
-        label="email"
-        :error="!!emailErrors.length"
-        :error-messages="emailErrors"
+        v-model="id"
+        type="id"
+        label="id"
+        :error="!!idErrors.length"
+        :error-messages="idErrors"
         />
 
         <va-input
@@ -18,7 +18,7 @@
         />
     <div style="margin-top: 15px">
         <va-button @click="onSubmit">登录</va-button>
-        <va-button flat style="margin-left: 10px" @click="this.$router.push({name: 'RecoverPassword', params: {email: this.email}})">忘记密码？</va-button>
+        <va-button flat style="margin-left: 10px" @click="this.$router.push({name: 'RecoverPassword', params: {id: this.id}})">忘记密码？</va-button>
     </div>
     </form>
 </template>
@@ -28,59 +28,53 @@ export default {
     name: 'LogIn',
     data() {
         return {
-            email: '',
+            id: '',
             password: '',
-            emailErrors: [],
+            idErrors: [],
             passwordErrors: [],
         }
     },
     computed: {
         formReady() {
-            return !this.emailErrors.length && !this.passwordErrors.length
+            return !this.idErrors.length && !this.passwordErrors.length
         }
     },
     mounted () {
         console.log('params from the last page:')
-        console.log(this.$route.params.email, this.$route.params.password)
-        this.email = this.$route.params.email
+        console.log(this.$route.params.id, this.$route.params.password)
+        this.id = this.$route.params.id
         this.password = this.$route.params.password
     },
     methods: {
         onSubmit () {
-            let myReg=/^(\w|(\.\w+))+@([a-zA-Z0-9_-]+\.)+(com|org|cn|net)+$/
-            console.log(this.email, this.password)
-            if (!this.email) {
-                this.emailErrors = ['email不能为空']
-            } else if (!myReg.test(this.email)) {
-                this.emailErrors = ['请填入正确格式的email']
+            // let myReg=/^(\w|(\.\w+))+@([a-zA-Z0-9_-]+\.)+(com|org|cn|net)+$/
+            console.log(this.id, this.password)
+            if (!this.id) {
+                this.idErrors = ['id不能为空']
             } else {
-                this.emailErrors = []
+                this.idErrors = []
             }
             this.passwordErrors = this.password ? [] : ['密码不能为空']
             if (!this.formReady) {
                 return
             } else {
-                const req = {
-                    username: this.email,
-                    password: this.password
-                }
-
-                fetch(this.$URL + "/login", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"},
-                    body: JSON.stringify(req),
+                fetch(this.$URL + "/user/login?id=" + this.id + "&password=" + this.password, {
+                    method: "GET",
                 }).then((res) => {
                     console.log(res)
-                    console.log()
-                    let response = res.json()
-                    response.then((response) => {
-                        console.log(response)
+                    let result = res.text()
+                    result.then((res) => {
+                        if (res=='登陆成功') {
+                            this.$notification.success("登录成功")
+                            this.$router.push({name: 'Home'})
+                        } else {
+                            this.$notification.error("用户不存在或密码错误")
+                        }
                     })
-
 
                 })
 
-                // fetch(this.$URL + "/login?username=" + this.email + "&password=" + this.password)
+                // fetch(this.$URL + "/login?username=" + this.id + "&password=" + this.password)
                 // .then((res) => {
                 //     console.log(res)
                 //     console.log(res.status)
@@ -89,7 +83,7 @@ export default {
                 //         this.$router.push({
                 //             name: 'Home',
                 //             params: {
-                //                 email: this.email,
+                //                 id: this.id,
                 //                 password: this.password
                 //             }
                 //         })
@@ -107,7 +101,7 @@ export default {
                 // this.$router.push({
                 //     name: 'Home',
                 //     params: {
-                //         email: this.email,
+                //         id: this.id,
                 //         password: this.password
                 //     }
                 // })

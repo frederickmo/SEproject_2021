@@ -1,5 +1,6 @@
 package com.example.backendtest.service;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.example.backendtest.repository.UserRepository;
 import com.example.backendtest.model.UserEntity;
 import io.swagger.models.auth.In;
@@ -14,7 +15,7 @@ public class UserService {
 
     private UserRepository userRepository;
 
-    public void addUser(UserEntity user) {
+    public String addUser(UserEntity user) {
         Optional<UserEntity> userTemp = userRepository.findById(user.getId());
         if (userTemp.isPresent()) {
             throw new IllegalStateException("该用户已存在");
@@ -27,6 +28,7 @@ public class UserService {
             user.setGender(0);
             user.setIdentity(0);
             userRepository.save(user);
+            return "注册成功";
         }
     }
 
@@ -36,6 +38,8 @@ public class UserService {
             throw new IllegalStateException("该用户不存在");
         } else {
             if (userOptional.get().getPassword().equals(password)) {
+                // 登录，Sa-Token标记当前Session登录的用户id
+                StpUtil.login(id);
                 return "登陆成功";
             } else {
                 throw new IllegalStateException("密码不正确");

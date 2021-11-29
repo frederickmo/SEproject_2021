@@ -37,7 +37,7 @@ sa-token:
   # token name (also figured as cookie name)
   token-name: satoken
   # token term of validity: unit :seconds / 30days default / -1 means no expiration
-  timeout: 2592000
+  timeout: 604800
   # token temporary term of validity (validity expires when no operations during a certain period of time) unit: second
   activity-timeout: -1
   # ???????????? (?true???????, ?false?????????)

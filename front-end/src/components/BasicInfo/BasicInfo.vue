@@ -55,7 +55,7 @@
                 </tr>
                 <tr>
                   <td class="head">身份</td>
-                  <td>{{myStatus()}}</td>
+                  <td>{{myIdentity()}}</td>
                 </tr>
                 <tr>
                   <td class="head">账号激活状态</td>
@@ -72,14 +72,14 @@
 <script>
 export default {
   data () {
-    // let myStatus = () => {
-    //   if (this.status == 0) {
+    // let myidentity = () => {
+    //   if (this.identity == 0) {
     //     return "学生"
-    //   } else if (this.status == 1) {
+    //   } else if (this.identity == 1) {
     //     return ""
-    //   } else if (this.status == 2) {
+    //   } else if (this.identity == 2) {
     //     return ""
-    //   } else if (this. status == 3) {
+    //   } else if (this. identity == 3) {
     //     return ""
     //   } else {
     //     return ""
@@ -93,25 +93,26 @@ export default {
       email: '123@gmail.com',
       password: '12345',
       activated: 1,
-      status: 0,
-      userInfo: {
-        email: this.email,
-        password: this.password,
-        name: 'John Doe',
-        gender: 1,
-        activated: this.activated,
-        status: this.status
-      }
+      identity: 0,
     }
   },
   mounted () {
-    // console.log(this.$route.params.userInfo.email)
-    // this.userInfo = this.$route.params.userInfo ? this.$route.params.userInfo : this.userInfo
-    // this.email = this.$route.params.userInfo ? this.$route.params.userInfo.email : this.email
-    // console.log(localStorage.getItem('userInfo'))
-    // this.userInfo = localStorage.getItem('userInfo')
-    this.name = localStorage.getItem('name')
-    this.gender = localStorage.getItem('gender')
+    this.id = localStorage.getItem("id")
+    this.password = localStorage.getItem("password")
+    fetch(this.$URL + "/user/get?id=" + this.id, {
+      method: "GET"
+    }).then((res) => {
+      var result = res.json()
+      result.then((res) => {
+        console.log(res)
+        this.name = res.name
+        this.gender = res.gender
+        this.email = res.email
+        this.identity = res.identity
+        this.activated = res.activated
+      })
+    })
+    
   },
   methods: {
     myGender () {
@@ -123,14 +124,14 @@ export default {
         return "未知"
       }
     },
-    myStatus () {
-      if (this.status == 0) {
+    myIdentity () {
+      if (this.identity == 1) {
         return "学生"
-      } else if (this.status == 1) {
+      } else if (this.identity == 2) {
         return "助教"
-      } else if (this.status == 2) {
+      } else if (this.identity == 3) {
         return "教师"
-      } else if (this.status == 3) {
+      } else if (this.identity == 4) {
         return "责任教师"
       } else {
         return "未知"

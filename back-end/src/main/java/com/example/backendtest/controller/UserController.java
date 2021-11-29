@@ -1,5 +1,6 @@
 package com.example.backendtest.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.example.backendtest.repository.UserRepository;
 import com.example.backendtest.model.UserEntity;
 import com.example.backendtest.service.UserService;
@@ -17,9 +18,6 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserController {
 
-    @Resource
-    private UserRepository userRepository;
-
     private final UserService userService;
 
     // 测试后端是否正常工作
@@ -30,6 +28,8 @@ public class UserController {
     }
 
 
+    // 以下注解用于登录后鉴权
+    @SaCheckLogin
     @ApiOperation("以ID获取完整用户信息")
     @GetMapping("get")
     public UserEntity getUserById(Integer id) {
@@ -38,8 +38,8 @@ public class UserController {
 
     @ApiOperation("新增用户/用户注册")
     @PostMapping("add")
-    public void register(@RequestBody UserEntity user) {
-        userService.addUser(user);
+    public String register(@RequestBody UserEntity user) {
+        return userService.addUser(user);
     }
 
     @ApiOperation("用户登录")

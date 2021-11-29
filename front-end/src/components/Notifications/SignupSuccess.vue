@@ -17,13 +17,13 @@
 export default {
     data () {
         return {
-            email: '',
+            id: 0,
             password: '',
         }
     },
     mounted () {
-        console.log(this.$route.params.email, this.$route.params.password)
-        this.email = this.$route.params.email
+        console.log(this.$route.params.id, this.$route.params.password)
+        this.id = this.$route.params.id
         this.password = this.$route.params.password
     },
     methods: {
@@ -31,7 +31,7 @@ export default {
             this.$router.push({
                 name: 'Login',
                 params: {
-                    email: this.email,
+                    id: this.id,
                     password: this.password
                 }
             })

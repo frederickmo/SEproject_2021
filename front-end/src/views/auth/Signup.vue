@@ -1,6 +1,14 @@
 <template>
     <form @submit.prevent="onsubmit">
         <va-input
+        v-model="id"
+        type="id"
+        label="id"
+        :error="!!idErrors.length"
+        :error-messages="idErrors"
+        />
+
+        <va-input
         v-model="email"
         type="email"
         label="email"
@@ -28,21 +36,23 @@ export default {
     name: 'SignUp',
     data () {
         return {
+            id: 0,
             email: '',
             password: '',
+            idErrors: [],
             emailErrors: [],
             passwordErrors: [],
         }
     },
     computed: {
         formReady () {
-            return !this.emailErrors.length && !this.passwordErrors.length
+            return !this.emailErrors.length && !this.passwordErrors.length && !this.idErrors.length
         }
     },
     methods: {
         onsubmit () {
             let myReg=/^(\w|(\.\w+))+@([a-zA-Z0-9_-]+\.)+(com|org|cn|net)+$/
-            console.log(this.email, this.password)
+            console.log(this.id, this.email, this.password)
             if (!this.email) {
                 this.emailErrors = ['email不能为空！']
             } else if (!myReg.test(this.email)) {
@@ -51,20 +61,36 @@ export default {
                 this.emailErrors = []
             }
             this.passwordErrors = this.password ? [] : ['密码不能为空！']
+            this.idErrors = this.id ? [] : ['ID不能为空！']
             if (!this.formReady) {
                 return
             } else {
-                // this.$vaToast.init({
-                //     message: '注册成功！',
-                //     color: 'success'
-                // })
-                this.$notification.success('注册成功！')
-                this.$router.push({
-                    name: 'SignupSuccess',
-                    params: {
-                        email: this.email,
-                        password: this.password
-                    }
+                let request = {
+                    id: this.id,
+                    password: this.password,
+                    email: this.email,
+                    activated: 0
+                }
+                fetch(this.$URL + "/user/add", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(request)
+                }).then((res) => {
+                    let result = res.text()
+                    result.then((res) => {
+                        if (res == '注册成功') {
+                            this.$notification.success('注册成功！')
+                            this.$router.push({
+                                name: 'SignupSuccess',
+                                params: {
+                                    id: this.id,
+                                    password: this.password
+                                }
+                            })
+                        } else {
+                            this.$notification.error("注册失败！")
+                        }
+                    })
                 })
             }
         },

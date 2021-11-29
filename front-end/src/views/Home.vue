@@ -198,58 +198,38 @@ export default {
       minimized: false,
       mainIndex: 0,
 
+
+      id: 0,
+      name: '',
+      gender: 0,
+      email: '',
+      password: '',
+      activated: 0,
       identity: 0,
 
-      name: 'Admin',
-      gender: 2,
-      email: 'admin@gmail.com',
-      password: 'admin',
-      activated: 0,
-      status: 0,
-
-      userInfo: {
-        email: this.email,
-        password: this.password,
-        name: 'John Doe',
-        gender: 1,
-        activated: this.activated,
-        status: this.status,
-      }
     }
   },
   mounted () {
       console.log("this.$URL: ", this.$URL)
 
 
-    fetch(this.$URL + "/user/info?username=" + this.email + "&password=" + this.password, {
+    fetch(this.$URL + "/user/get?id=" + 1852461, {
       method: "GET",
     }).then((res) => {
-      console.log("this.$URL: ", this.$URL)
-      console.log('this is the response line')
       console.log(res)
-      console.log('222')
       var result = res.json()
       result.then((result) => {
         console.log(result)
+        this.id = result.id
+        this.name = result.name
+        this.password = result.password
+        this.identity = result.identity
+        this.activated = result.activated
+
+        localStorage.setItem("id", this.id)
+        localStorage.setItem("password", this.password)
       })
     })
-
-    // const data = {
-    //   username: "2323",
-    //   password: "1234",
-    // }
-
-    // fetch(this.$URL + "/api/login", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(data)
-    // }).then((res) => {
-    //   console.log(res)
-    //   let result = res.json()
-    //   result.then((res) => {
-    //     console.log(res)
-    //   })
-    // })
 
     this.$router.push({
       name: 'BasicInfo'
