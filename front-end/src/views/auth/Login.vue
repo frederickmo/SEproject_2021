@@ -80,10 +80,11 @@ export default {
                 fetch(this.$URL + "/user/login?id=" + this.id + "&password=" + this.password, {
                     method: "GET",
                 }).then((res) => {
-                    console.log(res)
-                    let result = res.text()
+                    let result = res.json()
                     result.then((res) => {
-                        if (res=='登陆成功') {
+                        console.log("打印token了吗？")
+                        console.log(res)
+                        if (res.status==200) {
                             this.$notification.success("登录成功")
                             localStorage.setItem("id", this.id)
                             localStorage.setItem("password", this.password)

@@ -1,5 +1,6 @@
 package com.example.backendtest.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.exception.FileStorageException;
 import com.example.backendtest.exception.MyFileNotFoundException;
 import com.example.backendtest.property.FileStorageProperties;
@@ -10,12 +11,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class FileStorageService {
@@ -80,6 +84,28 @@ public class FileStorageService {
         } catch (MalformedURLException e) {
             throw new MyFileNotFoundException("未找到文件" + fileName, e);
         }
+    }
+
+    public List<JSONObject> getAllFiles() {
+        File file = new File(fileStorageLocation.toString());
+        File[] fileList = file.listFiles();
+        List<JSONObject> fileNameList = new ArrayList<>();
+
+        if (fileList == null) {
+            JSONObject json = new JSONObject();
+            json.put("name", "empty directory");
+            fileNameList.add(json);
+        } else {
+            for (File value : fileList) {
+                if (value.isFile() || value.isDirectory()) {
+                    String fileName = value.getName();
+                    JSONObject json = new JSONObject();
+                    json.put("name", fileName);
+                    fileNameList.add(json);
+                }
+            }
+        }
+        return fileNameList;
     }
 
 }

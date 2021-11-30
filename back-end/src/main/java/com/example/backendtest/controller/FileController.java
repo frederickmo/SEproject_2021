@@ -1,5 +1,6 @@
 package com.example.backendtest.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.payload.UploadFileResponse;
 import com.example.backendtest.repository.FileRepository;
 import com.example.backendtest.service.FileService;
@@ -98,6 +99,11 @@ public class FileController {
                                 + fileName + "\"")
                 .body(path);
 
+    }
+
+    @GetMapping("/getAllFiles")
+    public List<JSONObject> getAllFiles() {
+        return fileStorageService.getAllFiles();
     }
 
 
