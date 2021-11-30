@@ -9,6 +9,8 @@ import com.example.backendtest.util.JwtUtil;
 import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -83,6 +85,23 @@ public class UserService {
             throw new IllegalStateException("用户不存在");
         } else {
             return userOptional.get();
+        }
+    }
+
+    public JSONObject updateUserInfo(UserEntity user) {
+        Optional<UserEntity> userOptional = userRepository.findById(user.getId());
+        if (userOptional.isEmpty()) {
+            throw new IllegalStateException("用户" + user.getId() + "不存在");
+        } else {
+            userOptional.get().setGender(user.getGender());
+            log.info("用户修改性别为 " + user.getGender());
+            userOptional.get().setName(user.getName());
+            log.info("用户修改姓名为 " + user.getName());
+            userRepository.save(userOptional.get());
+            JSONObject json = new JSONObject();
+            json.put("status", 200);
+            json.put("message", "修改成功");
+            return json;
         }
     }
 }

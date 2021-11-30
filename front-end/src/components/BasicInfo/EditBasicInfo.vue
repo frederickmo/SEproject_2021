@@ -77,10 +77,6 @@ export default {
             } else {
                 this.gender = 0
             }
-            localStorage.setItem('name', this.name)
-            localStorage.setItem('gender', this.gender)
-            console.log('localstorage的name: ', localStorage.getItem('name'))
-            console.log('localstorage的gender', localStorage.getItem('gender'))
         }
     }
 }
