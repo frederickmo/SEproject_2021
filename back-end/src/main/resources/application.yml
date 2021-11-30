@@ -32,6 +32,17 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
+
+file:
+  upload-dir: /Users/frederickmo/Documents/GitHub/SEproject_2021/back-end/src/main/resources/static
+
+
 # Sa-Token Configuration
 sa-token:
   # token name (also figured as cookie name)
@@ -48,3 +59,4 @@ sa-token:
   token-style: uuid
   # ????????
   is-log: true
+
