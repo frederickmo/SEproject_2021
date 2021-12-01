@@ -1,10 +1,12 @@
 package com.example.backendtest.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.payload.UploadFileResponse;
 import com.example.backendtest.repository.FileRepository;
 import com.example.backendtest.service.FileService;
 import com.example.backendtest.service.FileStorageService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Api("课程资源管理")
+@Api(tags = "课程资源管理")
 @RestController
 @RequestMapping("/file")
 //@AllArgsConstructor
@@ -36,7 +38,8 @@ public class FileController {
     @Autowired
     private FileStorageService fileStorageService;
 
-    @PostMapping("/uploadFile")
+    @ApiOperation("上传单个文件")
+    @PostMapping("/upload")
     public UploadFileResponse uploadFile(@RequestParam("file")MultipartFile file) {
         String fileName = fileStorageService.storeFile(file);
 
@@ -51,6 +54,30 @@ public class FileController {
                     file.getSize());
     }
 
+    @ApiOperation("上传文件并重命名")
+    @PostMapping("/upload/rename")
+    public UploadFileResponse uploadAndRename(@RequestParam("file")MultipartFile file, String newFileName, String location) {
+        fileStorageService.storeAndRename(file, newFileName, location);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/file/downloadFile/" + location + "/")
+                .path(newFileName)
+                .toUriString();
+
+        return new UploadFileResponse(newFileName,
+                fileDownloadUri,
+                file.getContentType(),
+                file.getSize());
+
+    }
+
+    @ApiOperation("以ID上传头像并重命名")
+    @PostMapping("/upload/avatar")
+    public UploadFileResponse uploadAvatar(@RequestParam("file")MultipartFile file, @RequestParam Integer id) {
+        return fileStorageService.storeAvatar(file, id);
+    }
+
+    @ApiOperation("上传多个文件")
     @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.stream(files)
@@ -58,46 +85,37 @@ public class FileController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/downloadFile/{fileName:.+}")
+    /**
+     * 以下是获取根目录文件的API
+     */
+
+    @ApiOperation("下载根目录文件")
+    @GetMapping("/download/{fileName:.+}")
 //    @GetMapping("/downloadFile")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName,
                                                  HttpServletRequest request) {
-        // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource(fileName);
-
-        //Try to determine file's content type
-        String contentType = null;
-        try {
-            contentType = request.getServletContext()
-                    .getMimeType(resource.getFile().getAbsolutePath());
-        } catch (IOException e) {
-            logger.info("无法确定文件类型");
-        }
-
-        // Fallback to the default content type if type could not be determined
-        if (contentType == null) {
-            contentType = "application/octet-stream";
-        }
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\""
-                                + resource.getFilename() + "\"")
-                .body(resource);
+        return fileStorageService.downloadFile(fileName, "", request);
     }
 
-    @GetMapping("/getPath/{fileName:.+}")
-    public ResponseEntity<Path> downloadFilePath(@PathVariable String fileName,
-                                                                  HttpServletRequest request) {
-        Path path = fileStorageService.loadFileAsPath(fileName);
-        return ResponseEntity.ok()
-//                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\""
-                                + fileName + "\"")
-                .body(path);
+    /**
+     * 这个是可以获取文件根目录以下一层目录文件的API
+     *
+     * @param fileName 文件名（包含完整后缀）
+     * @param dirName 目录名（不要带'/'）
+     * @param request http请求
+     * @return 源文件
+     */
 
+    @ApiOperation("下载根目录以下某个目录的文件")
+    @GetMapping("/download/{dirName}/{fileName:.+}")
+    public ResponseEntity<Resource> download(@PathVariable String fileName, @PathVariable String dirName, HttpServletRequest request) {
+        return fileStorageService.downloadFile(fileName, dirName, request);
+    }
+
+    @ApiOperation("获取根目录所有文件")
+    @GetMapping("/getAll")
+    public List<JSONObject> getAllFiles() {
+        return fileStorageService.getAllFiles();
     }
 
 

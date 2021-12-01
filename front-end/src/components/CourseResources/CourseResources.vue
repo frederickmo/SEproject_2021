@@ -12,18 +12,17 @@
           <va-list>
               <va-list-label style="text-align: left; font-size: 16px">课程资料</va-list-label>
               <va-list-item
-              v-for="(file, index) in resources"
+              v-for="(file,index) in resources"
               :key="index"
-              to="/home">
-                {{file.name}}
+              >
+                <a :href="generateUrl(file.name)">{{file.name}}</a>
               </va-list-item>
           </va-list>
           <va-list>
               <va-list-label style="text-align: left; font-size: 16px">实验报告</va-list-label>
               <va-list-item
               v-for="(file, index) in reports"
-              :key="index"
-              to="/home">
+              :key="index">
                 {{file.name}}
               </va-list-item>
           </va-list>
@@ -37,16 +36,27 @@
 export default {
     data () {
         return {
-            resources: [
-                {name: '实验须知.pdf'},
-                {name: '教学大纲.pdf'},
-                {name: '实验参考手册.pdf'},
-            ],
-            reports: [
-                {name: '计算机组成原理实验一.docx'},
-                {name: '计算机网络实验一.docx'},
-                {name: '计算机系统结构实验三.docx'},
-            ]
+            resources: [],
+            r: 0,
+            reports: [],
+            test:""
+        }
+    },
+    mounted () {
+        fetch(this.$URL + "/file/getAllFiles", {
+            method: "GET"
+        }).then((response) => {
+            let result = response.json()
+            result.then((res) => {
+                console.log(res)
+                this.resources=res
+                console.log(this.resources)
+            })
+        })
+    },
+    methods: {
+        generateUrl(fileName) {
+            return this.$URL + "/file/downloadFile/" + fileName;
         }
     }
 }

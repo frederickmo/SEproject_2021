@@ -3,14 +3,14 @@ package com.example.backendtest.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "User", schema = "backend_demo", catalog = "")
+@Table(name = "user", schema = "backend_demo", catalog = "")
 public class UserEntity {
     private int id;
     private String email;
     private String name;
     private int gender;
     private int identity;
-    private byte activated;
+    private int activated;
     private String password;
 
     @Id
@@ -49,6 +49,10 @@ public class UserEntity {
         return gender;
     }
 
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
     public void setGender(int gender) {
         this.gender = gender;
     }
@@ -59,17 +63,25 @@ public class UserEntity {
         return identity;
     }
 
+    public void setIdentity(Integer identity) {
+        this.identity = identity;
+    }
+
     public void setIdentity(int identity) {
         this.identity = identity;
     }
 
     @Basic
     @Column(name = "activated")
-    public byte getActivated() {
+    public int getActivated() {
         return activated;
     }
 
-    public void setActivated(byte activated) {
+    public void setActivated(Integer activated) {
+        this.activated = activated;
+    }
+
+    public void setActivated(int activated) {
         this.activated = activated;
     }
 

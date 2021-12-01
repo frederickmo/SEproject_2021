@@ -56,4 +56,10 @@ public class UserController {
         return userService.isLogin();
     }
 
+    @ApiOperation("更新用户信息")
+    @PostMapping("update")
+    public JSONObject updateUserInfo(@RequestBody UserEntity user) {
+        return userService.updateUserInfo(user);
+    }
+
 }

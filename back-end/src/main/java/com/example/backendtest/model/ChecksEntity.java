@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "Checks", schema = "backend_demo", catalog = "")
+@Table(name = "checks", schema = "backend_demo", catalog = "")
 @IdClass(ChecksEntityPK.class)
 public class ChecksEntity {
     private int teacherId;
@@ -14,7 +14,7 @@ public class ChecksEntity {
     private Integer score;
 
     @Id
-    @Column(name = "teacherId")
+    @Column(name = "teacher_id")
     public int getTeacherId() {
         return teacherId;
     }
@@ -24,7 +24,7 @@ public class ChecksEntity {
     }
 
     @Id
-    @Column(name = "taskId")
+    @Column(name = "task_id")
     public int getTaskId() {
         return taskId;
     }
@@ -34,7 +34,7 @@ public class ChecksEntity {
     }
 
     @Id
-    @Column(name = "studentId")
+    @Column(name = "student_id")
     public int getStudentId() {
         return studentId;
     }
@@ -44,7 +44,7 @@ public class ChecksEntity {
     }
 
     @Basic
-    @Column(name = "checkTime")
+    @Column(name = "check_time")
     public Timestamp getCheckTime() {
         return checkTime;
     }

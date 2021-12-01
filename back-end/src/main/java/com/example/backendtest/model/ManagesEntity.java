@@ -3,14 +3,14 @@ package com.example.backendtest.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Manages", schema = "backend_demo", catalog = "")
+@Table(name = "manages", schema = "backend_demo", catalog = "")
 @IdClass(ManagesEntityPK.class)
 public class ManagesEntity {
     private int teacherId;
     private int courseId;
 
     @Id
-    @Column(name = "teacherId")
+    @Column(name = "teacher_id")
     public int getTeacherId() {
         return teacherId;
     }
@@ -20,7 +20,7 @@ public class ManagesEntity {
     }
 
     @Id
-    @Column(name = "courseId")
+    @Column(name = "course_id")
     public int getCourseId() {
         return courseId;
     }

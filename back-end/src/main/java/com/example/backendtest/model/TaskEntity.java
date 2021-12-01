@@ -3,14 +3,14 @@ package com.example.backendtest.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Task", schema = "backend_demo", catalog = "")
+@Table(name = "task", schema = "backend_demo", catalog = "")
 public class TaskEntity {
     private int id;
     private Integer curriculumId;
     private String name;
     private String description;
     private String url;
-    private Byte type;
+    private Integer type;
 
     @Id
     @Basic
@@ -24,7 +24,7 @@ public class TaskEntity {
     }
 
     @Basic
-    @Column(name = "curriculumId")
+    @Column(name = "curriculum_id")
     public Integer getCurriculumId() {
         return curriculumId;
     }
@@ -65,11 +65,15 @@ public class TaskEntity {
 
     @Basic
     @Column(name = "type")
-    public Byte getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(Byte type) {
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public void setType(int type) {
         this.type = type;
     }
 

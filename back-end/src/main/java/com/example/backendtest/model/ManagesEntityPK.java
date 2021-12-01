@@ -8,7 +8,7 @@ public class ManagesEntityPK implements Serializable {
     private int teacherId;
     private int courseId;
 
-    @Column(name = "teacherId")
+    @Column(name = "teacher_id")
     @Id
     public int getTeacherId() {
         return teacherId;
@@ -18,7 +18,7 @@ public class ManagesEntityPK implements Serializable {
         this.teacherId = teacherId;
     }
 
-    @Column(name = "courseId")
+    @Column(name = "course_id")
     @Id
     public int getCourseId() {
         return courseId;

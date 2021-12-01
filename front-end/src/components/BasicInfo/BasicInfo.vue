@@ -9,7 +9,7 @@
       <va-modal ref="modal" v-model="showAvatar"
       hide-default-actions title="查看大图"
       >
-      <div><img src="https://avatars.githubusercontent.com/u/58105082?v=4" /></div>
+      <div><img :src="myAvatarUrl()" /></div>
       <div style="text-align: center">
         <va-button flat style="margin-top: 15px; color: gray" @click="this.showAvatar=!this.showAvatar">关闭</va-button>
       </div>
@@ -36,7 +36,7 @@
                   <td>
                       <va-avatar
                       square
-                      src="https://avatars.githubusercontent.com/u/58105082?v=4"
+                      :src="myAvatarUrl()"
                       @click="this.showAvatar=!this.showAvatar"
                       style="width: 80px; height: 80px" />
                   </td>
@@ -72,19 +72,6 @@
 <script>
 export default {
   data () {
-    // let myidentity = () => {
-    //   if (this.identity == 0) {
-    //     return "学生"
-    //   } else if (this.identity == 1) {
-    //     return ""
-    //   } else if (this.identity == 2) {
-    //     return ""
-    //   } else if (this. identity == 3) {
-    //     return ""
-    //   } else {
-    //     return ""
-    //   }
-    // }
     return {
       showAvatar: false,
 
@@ -136,6 +123,12 @@ export default {
       } else {
         return "未知"
       }
+    },
+    myAvatarUrl() {
+      var myAvatar = this.$URL + "/file/download/avatar/avatar_" + this.id + ".jpg"
+      console.log("avatarUrl: ", myAvatar)
+      return myAvatar
+      
     }
   }
 }
