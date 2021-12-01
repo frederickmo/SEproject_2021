@@ -6,11 +6,11 @@ import javax.persistence.*;
 @Table(name = "user", schema = "backend_demo", catalog = "")
 public class UserEntity {
     private int id;
+    private Integer activated;
     private String email;
+    private Integer gender;
+    private Integer identity;
     private String name;
-    private int gender;
-    private int identity;
-    private int activated;
     private String password;
 
     @Id
@@ -24,6 +24,16 @@ public class UserEntity {
     }
 
     @Basic
+    @Column(name = "activated")
+    public Integer getActivated() {
+        return activated;
+    }
+
+    public void setActivated(Integer activated) {
+        this.activated = activated;
+    }
+
+    @Basic
     @Column(name = "email")
     public String getEmail() {
         return email;
@@ -34,18 +44,8 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Basic
     @Column(name = "gender")
-    public int getGender() {
+    public Integer getGender() {
         return gender;
     }
 
@@ -53,13 +53,9 @@ public class UserEntity {
         this.gender = gender;
     }
 
-    public void setGender(int gender) {
-        this.gender = gender;
-    }
-
     @Basic
     @Column(name = "identity")
-    public int getIdentity() {
+    public Integer getIdentity() {
         return identity;
     }
 
@@ -67,22 +63,14 @@ public class UserEntity {
         this.identity = identity;
     }
 
-    public void setIdentity(int identity) {
-        this.identity = identity;
-    }
-
     @Basic
-    @Column(name = "activated")
-    public int getActivated() {
-        return activated;
+    @Column(name = "name")
+    public String getName() {
+        return name;
     }
 
-    public void setActivated(Integer activated) {
-        this.activated = activated;
-    }
-
-    public void setActivated(int activated) {
-        this.activated = activated;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Basic
@@ -103,10 +91,10 @@ public class UserEntity {
         UserEntity that = (UserEntity) o;
 
         if (id != that.id) return false;
-        if (gender != that.gender) return false;
-        if (identity != that.identity) return false;
-        if (activated != that.activated) return false;
+        if (activated != null ? !activated.equals(that.activated) : that.activated != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
+        if (identity != null ? !identity.equals(that.identity) : that.identity != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
 
@@ -116,11 +104,11 @@ public class UserEntity {
     @Override
     public int hashCode() {
         int result = id;
+        result = 31 * result + (activated != null ? activated.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
+        result = 31 * result + (identity != null ? identity.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + gender;
-        result = 31 * result + identity;
-        result = 31 * result + (int) activated;
         result = 31 * result + (password != null ? password.hashCode() : 0);
         return result;
     }

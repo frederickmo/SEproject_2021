@@ -187,8 +187,8 @@ public class FileStorageService {
         }
     }
 
-    public List<JSONObject> getAllFiles() {
-        File file = new File(fileStorageLocation.toString());
+    public List<JSONObject> getAllFiles(String path) {
+        File file = new File(fileStorageLocation.toString() + path);
         File[] fileList = file.listFiles();
         List<JSONObject> fileNameList = new ArrayList<>();
 
@@ -198,7 +198,9 @@ public class FileStorageService {
             fileNameList.add(json);
         } else {
             for (File value : fileList) {
-                if (value.isFile() || value.isDirectory()) {
+                // 去掉文件名首尾为'.'是为了过滤掉.DS_store
+                if (value.isFile() && value.getName().charAt(0) != '.') {
+                    log.info("value.getName(): " + value.getName());
                     String fileName = value.getName();
                     JSONObject json = new JSONObject();
                     json.put("name", fileName);

@@ -5,18 +5,8 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 public class FinishesEntityPK implements Serializable {
-    private int studentId;
     private int taskId;
-
-    @Column(name = "student_id")
-    @Id
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
+    private int studentId;
 
     @Column(name = "task_id")
     @Id
@@ -28,6 +18,16 @@ public class FinishesEntityPK implements Serializable {
         this.taskId = taskId;
     }
 
+    @Column(name = "student_id")
+    @Id
+    public int getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -35,16 +35,16 @@ public class FinishesEntityPK implements Serializable {
 
         FinishesEntityPK that = (FinishesEntityPK) o;
 
-        if (studentId != that.studentId) return false;
         if (taskId != that.taskId) return false;
+        if (studentId != that.studentId) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = studentId;
-        result = 31 * result + taskId;
+        int result = taskId;
+        result = 31 * result + studentId;
         return result;
     }
 }

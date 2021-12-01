@@ -4,6 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
 
+/**
+ * 我也不知道这个PK类有什么用，
+ * 目前来看确实没什么用
+ */
+
 public class TakesEntityPK implements Serializable {
     private int studentId;
     private int courseId;

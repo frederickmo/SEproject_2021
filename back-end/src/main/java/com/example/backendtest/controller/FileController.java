@@ -6,6 +6,7 @@ import com.example.backendtest.repository.FileRepository;
 import com.example.backendtest.service.FileService;
 import com.example.backendtest.service.FileStorageService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -112,10 +113,28 @@ public class FileController {
         return fileStorageService.downloadFile(fileName, dirName, request);
     }
 
-    @ApiOperation("获取根目录所有文件")
+    /**
+     * 暂时写到两层目录
+     * 如果需要多层目录的话，就调用fileStorageService的downloadFile这个接口，
+     * 然后把dirName拼一下应该就可以了
+     * 注意有几层目录，@PathVariable的dirName就得写几个
+     */
+
+    @ApiOperation("获取根目录以下两层某目录的文件")
+    @GetMapping("/download/{dirName1}/{dirName2}/{fileName:.+}")
+    public ResponseEntity<Resource> download2(@PathVariable String fileName,
+                                              @PathVariable String dirName1,
+                                              @PathVariable String dirName2,
+                                              HttpServletRequest request) {
+        String dirName = dirName1 + "/" + dirName2;
+        return fileStorageService.downloadFile(fileName, dirName, request);
+    }
+
+    @ApiOperation("获取某一目录所有文件")
+    @ApiImplicitParam(name = "path", value = "路径值（包含左'/'不含右'/'）")
     @GetMapping("/getAll")
-    public List<JSONObject> getAllFiles() {
-        return fileStorageService.getAllFiles();
+    public List<JSONObject> getAllFiles(String path) {
+        return fileStorageService.getAllFiles(path);
     }
 
 

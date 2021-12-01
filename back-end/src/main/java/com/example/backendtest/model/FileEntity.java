@@ -7,9 +7,9 @@ import javax.persistence.*;
 public class FileEntity {
     private int id;
     private String name;
-    private String url;
-    private String type;
     private Long size;
+    private String type;
+    private String url;
 
     @Id
     @Column(name = "id")
@@ -32,13 +32,13 @@ public class FileEntity {
     }
 
     @Basic
-    @Column(name = "url")
-    public String getUrl() {
-        return url;
+    @Column(name = "size")
+    public Long getSize() {
+        return size;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setSize(Long size) {
+        this.size = size;
     }
 
     @Basic
@@ -52,13 +52,13 @@ public class FileEntity {
     }
 
     @Basic
-    @Column(name = "size")
-    public Long getSize() {
-        return size;
+    @Column(name = "url")
+    public String getUrl() {
+        return url;
     }
 
-    public void setSize(Long size) {
-        this.size = size;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override
@@ -70,9 +70,9 @@ public class FileEntity {
 
         if (id != that.id) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (url != null ? !url.equals(that.url) : that.url != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (size != null ? !size.equals(that.size) : that.size != null) return false;
+        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (url != null ? !url.equals(that.url) : that.url != null) return false;
 
         return true;
     }
@@ -81,9 +81,9 @@ public class FileEntity {
     public int hashCode() {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (size != null ? size.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (url != null ? url.hashCode() : 0);
         return result;
     }
 }
