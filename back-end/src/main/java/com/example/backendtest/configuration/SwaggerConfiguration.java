@@ -22,6 +22,7 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfiguration {
+    //swagger接口文档配置
     @Bean
     public Docket createRestApi(){
         return new Docket(DocumentationType.SWAGGER_2)
