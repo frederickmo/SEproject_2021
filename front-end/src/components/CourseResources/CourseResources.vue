@@ -43,7 +43,7 @@ export default {
         }
     },
     mounted () {
-        fetch(this.$URL + "/file/getAllFiles", {
+        fetch(this.$URL + "/file/getAll?path=/courseResource", {
             method: "GET"
         }).then((response) => {
             let result = response.json()
@@ -56,7 +56,7 @@ export default {
     },
     methods: {
         generateUrl(fileName) {
-            return this.$URL + "/file/downloadFile/" + fileName;
+            return this.$URL + "/file/download/courseResource/" + fileName;
         }
     }
 }

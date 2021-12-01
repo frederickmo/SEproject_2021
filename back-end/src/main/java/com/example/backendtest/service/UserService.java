@@ -3,18 +3,13 @@ package com.example.backendtest.service;
 import cn.dev33.satoken.stp.StpUtil;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import com.example.backendtest.repository.UserRepository;
 import com.example.backendtest.model.UserEntity;
+import com.example.backendtest.repository.UserRepository;
 import com.example.backendtest.util.JwtUtil;
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -36,7 +31,7 @@ public class UserService {
         else if (userRepository.findAllByEmail(user.getEmail()).isPresent()) {
             throw new IllegalStateException("该邮箱已被注册");
         } else {
-            user.setActivated((byte)0);
+            user.setActivated(0);
             user.setGender(0);
             user.setIdentity(0);
             userRepository.save(user);
@@ -82,7 +77,7 @@ public class UserService {
     public UserEntity getUserById(Integer id) {
         Optional<UserEntity> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()) {
-            throw new IllegalStateException("用户不存在");
+            throw new IllegalStateException("ID为 " + id + " 的用户不存在");
         } else {
             return userOptional.get();
         }

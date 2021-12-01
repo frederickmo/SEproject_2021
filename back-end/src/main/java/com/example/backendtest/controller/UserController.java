@@ -2,17 +2,12 @@ package com.example.backendtest.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.alibaba.fastjson.JSONObject;
-import com.example.backendtest.repository.UserRepository;
 import com.example.backendtest.model.UserEntity;
 import com.example.backendtest.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
-import java.util.Optional;
 
 @Api(tags = "用户管理")
 @RestController

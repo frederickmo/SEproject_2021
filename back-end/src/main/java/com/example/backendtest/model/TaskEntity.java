@@ -1,19 +1,20 @@
 package com.example.backendtest.model;
 
+import io.swagger.models.auth.In;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "task", schema = "backend_demo", catalog = "")
 public class TaskEntity {
     private int id;
-    private Integer curriculumId;
-    private String name;
+    private Integer courseId;
     private String description;
-    private String url;
+    private String name;
     private Integer type;
+    private String url;
 
     @Id
-    @Basic
     @Column(name = "id")
     public int getId() {
         return id;
@@ -24,13 +25,24 @@ public class TaskEntity {
     }
 
     @Basic
-    @Column(name = "curriculum_id")
-    public Integer getCurriculumId() {
-        return curriculumId;
+    @Column(name = "courseId")
+    public Integer getCourseId() {
+        return courseId;
     }
 
-    public void setCurriculumId(Integer curriculumId) {
-        this.curriculumId = curriculumId;
+    public void setCourseId(Integer courseId) {
+        this.courseId = courseId;
+    }
+
+
+    @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Basic
@@ -44,13 +56,13 @@ public class TaskEntity {
     }
 
     @Basic
-    @Column(name = "description")
-    public String getDescription() {
-        return description;
+    @Column(name = "type")
+    public Integer getType() {
+        return type;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     @Basic
@@ -63,20 +75,6 @@ public class TaskEntity {
         this.url = url;
     }
 
-    @Basic
-    @Column(name = "type")
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,11 +83,11 @@ public class TaskEntity {
         TaskEntity that = (TaskEntity) o;
 
         if (id != that.id) return false;
-        if (curriculumId != null ? !curriculumId.equals(that.curriculumId) : that.curriculumId != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (courseId != that.courseId) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (url != null ? !url.equals(that.url) : that.url != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (url != null ? !url.equals(that.url) : that.url != null) return false;
 
         return true;
     }
@@ -97,11 +95,11 @@ public class TaskEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (curriculumId != null ? curriculumId.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (courseId != null ? courseId.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (url != null ? url.hashCode() : 0);
         return result;
     }
 }
