@@ -58,6 +58,7 @@ public class FileController {
     @ApiOperation("上传文件并重命名")
     @PostMapping("/upload/rename")
     public UploadFileResponse uploadAndRename(@RequestParam("file")MultipartFile file, String newFileName, String location) {
+        // location 带左'/'不带右'/'
         fileStorageService.storeAndRename(file, newFileName, location);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
