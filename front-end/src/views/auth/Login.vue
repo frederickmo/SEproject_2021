@@ -82,7 +82,6 @@ export default {
                 }).then((res) => {
                     let result = res.json()
                     result.then((res) => {
-                        console.log("打印token了吗？")
                         console.log(res)
                         if (res.status==200) {
                             this.$notification.success("登录成功")

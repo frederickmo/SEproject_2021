@@ -7,6 +7,24 @@
             </va-breadcrumbs>
         </div>
 
+        <va-modal
+        v-model="showModal"
+        title="修改头像">
+            <div>
+                <a-upload 
+                list-type="picture-card"
+                @preview="onPreview"
+                auto-upload="false"
+                multiple="false"
+                draggable="true"
+                accept="image/jpeg, image/png"
+                :action="getUploadUrl()"
+                :data="additionalData()"
+                />
+                <!--TODO: 现在头像是自动上传的 / 命名还有点问题-->
+            </div>
+        </va-modal>
+
         <va-card>
             <va-card-title style="font-size: 20px">修改基本信息</va-card-title>
             <va-card-content>
@@ -14,7 +32,9 @@
                     <tbody style="font-size: 16px">
                         <tr style="width: 220px">
                             <td class="head">头像</td>
-                            <td style="text-align: center; width: 170px"><va-button flat style="color: #555">修改头像</va-button></td>
+                            <td style="text-align: center; width: 170px">
+                                <va-button @click="showModal=!showModal" flat style="color: #555">修改头像</va-button>
+                                </td>
                         </tr>
                     </tbody>
                 </table>
@@ -48,24 +68,19 @@
 export default {
     data () {
         return {
-            email: '',
-            password: '',
+            id: '',
             name: '',
+            gender: '',
 
             myGender: '',
-            gender: 1,
-            userInfo: {
-                email: this.email,
-                password: this.password,
-                name: 'John Doe',
-                gender: 1,
-                activated: this.activated,
-                status: this.status
-            }
+
+            avatarUrl: '',
+
+            showModal: false,
         }
     },
     mounted () {
-
+        this.id = localStorage.getItem("id")
     },
     methods: {
         onSubmit () {
@@ -77,6 +92,46 @@ export default {
             } else {
                 this.gender = 0
             }
+            let req = {
+                id: this.id,
+                name: this.name,
+                gender: this.gender
+            }
+            fetch(this.$URL + "/user/update", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(req)
+            }).then(response => {
+                let result = response.json()
+                result.then(res => {
+                    console.log(res)
+                    if (res.status == 200) {
+                        this.$notification.success("修改成功");
+                    } else {
+                        this.$notification.error("修改失败")
+                    }
+                })
+            })
+            
+        },
+        onPreview(file) {
+            this.$modal.info({
+                title: 'Preview',
+                content: (
+                <div style="text-align: center">
+                    <img style="max-width: 100%" src={file.url || URL.createObjectURL(file.originFile)} />
+                </div>
+                )
+            });   
+        },
+        getUploadUrl() {
+            return this.$URL + "/file/upload/avatar"
+        },
+        renameAvatar() {
+            return "avatar_" + this.id;
+        },
+        additionalData() {
+            return {"id": this.id}
         }
     }
 }

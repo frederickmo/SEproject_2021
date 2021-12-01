@@ -9,7 +9,7 @@ public class ChecksEntityPK implements Serializable {
     private int taskId;
     private int studentId;
 
-    @Column(name = "teacherId")
+    @Column(name = "teacher_id")
     @Id
     public int getTeacherId() {
         return teacherId;
@@ -19,7 +19,7 @@ public class ChecksEntityPK implements Serializable {
         this.teacherId = teacherId;
     }
 
-    @Column(name = "taskId")
+    @Column(name = "task_id")
     @Id
     public int getTaskId() {
         return taskId;
@@ -29,7 +29,7 @@ public class ChecksEntityPK implements Serializable {
         this.taskId = taskId;
     }
 
-    @Column(name = "studentId")
+    @Column(name = "student_id")
     @Id
     public int getStudentId() {
         return studentId;

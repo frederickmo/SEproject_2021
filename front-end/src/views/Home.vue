@@ -11,7 +11,7 @@
       <div style="height: 60px; min-height: 60px; display: flex">
         <div style="height: 60px">
           <va-button style="top: 12px" round @click="this.$router.push({name: 'BasicInfo'})">
-          <va-avatar src="https://avatars.githubusercontent.com/u/58105082?v=4" />
+          <va-avatar :src="myAvatarUrl()" />
           </va-button>
         </div>
       <div style="line-height: 60px; margin-left: 20px">
@@ -239,6 +239,13 @@ export default {
 
   },
   methods: {
+
+    myAvatarUrl() {
+      var myAvatar = this.$URL + "/file/download/avatar/avatar_" + this.id + ".jpg"
+      console.log("avatarUrl: ", myAvatar)
+      return myAvatar
+      
+    },
     onClickAnnouncement () {
       this.$router.push({
         name: 'Announcement',

@@ -1,21 +1,23 @@
 package com.example.backendtest.model;
 
+import io.swagger.models.auth.In;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "Finishes", schema = "backend_demo", catalog = "")
+@Table(name = "finishes", schema = "backend_demo", catalog = "")
 @IdClass(FinishesEntityPK.class)
 public class FinishesEntity {
     private int studentId;
     private int taskId;
     private Timestamp finishTime;
-    private Byte finished;
+    private Integer finished;
     private String answer;
     private Integer score;
 
     @Id
-    @Column(name = "studentId")
+    @Column(name = "student_id")
     public int getStudentId() {
         return studentId;
     }
@@ -25,7 +27,7 @@ public class FinishesEntity {
     }
 
     @Id
-    @Column(name = "taskId")
+    @Column(name = "task_id")
     public int getTaskId() {
         return taskId;
     }
@@ -35,7 +37,7 @@ public class FinishesEntity {
     }
 
     @Basic
-    @Column(name = "finishTime")
+    @Column(name = "finish_time")
     public Timestamp getFinishTime() {
         return finishTime;
     }
@@ -46,11 +48,15 @@ public class FinishesEntity {
 
     @Basic
     @Column(name = "finished")
-    public Byte getFinished() {
+    public Integer getFinished() {
         return finished;
     }
 
-    public void setFinished(Byte finished) {
+    public void setFinished(Integer finished) {
+        this.finished = finished;
+    }
+
+    public void setFinished(int finished) {
         this.finished = finished;
     }
 
