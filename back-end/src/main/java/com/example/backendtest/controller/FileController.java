@@ -1,29 +1,28 @@
 package com.example.backendtest.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.backendtest.model.FileEntity;
+import com.example.backendtest.model.TestContext;
 import com.example.backendtest.payload.UploadFileResponse;
-import com.example.backendtest.repository.FileRepository;
 import com.example.backendtest.service.FileService;
 import com.example.backendtest.service.FileStorageService;
+import com.example.backendtest.service.ManagesService;
+import com.example.backendtest.util.FtpUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +37,12 @@ public class FileController {
 
     @Autowired
     private FileStorageService fileStorageService;
+
+    @Autowired
+    private FileService fileService;
+
+    @Autowired
+    private ManagesService managesService;
 
     @ApiOperation("上传单个文件")
     @PostMapping("/upload")
@@ -138,4 +143,59 @@ public class FileController {
     }
 
 
+
+
+
+    @ApiOperation("上传文件到服务器上")
+    @PostMapping("addFile")
+    public Object addFile(int uploadID,int courseID,String addPath,@RequestParam("myFile")MultipartFile multipartFile) throws IOException {
+
+
+        FileEntity file = new FileEntity();
+        int tempID;
+        for(;;)
+        {
+            tempID = (int) (Math.random() * 999);
+            if(fileService.checkExist(tempID)==false){break;}
+        }
+        file.setId(tempID);
+        file.setUrl(addPath+"/"+multipartFile.getOriginalFilename());
+        if(managesService.checkExist(uploadID,courseID) == false)//检查是否有权利上传资料
+        {
+            return "manages wrong";
+        }
+        else {
+            fileService.addFile(file);
+            //调用自定义的FTP工具类上传文件
+            String fileName = FtpUtil.uploadFile(addPath, multipartFile);
+            //
+            return fileName;
+        }
+    }
+
+    @ApiOperation("删除服务器上的文件")
+    @PostMapping("deleteFile")
+    public Object deleteFile(String path)
+    {
+        if(FtpUtil.deleteFile(path)==true)
+        {return "success delete";}
+return "wrong delete";
+    }
+
+    @ApiOperation("通过excel文件展示小项目的题目到前端")
+    @RequestMapping("/changeExcelIntoJson")
+    @ResponseBody
+    /**
+     * 通过excel文件展示小项目的题目到前端
+     */
+    public Object changeExcelIntoJson(@RequestParam("file")MultipartFile excelFile) throws Exception {
+        if (excelFile.isEmpty()) {
+            return "Excel is empty";
+        } else {
+            String fileName = excelFile.getOriginalFilename();//获取文件名
+            InputStream in = excelFile.getInputStream();//获取文件输入流
+            //回到前端是json格式
+             return fileService.showExcelContext(in, fileName);
+        }
+    }
 }

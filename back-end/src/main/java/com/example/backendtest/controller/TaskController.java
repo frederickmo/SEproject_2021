@@ -33,6 +33,18 @@ public class TaskController {
         return taskService.getByCourseId(courseId);
     }
 
+    @ApiOperation("按课程ID查询小型实验项目")
+    @GetMapping("/get/smallCourse")
+    public List<TaskEntity> getSmallCourse(Integer courseId) {
+        return taskService.getSmallCourse(courseId);
+    }
+
+    @ApiOperation("按课程ID查询大型实验项目")
+    @GetMapping("/get/bigCourse")
+    public List<TaskEntity> getBigCourse(Integer courseId) {
+        return taskService.getBigCourse(courseId);
+    }
+
     @ApiOperation("添加实验项目")
     @PostMapping("/add")
     public JSONObject addTask(@RequestBody TaskEntity task) {

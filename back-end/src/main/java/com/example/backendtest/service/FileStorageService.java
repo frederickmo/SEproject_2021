@@ -50,6 +50,7 @@ public class FileStorageService {
                 .toAbsolutePath().normalize();
 
         try {
+            //创建文件夹
             Files.createDirectories(this.fileStorageLocation);
         } catch (Exception e) {
             e.printStackTrace();
