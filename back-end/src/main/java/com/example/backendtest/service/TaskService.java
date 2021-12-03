@@ -73,17 +73,32 @@ public class TaskService {
         }
     }
 
-    public JSONObject removeTask(Integer taskId) {
-        boolean taskExists = taskRepository.existsById(taskId);
-        if (!taskExists) {
-            throw new IllegalStateException("该课程不存在！");
+    /**
+     * 通过课程id找到小型项目
+     * @param courseId
+     * @return 返回所有找到的小型项目
+     */
+    public List<TaskEntity> getSmallCourse(Integer courseId) {
+
+        Optional<List<TaskEntity>> tasksOptional = taskRepository.findByCourseId(courseId,1);
+        if (tasksOptional.isPresent()) {
+            throw new IllegalStateException("该课程下无小型实验项目！");
         } else {
-            taskRepository.deleteById(taskId);
-            JSONObject json = new JSONObject();
-            json.put("status", 200);
-            json.put("message", "删除成功");
-            log.info("删除课程项目 => taskId: " + taskId);
-            return json;
+            return tasksOptional.get();
+        }
+    }
+
+    /**
+     * 通过课程id找到大型项目
+     * @param courseId
+     * @return 返回所有找到的大型项目
+     */
+    public List<TaskEntity> getBigCourse(Integer courseId) {
+        Optional<List<TaskEntity>> tasksOptional = taskRepository.findByCourseId(courseId,0);
+        if (tasksOptional.isEmpty()) {
+            throw new IllegalStateException("该课程下无大型实验项目！");
+        } else {
+            return tasksOptional.get();
         }
     }
 }

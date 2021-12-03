@@ -14,4 +14,8 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Integer> {
      */
     @Query(value = "select t from TaskEntity t where t.courseId = ?1")
     public Optional<List<TaskEntity>> findByCourseId(Integer courseId);
+
+
+    @Query(value = "select t from TaskEntity t where t.courseId = ?1 and t.type = ?2")
+    public Optional<List<TaskEntity>> findByCourseId(Integer courseId,Integer type);
 }

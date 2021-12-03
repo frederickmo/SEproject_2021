@@ -61,6 +61,7 @@ public class FileEntity {
         this.url = url;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,7 +74,6 @@ public class FileEntity {
         if (size != null ? !size.equals(that.size) : that.size != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
-
         return true;
     }
 
