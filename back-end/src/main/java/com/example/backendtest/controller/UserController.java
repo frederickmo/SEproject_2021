@@ -35,8 +35,14 @@ public class UserController {
 
     @ApiOperation("新增用户/用户注册")
     @PostMapping("add")
-    public String register(@RequestBody UserEntity user) {
-        return userService.addUser(user);
+    public JSONObject add(@RequestBody UserEntity user) {
+        return userService.add(user);
+    }
+
+    @ApiOperation("移除用户/用户注销")
+    @DeleteMapping("remove")
+    public JSONObject remove(Integer id) {
+        return userService.remove(id);
     }
 
     @ApiOperation("用户登录")

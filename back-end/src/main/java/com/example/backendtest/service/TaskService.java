@@ -72,4 +72,18 @@ public class TaskService {
             return json;
         }
     }
+
+    public JSONObject removeTask(Integer taskId) {
+        boolean taskExists = taskRepository.existsById(taskId);
+        if (!taskExists) {
+            throw new IllegalStateException("该课程不存在！");
+        } else {
+            taskRepository.deleteById(taskId);
+            JSONObject json = new JSONObject();
+            json.put("status", 200);
+            json.put("message", "删除成功");
+            log.info("删除课程项目 => taskId: " + taskId);
+            return json;
+        }
+    }
 }

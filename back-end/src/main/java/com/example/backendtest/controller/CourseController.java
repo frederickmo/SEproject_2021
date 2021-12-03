@@ -44,7 +44,13 @@ public class CourseController {
 
     @ApiOperation("新增课程")
     @PostMapping("/add")
-    public JSONObject addCourse(@RequestBody CourseEntity course) {
-        return courseService.addCourse(course);
+    public JSONObject add(@RequestBody CourseEntity course) {
+        return courseService.add(course);
+    }
+
+    @ApiOperation("删除课程【注意：此操作会将所有该课程的学生选课信息一并移除！】")
+    @DeleteMapping("/remove")
+    public JSONObject remove(Integer courseId) {
+        return courseService.remove(courseId);
     }
 }
