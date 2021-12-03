@@ -20,7 +20,6 @@ public class TaskController {
 
     private final TaskService taskService;
 
-
     @ApiOperation("按实验项目ID查询")
     @GetMapping("/get")
     public TaskEntity getById(Integer id) {
@@ -49,5 +48,11 @@ public class TaskController {
     @PostMapping("/add")
     public JSONObject addTask(@RequestBody TaskEntity task) {
         return taskService.addTask(task);
+    }
+
+    @ApiOperation("删除实验项目")
+    @DeleteMapping("/remove")
+    public JSONObject removeTask(Integer taskId) {
+        return taskService.removeTask(taskId);
     }
 }

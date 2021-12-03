@@ -53,7 +53,7 @@ public class CourseService {
         }
     }
 
-    public JSONObject addCourse(CourseEntity course) {
+    public JSONObject add(CourseEntity course) {
         Optional<CourseEntity> courseOptional = courseRepository.findById(course.getId());
         if (courseOptional.isPresent()) {
             throw new IllegalStateException("该课程已存在");
@@ -63,6 +63,20 @@ public class CourseService {
             JSONObject json = new JSONObject();
             json.put("status", 200);
             json.put("message", "课程添加成功");
+            return json;
+        }
+    }
+
+    public JSONObject remove(Integer courseId) {
+        boolean courseExists = courseRepository.existsById(courseId);
+        if (!courseExists) {
+            throw new IllegalStateException("该课程不存在");
+        } else {
+            courseRepository.deleteById(courseId);
+            log.info("删除课程: 课程ID " + courseId);
+            JSONObject json = new JSONObject();
+            json.put("status", 200);
+            json.put("message", "删除课程成功！");
             return json;
         }
     }
