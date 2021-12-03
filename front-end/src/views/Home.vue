@@ -30,6 +30,7 @@ minimizedWidth="0">
 
   <va-accordion
   v-model="value"
+  v-show="teacherHome"
   style="font-weight: bold"
   multiply
   inset>
@@ -161,6 +162,119 @@ minimizedWidth="0">
       </va-sidebar-item-content>
     </va-sidebar-item>
   </va-accordion>
+
+  <va-accordion
+  v-model="value"
+  v-show="studentHome"
+  style="font-weight: bold"
+  multiply
+  inset>
+    <va-collapse
+    key="0"
+    header="通知公告"
+    icon="notifications">
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="this.$router.push({name: 'Announcement'})">
+        <va-sidebar-item-title>通知公告</va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+
+    <va-collapse
+    key="1"
+    header="基本信息"
+    icon="person_outline">
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="onClickBasicInfo()">
+          <va-sidebar-item-title>
+            查看基本信息
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="onClickEditBasicInfo()">
+          <va-sidebar-item-title>
+            修改基本信息
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+    <va-collapse
+    key="2"
+    header="课程资源"
+    icon="attach_file">
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="onClickCourseResources()">
+          <va-sidebar-item-title>
+            课程资源
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+    <va-collapse
+    key="3"
+    header="我的课程"
+    icon="source">
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="onClickMyCourses()">
+          <va-sidebar-item-title>
+            我的课程
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+    <va-collapse
+    key="4"
+    header="我的考试"
+    icon="mode">
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="onClickMyExams()">
+          <va-sidebar-item-title>
+            我的考试
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+    <va-collapse
+    key="5"
+    header="我的成绩"
+    icon="emoji_events">
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="onClickMyGrades()">
+          <va-sidebar-item-title>
+            我的成绩
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+    <va-sidebar-item>
+      <va-sidebar-item-content
+      style="text-align: center;" 
+      @click="this.$router.push({name: 'Login', params: {tabValue: 0}})">
+        <va-sidebar-item-title>
+          退出登录
+        </va-sidebar-item-title>
+      </va-sidebar-item-content>
+    </va-sidebar-item>
+
+    <!-- <va-sidebar-item>
+      <va-sidebar-item-content
+      style="text-align: center;" 
+      @click="this.$router.push({name: 'About'})">
+        <va-sidebar-item-title>
+          About
+        </va-sidebar-item-title>
+      </va-sidebar-item-content>
+    </va-sidebar-item> -->
+  </va-accordion>
+  
 </va-sidebar>
   <el-container>
 
@@ -207,6 +321,9 @@ export default {
       activated: 0,
       identity: 0,
 
+      teacherHome: false,
+      studentHome: true,
+
     }
   },
   mounted () {
@@ -233,12 +350,27 @@ export default {
       })
     })
 
+    if (this.identity == 0 || this.identity == 1) {
+      this.teacherHome = false
+      this.studentHome = true
+    } else {
+      this.teacherHome = true
+      this.studentHome = false
+    }
+
     this.$router.push({
       name: 'BasicInfo'
     })
 
   },
   methods: {
+    showByIdentity () {
+      if (this.identity == 0 && this.identity == 1) {
+        return false
+      } else {
+        return true
+      }
+    },
 
     myAvatarUrl() {
       var myAvatar = this.$URL + "/file/download/avatar/avatar_" + this.id + ".jpg"

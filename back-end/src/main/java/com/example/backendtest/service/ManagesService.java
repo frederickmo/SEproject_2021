@@ -18,7 +18,9 @@ import java.util.Optional;
  * 检查上传者是否为任课的老师
  */
 public class ManagesService {
+
     private ManagesRepository managesRepository;
+
     public boolean checkExist(int uploadID,int courseID) {
         Optional<ManagesEntity> managesTemp = managesRepository.findById(uploadID,courseID);
         if (managesTemp.isPresent()) {

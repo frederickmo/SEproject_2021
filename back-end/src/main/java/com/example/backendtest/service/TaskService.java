@@ -25,7 +25,7 @@ public class TaskService {
      * @param id 实验项目ID
      * @return 实验项目详细信息
      */
-    public TaskEntity getById(Integer id) {
+    public TaskEntity getByTaskId(Integer id) {
         Optional<TaskEntity> taskOptional = taskRepository.findById(id);
         if (taskOptional.isEmpty()) {
             throw new IllegalStateException("该实验项目不存在！");
@@ -49,11 +49,11 @@ public class TaskService {
     }
 
     /**
-     * 添加实验项目（可以不指定其所属课程）
+     * 添加实验项目（可以不指定其所属课程）=> 似乎不能不指定，因为指定了外码约束
      * @param task 实验项目实体
      * @return 添加结果json
      */
-    public JSONObject addTask(TaskEntity task) {
+    public JSONObject add(TaskEntity task) {
         log.info("task.id: " + task.getId());
         log.info("task.courseId: " + task.getCourseId());
         Optional<TaskEntity> taskOptional = taskRepository.findById(task.getId());
@@ -69,6 +69,20 @@ public class TaskService {
             JSONObject json = new JSONObject();
             json.put("status", 200);
             json.put("message", "成功添加实验项目");
+            return json;
+        }
+    }
+
+    public JSONObject remove(Integer taskId) {
+        boolean taskExists = taskRepository.existsById(taskId);
+        if (!taskExists) {
+            throw new IllegalStateException("该实验项目不存在");
+        } else {
+            taskRepository.deleteById(taskId);
+            log.info("删除实验项目: ID " + taskId);
+            JSONObject json = new JSONObject();
+            json.put("status", 200);
+            json.put("message", "成功删除实验项目");
             return json;
         }
     }

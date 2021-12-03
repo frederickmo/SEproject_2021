@@ -36,6 +36,9 @@ const routes = [{
                 component: () =>
                     import ('../components/Announcement/Announcement.vue')
             },
+
+
+
             {
                 path: '/home/basicinfo',
                 name: 'BasicInfo',
@@ -48,12 +51,19 @@ const routes = [{
                 component: () =>
                     import ('../components/BasicInfo/EditBasicInfo.vue')
             },
+
+
+
             {
                 path: '/home/courseresources',
                 name: 'CourseResources',
                 component: () =>
                     import ('../components/CourseResources/CourseResources.vue')
             },
+
+
+
+
             {
                 path: '/home/mycourses',
                 name: 'MyCourses',
@@ -66,6 +76,15 @@ const routes = [{
                 component: () =>
                     import ('../components/CourseManagement/CourseManagement.vue')
             },
+            {
+                path: '/home/course',
+                name: 'CoursePage',
+                component: () => 
+                    import ('../components/CourseManagement/CoursePage.vue')
+            },
+
+
+            
             {
                 path: '/home/myexams',
                 name: 'MyExams',
@@ -84,6 +103,9 @@ const routes = [{
                 component: () =>
                     import ('../components/ExamManagement/ExamManagement.vue')
             },
+
+
+
             {
                 path: '/home/mygrades',
                 name: 'MyGrades',

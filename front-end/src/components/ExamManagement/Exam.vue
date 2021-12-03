@@ -159,8 +159,17 @@
           testId: '',
           userQId: '',
           questionList: [],
-        }
+        },
+
+        taskId: '',
+        courseId: '',
+        description: '',
+        type: '',
+        url: '',
+
       }
+
+
     },
     created() {
       // const testId = this.$route.params.testId
@@ -169,6 +178,20 @@
       //   this.testId = testId
       //   this.fetchData(testId)
       // }
+    },
+    mounted () {
+      this.taskId = this.$route.params.id
+      this.courseId = this.$route.params.courseId
+      this.description = this.$route.params.description
+      this.type = this.$route.params.type
+      this.url = this.$route.params.url
+
+      console.log("从上个界面传过来的信息：")
+      console.log("taskId: " + this.taskId)
+      console.log("courseId: " + this.courseId)
+      console.log("description: " + this.description)
+      console.log("type: " + this.type)
+      console.log("url: " + this.url)
     },
     methods: {
       // 倒计时

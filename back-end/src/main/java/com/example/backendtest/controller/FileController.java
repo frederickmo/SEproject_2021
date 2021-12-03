@@ -11,6 +11,7 @@ import com.example.backendtest.util.FtpUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +31,18 @@ import java.util.stream.Collectors;
 @Api(tags = "课程资源管理")
 @RestController
 @RequestMapping("/file")
-//@AllArgsConstructor
+@AllArgsConstructor
 public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
-    @Autowired
+//    @Autowired
     private FileStorageService fileStorageService;
 
-    @Autowired
+//    @Autowired
     private FileService fileService;
 
-    @Autowired
+//    @Autowired
     private ManagesService managesService;
 
     @ApiOperation("上传单个文件")
