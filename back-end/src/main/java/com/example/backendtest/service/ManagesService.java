@@ -20,12 +20,10 @@ import java.util.Optional;
 public class ManagesService {
 
     private ManagesRepository managesRepository;
-<<<<<<< Updated upstream
 
-    public boolean checkExist(int uploadID,int courseID) {
-=======
+
+
     public JSONObject checkExist(int uploadID,int courseID) {
->>>>>>> Stashed changes
         Optional<ManagesEntity> managesTemp = managesRepository.findById(uploadID,courseID);
         if (managesTemp.isPresent()) {
             JSONObject json = new JSONObject();
