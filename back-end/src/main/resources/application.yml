@@ -41,8 +41,9 @@ spring:
       max-request-size: 215MB
 
 file:
-#  upload-dir: /Users/dengruotao/Desktop/SEproject_2021/back-end/src/main/resources/static
-  upload-dir: /Users/frederickmo/documents/Github/SEproject_2021/back-end/src/main/resources/static
+
+ upload-dir: /Users/dengruotao/Desktop/SEproject_2021/back-end/src/main/resources/static
+  #upload-dir: /Users/frederickmo/documents/Github/SEproject_2021/back-end/src/main/resources/static
 #  upload-dir: /usr/test/resources
 
 

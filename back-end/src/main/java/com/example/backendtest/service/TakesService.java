@@ -2,6 +2,7 @@ package com.example.backendtest.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.model.CourseEntity;
+import com.example.backendtest.model.ManagesEntity;
 import com.example.backendtest.model.TakesEntity;
 import com.example.backendtest.model.UserEntity;
 import com.example.backendtest.repository.CourseRepository;
@@ -141,5 +142,23 @@ public class TakesService {
             json.put("message", "退课成功");
             return json;
         }
+    }
+
+    public JSONObject checkExist(Integer id, Integer courseId) {
+
+        Optional<TakesEntity> takesTemp = takesRepository.findById(id,courseId);
+        if (takesTemp.isPresent())
+        {
+            JSONObject json = new JSONObject();
+            json.put("status", 000);
+            json.put("message", "学生选课关系已存在");
+            json.put("boolean",true);
+            return json;
+        }
+        JSONObject json = new JSONObject();
+        json.put("status", 001);
+        json.put("message", "学生选课关系不存在");
+        json.put("boolean",false);
+        return json;
     }
 }

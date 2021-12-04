@@ -7,6 +7,7 @@ import com.example.backendtest.payload.UploadFileResponse;
 import com.example.backendtest.service.FileService;
 import com.example.backendtest.service.FileStorageService;
 import com.example.backendtest.service.ManagesService;
+import com.example.backendtest.service.TakesService;
 import com.example.backendtest.util.FtpUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -44,6 +45,9 @@ public class FileController {
 
 //    @Autowired
     private ManagesService managesService;
+
+    @Autowired
+    private TakesService takesService;
 
     @ApiOperation("上传单个文件")
     @PostMapping("/upload")
@@ -162,7 +166,7 @@ public class FileController {
         }
         file.setId(tempID);
         file.setUrl(addPath+"/"+multipartFile.getOriginalFilename());
-        if(managesService.checkExist(uploadID,courseID) == false)//检查是否有权利上传资料
+        if(managesService.checkExist(uploadID,courseID).getBooleanValue("boolean") == false)//检查是否有权利上传资料
         {
             return "manages wrong";
         }
@@ -184,6 +188,8 @@ public class FileController {
 return "wrong delete";
     }
 
+
+
     @ApiOperation("通过excel文件展示小项目的题目到前端")
     @RequestMapping("/changeExcelIntoJson")
     @ResponseBody
@@ -200,4 +206,31 @@ return "wrong delete";
              return fileService.showExcelContext(in, fileName);
         }
     }
+
+    /**
+     *可以用于放在教师上传下载文件时的验证
+     * @param id
+     * @param courseId
+     * @return JSON
+     */
+    @ApiOperation("文件上传下载是否符合教师授课关系")
+    @GetMapping("/followManages")
+    public JSONObject followManages(Integer id,Integer courseId)
+    {
+      return managesService.checkExist(id,courseId);
+    }
+
+    /**
+     * 可以用于放在学生上传下载文件时的验证
+     * @param id
+     * @param courseId
+     * @return JSON
+     */
+    @ApiOperation("文件上传下载是否符合学生选课关系")
+    @GetMapping("/followTakes")
+    public JSONObject followTakes(Integer id,Integer courseId)
+    {
+        return takesService.checkExist(id,courseId);
+    }
+
 }
