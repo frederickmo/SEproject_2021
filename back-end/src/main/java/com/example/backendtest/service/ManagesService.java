@@ -21,11 +21,21 @@ public class ManagesService {
 
     private ManagesRepository managesRepository;
 
-    public boolean checkExist(int uploadID,int courseID) {
+
+
+    public JSONObject checkExist(int uploadID,int courseID) {
         Optional<ManagesEntity> managesTemp = managesRepository.findById(uploadID,courseID);
         if (managesTemp.isPresent()) {
-            return true;
+            JSONObject json = new JSONObject();
+            json.put("status", 000);
+            json.put("message", "教师授课关系已存在");
+            json.put("boolean",true);
+            return json;
         }
-        else return  false;
+        JSONObject json = new JSONObject();
+        json.put("status", 001);
+        json.put("message", "教师授课关系不存在");
+        json.put("boolean",false);
+        return json;
     }
 }
