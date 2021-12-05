@@ -85,7 +85,7 @@ export default {
                         console.log(res)
                         if (res.status==200) {
                             this.$notification.success("登录成功")
-                            localStorage.setItem("id", this.id)
+                            localStorage.setItem("userId", this.id)
                             localStorage.setItem("password", this.password)
                             this.$router.push({name: 'Home'})
                         } else {

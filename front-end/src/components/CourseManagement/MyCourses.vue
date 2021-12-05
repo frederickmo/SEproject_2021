@@ -20,7 +20,7 @@
                 <div style="display: flex">
                   <!-- va-card高度: 76px -->
                   <!-- va-card高度: 36px -->
-                  <div style="line-height: 36px; width: 80%; font-size: 18px">{{course.name}}</div>
+                  <div style="line-height: 36px; width: 90%; font-size: 18px">{{course.name}}</div>
                   <div><va-button @click="switchToCourse(course.id, index)" color="#e0e5df" style="color: rgb(40,40,40)">点击进入</va-button></div>
                 </div>
               </va-card-content>
@@ -46,7 +46,7 @@ export default {
   },
   mounted () {
 
-    this.id = localStorage.getItem("id")
+    this.id = localStorage.getItem("userId")
     console.log("id: ", this.id)
 
     fetch(this.$URL + "/takes/get/student/detail?studentId=" + this.id, {
@@ -61,16 +61,16 @@ export default {
     })
   },
   methods: {
-    switchToCourse (id, index) {
-      console.log("调用switchToCourse时，courseId传过去了吗？ courseId的值是：" + id)
-      console.log("调用switchToCourse时，index的值是：" + index)
-      console.log(this.courses[index])
-      localStorage.setItem("courseId", id)
+    switchToCourse (courseId, index) {
+      // console.log("调用switchToCourse时，courseId传过去了吗？ courseId的值是：" + id)
+      // console.log("调用switchToCourse时，index的值是：" + index)
+      // console.log(this.courses[index])
+      localStorage.setItem("courseId", courseId)
       console.log("设置courseID了吗？courseId=" + localStorage.getItem("courseId"))
       this.$router.push({
         name: 'CoursePage',
         params: {
-          id: this.courses[index].id,
+          courseId: this.courses[index].id,
           name: this.courses[index].name,
           description: this.courses[index].description,
           year: this.courses[index].year,

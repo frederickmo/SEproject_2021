@@ -1,25 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-// import LogIn from '../views/auth/Login.vue'
-// import SignUp from '../views/auth/Signup.vue'
-// import Auth from '../views/auth/Auth.vue'
-// import RecoverPassword from '../views/auth/RecoverPassword.vue'
-
-// import BasicInfo from '../components/BasicInfo/BasicInfo.vue'
-// import EditBasicInfo from '../components/BasicInfo/EditBasicInfo.vue'
-
-// import Announcement from '../components/Announcement/Announcement.vue'
-
-// import CourseResources from '../components/CourseResources/CourseResources.vue'
-
-// import MyCourses from '../components/CourseManagement/MyCourses.vue'
-// import CourseManagement from '../components/CourseManagement/CourseManagement.vue'
-
-// import MyExams from '../components/ExamManagement/MyExams.vue'
-// import ExamManagement from '../components/ExamManagement/ExamManagement.vue'
-
-// import MyGrades from '../components/GradeManagement/MyGrades.vue'
-// import GradeManagement from '../components/GradeManagement/GradeManagement.vue'
 
 // 从直接头部import改成在component属性import => es6中提出的路由懒加载机制
 // 路由懒加载：在访问该路由时才加载页面，减轻初次访问时加载过多页面造成的等待时间过长
@@ -86,22 +66,22 @@ const routes = [{
 
             
             {
-                path: '/home/myexams',
-                name: 'MyExams',
+                path: '/home/mytasks',
+                name: 'MyTasks',
                 component: () =>
-                    import ('../components/ExamManagement/MyExams.vue')
+                    import ('../components/TaskManagement/MyTasks.vue')
             },
             {
-                path: '/home/exam',
-                name: 'Exam',
+                path: '/home/task',
+                name: 'Task',
                 component: () =>
-                    import ('../components/ExamManagement/Exam.vue')
+                    import ('../components/TaskManagement/Task.vue')
             },
             {
-                path: '/home/exammanagement',
-                name: 'ExamManagement',
+                path: '/home/taskmanagement',
+                name: 'TaskManagement',
                 component: () =>
-                    import ('../components/ExamManagement/ExamManagement.vue')
+                    import ('../components/TaskManagement/TaskManagement.vue')
             },
 
 
@@ -118,6 +98,23 @@ const routes = [{
                 component: () =>
                     import ('../components/GradeManagement/GradeManagement.vue')
             },
+
+
+
+            // Forms / 在线表格
+            {
+                path: '/home/task/onlinetask',
+                name: 'OnlineTask',
+                component: () => 
+                    import ('../components/Forms/OnlineExperimentForm.vue')
+            },
+
+            {
+                path: '/home/task/complextask',
+                name: 'ComplexTask',
+                component: () => 
+                    import ("../components/Forms/ComplexExperimentPage.vue")
+            }
         ]
     },
     {

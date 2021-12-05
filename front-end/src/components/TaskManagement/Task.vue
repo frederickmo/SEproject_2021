@@ -180,7 +180,7 @@
       // }
     },
     mounted () {
-      this.taskId = this.$route.params.id
+      this.taskId = this.$route.params.taskId
       this.courseId = this.$route.params.courseId
       this.description = this.$route.params.description
       this.type = this.$route.params.type

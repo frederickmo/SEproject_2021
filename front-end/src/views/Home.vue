@@ -1,6 +1,6 @@
 <template>
 
-  <va-navbar style="height: 8%; min-height: 60px;">
+  <va-navbar color="#3d708f" gradient style="height: 8%; min-height: 60px;">
     <template v-slot:left>
       <va-checkbox v-model="minimized" label="Minimized(暂时还没实现)" />
     </template>
@@ -327,9 +327,10 @@ export default {
     }
   },
   mounted () {
-      console.log("this.$URL: ", this.$URL)
+      // console.log("this.$URL: ", this.$URL)
 
-      this.id = localStorage.getItem("id")
+      this.id = localStorage.getItem("userId")
+      console.log("mounted获取到id了吗? id = " + this.id)
 
 
     fetch(this.$URL + "/user/get?id=" + this.id, {
@@ -345,22 +346,26 @@ export default {
         this.identity = result.identity
         this.activated = result.activated
 
-        localStorage.setItem("id", this.id)
-        localStorage.setItem("password", this.password)
+        // localStorage.setItem("userId", this.id)
+        // localStorage.setItem("password", this.password)
+        localStorage.setItem("username", this.name)
+        localStorage.setItem("gender", this.gender)
+
+        if (this.identity == 0 || this.identity == 1) {
+          this.teacherHome = false
+          this.studentHome = true
+        } else {
+          this.teacherHome = true
+          this.studentHome = false
+        }
+
+        this.$router.push({
+          name: 'BasicInfo'
+        })
+
       })
     })
 
-    if (this.identity == 0 || this.identity == 1) {
-      this.teacherHome = false
-      this.studentHome = true
-    } else {
-      this.teacherHome = true
-      this.studentHome = false
-    }
-
-    this.$router.push({
-      name: 'BasicInfo'
-    })
 
   },
   methods: {
@@ -373,7 +378,8 @@ export default {
     },
 
     myAvatarUrl() {
-      var myAvatar = this.$URL + "/file/download/avatar/avatar_" + this.id + ".jpg"
+      console.log("看看哪个先加载：this.id = " + this.id)
+      let myAvatar = this.$URL + "/file/download/avatar/avatar_" + this.id + ".jpg"
       console.log("avatarUrl: ", myAvatar)
       return myAvatar
       
@@ -431,7 +437,7 @@ export default {
     },
     onClickMyExams () {
       this.$router.push({
-        name: 'MyExams',
+        name: 'MyTasks',
         params: {
           userInfo: this.userInfo
         }

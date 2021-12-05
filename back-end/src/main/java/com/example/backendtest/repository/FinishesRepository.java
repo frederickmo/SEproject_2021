@@ -17,4 +17,7 @@ public interface FinishesRepository extends JpaRepository<FinishesEntity, Finish
     @Query(value="select a.studentId,a.courseId,b.id from TakesEntity a ,TaskEntity b where a.courseId = b.courseId and b.id= ?2 and a.studentId = ?1")
     public List<Object> getStudentCourseTaskList(Integer studentId,Integer taskId);
 
+    @Query(value = "select f from FinishesEntity f where f.studentId = ?1")
+    public Optional<List<FinishesEntity>> findAllByStudentId(Integer studentId);
+
 }

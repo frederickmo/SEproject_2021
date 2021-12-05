@@ -45,12 +45,12 @@
                                 <va-form @submit.prevent="onSubmit">
                                     <div style="display: flex; height: 36px; margin-bottom: 20px">
                                         <div class="head" style="margin-right: 30px">姓名</div>
-                                        <va-input v-model="name" />
+                                        <va-input v-model="nameInput" />
                                     </div>
                                     <div style="display: flex; height: 36px">
                                         <div class="head" style="margin-right: 30px">性别</div>
                                         <va-select
-                                        v-model="myGender"
+                                        v-model="genderInput"
                                         :options="['男','女']" />
                                     </div>
                                         <va-button @click="onSubmit" style="margin-left: 60px; margin-top: 20px;">提交</va-button>
@@ -72,7 +72,11 @@ export default {
             name: '',
             gender: '',
 
-            myGender: '',
+            genderInput: '',
+            nameInput: '',
+
+            genderSubmit: '',
+            nameSubmit: '',
 
             avatarUrl: '',
 
@@ -80,23 +84,38 @@ export default {
         }
     },
     mounted () {
-        this.id = localStorage.getItem("id")
+        this.id = localStorage.getItem("userId")
+        fetch(this.$URL + "/user/get?id=" + this.id, {
+        method: "GET"
+        }).then((res) => {
+        var result = res.json()
+        result.then((res) => {
+            console.log(res)
+            this.name = res.name
+            this.gender = res.gender
+        })
+        })
     },
     methods: {
         onSubmit () {
             console.log(this.name, this.gender)
-            if (this.myGender == '男') {
-                this.gender = 1
-            } else if (this.myGender == '女') {
-                this.gender = 2
-            } else {
-                this.gender = 0
+            if (this.genderInput == '男') {
+                this.genderSubmit = 1
             }
+            if (this.genderInput == '女') {
+                this.genderSubmit = 2
+            } else {
+                this.genderSubmit = 0
+            }
+        
             let req = {
                 id: this.id,
-                name: this.name,
-                gender: this.gender
+                name: this.nameInput,
+                gender: this.genderSubmit
             }
+
+            console.log("现在提交的是哪个name？", req.name)
+
             fetch(this.$URL + "/user/update", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
@@ -107,6 +126,8 @@ export default {
                     console.log(res)
                     if (res.status == 200) {
                         this.$notification.success("修改成功");
+                        localStorage.setItem("gender", this.gender)
+                        localStorage.setItem("username", this.name)
                     } else {
                         this.$notification.error("修改失败")
                     }

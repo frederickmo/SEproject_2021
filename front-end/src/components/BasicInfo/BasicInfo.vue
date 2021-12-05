@@ -75,16 +75,17 @@ export default {
     return {
       showAvatar: false,
 
+      id: '',
       name: '',
-      gender: 2,
-      email: '123@gmail.com',
-      password: '12345',
+      gender: 0,
+      email: '',
+      password: '',
       activated: 1,
       identity: 0,
     }
   },
   mounted () {
-    this.id = localStorage.getItem("id")
+    this.id = localStorage.getItem("userId")
     this.password = localStorage.getItem("password")
     fetch(this.$URL + "/user/get?id=" + this.id, {
       method: "GET"
@@ -99,6 +100,13 @@ export default {
         this.activated = res.activated
       })
     })
+
+    localStorage.setItem("gender", this.gender)
+    console.log("this.gender: " , this.gender)
+    localStorage.setItem("username", this.name)
+    console.log("this.username: " , this.name)
+    // console.log("name存入localstorage了吗？" + this.localStorage.getItem("gender"))
+    // console.log("gender存入localstorage了吗？ " + this.localStorage.getItem("username"))
     
   },
   methods: {

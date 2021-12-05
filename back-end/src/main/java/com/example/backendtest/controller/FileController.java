@@ -146,6 +146,17 @@ public class FileController {
         return fileStorageService.downloadFile(fileName, dirName, request);
     }
 
+    @ApiOperation("获取根目录以下三层某目录的文件")
+    @GetMapping("/download/{dirName1}/{dirName2}/{dirName3}/{fileName:.+}")
+    public ResponseEntity<Resource> download3(@PathVariable String fileName,
+                                              @PathVariable String dirName1,
+                                              @PathVariable String dirName2,
+                                              @PathVariable String dirName3,
+                                              HttpServletRequest request) {
+        String dirName = dirName1 + "/" + dirName2 + "/" + dirName3;
+        return fileStorageService.downloadFile(fileName, dirName, request);
+    }
+
     @ApiOperation("获取某一目录所有文件")
     @ApiImplicitParam(name = "path", value = "路径值（包含左'/'不含右'/'）")
     @GetMapping("/getAll")

@@ -3,6 +3,9 @@ package com.example.backendtest.model;
 import io.swagger.models.auth.In;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "task", schema = "backend_demo", catalog = "")
@@ -13,6 +16,7 @@ public class TaskEntity {
     private String name;
     private Integer type;
     private String url;
+    private Date deadline;
 
     @Id
     @Column(name = "id")
@@ -33,7 +37,6 @@ public class TaskEntity {
     public void setCourseId(Integer courseId) {
         this.courseId = courseId;
     }
-
 
     @Basic
     @Column(name = "description")
@@ -88,6 +91,7 @@ public class TaskEntity {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
+        if (deadline != null ? !deadline.equals(that.deadline) : that.deadline != null) return false;
 
         return true;
     }
@@ -100,6 +104,18 @@ public class TaskEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + (deadline != null ? deadline.hashCode() : 0);
         return result;
     }
+
+    @Basic
+    @Column(name = "deadline")
+    public Date getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
+    }
+
 }

@@ -5,6 +5,7 @@ import com.example.backendtest.exception.FileStorageException;
 import com.example.backendtest.exception.MyFileNotFoundException;
 import com.example.backendtest.payload.UploadFileResponse;
 import com.example.backendtest.property.FileStorageProperties;
+import com.example.backendtest.repository.FinishesRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -22,9 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -56,6 +57,10 @@ public class FileStorageService {
             e.printStackTrace();
             throw new FileStorageException("无法创建目录", e);
         }
+    }
+
+    public String getFileStorageLocation () {
+        return this.fileStorageLocation.toString();
     }
 
     public String storeFile(MultipartFile file) {
@@ -211,5 +216,6 @@ public class FileStorageService {
         }
         return fileNameList;
     }
+
 
 }
