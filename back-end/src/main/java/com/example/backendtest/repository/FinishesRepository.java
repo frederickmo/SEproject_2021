@@ -20,4 +20,9 @@ public interface FinishesRepository extends JpaRepository<FinishesEntity, Finish
     @Query(value = "select f from FinishesEntity f where f.studentId = ?1")
     public Optional<List<FinishesEntity>> findAllByStudentId(Integer studentId);
 
+    @Query(value = "select f.taskId, t.name as taskName, t.courseId, c.name as courseName, f.score, f.answer " +
+            "from FinishesEntity f, TaskEntity t, CourseEntity c " +
+            "where f.taskId = t.id and t.courseId = c.id")
+    public Optional<List<Object>> findAllByStudentIdInDetail(Integer studentId);
+
 }

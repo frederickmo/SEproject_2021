@@ -98,6 +98,10 @@ export default {
     },
     methods: {
         onSubmit () {
+
+            /**
+             * 修改了当提交信息为空时候的逻辑，现在在后端进行检查了，若提交空信息给后端则不修改。
+             */
             console.log(this.name, this.gender)
             if (this.genderInput == '男') {
                 this.genderSubmit = 1

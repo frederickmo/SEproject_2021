@@ -1,7 +1,6 @@
 package com.example.backendtest.service;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.model.UserEntity;
@@ -109,10 +108,21 @@ public class UserService {
         if (userOptional.isEmpty()) {
             throw new IllegalStateException("用户" + user.getId() + "不存在");
         } else {
-            userOptional.get().setGender(user.getGender());
-            log.info("用户修改性别为 " + user.getGender());
-            userOptional.get().setName(user.getName());
-            log.info("用户修改姓名为 " + user.getName());
+            log.info("------------ 用户 " + user.getId() + " 提交信息变更申请 -------------");
+            if (user.getGender() == 1 || user.getGender() == 2) {
+                userOptional.get().setGender(user.getGender());
+                log.info("用户修改性别为 " + user.getGender());
+            } else {
+                log.info("用户提交的新的性别信息：" + user.getGender());
+                log.info("用户未更新性别信息");
+            }
+            if (user.getName().equals("")) {
+                log.info("用户提交的新的姓名信息：" + user.getName());
+                log.info("用户未更新姓名信息");
+            } else {
+                userOptional.get().setName(user.getName());
+                log.info("用户修改姓名为 " + user.getName());
+            }
             userRepository.save(userOptional.get());
             JSONObject json = new JSONObject();
             json.put("status", 200);

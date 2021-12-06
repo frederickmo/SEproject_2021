@@ -109,7 +109,7 @@ minimizedWidth="0">
         <va-sidebar-item-content
         @click="onClickMyExams()">
           <va-sidebar-item-title>
-            我的考试
+            我的实验
           </va-sidebar-item-title>
         </va-sidebar-item-content>
       </va-sidebar-item>
@@ -117,7 +117,7 @@ minimizedWidth="0">
         <va-sidebar-item-content
         @click="onClickExamManagement()">
           <va-sidebar-item-title>
-            考试管理
+            实验管理
           </va-sidebar-item-title>
         </va-sidebar-item-content>
       </va-sidebar-item>
@@ -230,13 +230,13 @@ minimizedWidth="0">
     </va-collapse>
     <va-collapse
     key="4"
-    header="我的考试"
+    header="我的实验"
     icon="mode">
       <va-sidebar-item>
         <va-sidebar-item-content
         @click="onClickMyExams()">
           <va-sidebar-item-title>
-            我的考试
+            我的实验
           </va-sidebar-item-title>
         </va-sidebar-item-content>
       </va-sidebar-item>

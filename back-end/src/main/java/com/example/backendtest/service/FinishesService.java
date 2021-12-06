@@ -152,6 +152,15 @@ public class FinishesService {
         }
     }
 
+    public List<Object> getAllScoresOfSubmitRecordsInDetail(Integer studentId) {
+        Optional<List<Object>> recordsInDetailOptional = finishesRepository.findAllByStudentIdInDetail(studentId);
+        if (recordsInDetailOptional.isEmpty()) {
+            throw new IllegalStateException("该学生无实验项目提交记录");
+        } else {
+            return recordsInDetailOptional.get();
+        }
+    }
+
 
 
 

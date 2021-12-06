@@ -9,7 +9,7 @@
       <va-modal ref="modal" v-model="showAvatar"
       hide-default-actions title="查看大图"
       >
-      <div><img :src="myAvatarUrl()" /></div>
+      <div><img style="max-height: 450px" :src="myAvatarUrl()" /></div>
       <div style="text-align: center">
         <va-button flat style="margin-top: 15px; color: gray" @click="this.showAvatar=!this.showAvatar">关闭</va-button>
       </div>
@@ -65,7 +65,7 @@
             </table>
         </va-card-content>
     </va-card>
-    <va-button flat :to="{name: 'Information'}">information</va-button>
+    <!-- <va-button flat :to="{name: 'Information'}">information</va-button> -->
   </div>
 </template>
 

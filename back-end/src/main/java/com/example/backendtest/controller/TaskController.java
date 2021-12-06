@@ -1,9 +1,7 @@
 package com.example.backendtest.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.backendtest.model.TakesEntity;
 import com.example.backendtest.model.TaskEntity;
-import com.example.backendtest.repository.*;
 import com.example.backendtest.service.TaskService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,15 +31,27 @@ public class TaskController {
     }
 
     @ApiOperation("按课程ID查询小型实验项目")
-    @GetMapping("/get/smallCourse")
-    public List<TaskEntity> getSmallCourse(Integer courseId) {
-        return taskService.getSmallCourse(courseId);
+    @GetMapping("/get/simple")
+    public List<TaskEntity> getSimpleTask(Integer courseId) {
+        return taskService.getSimpleTask(courseId);
     }
 
     @ApiOperation("按课程ID查询大型实验项目")
-    @GetMapping("/get/bigCourse")
-    public List<TaskEntity> getBigCourse(Integer courseId) {
-        return taskService.getBigCourse(courseId);
+    @GetMapping("/get/complex")
+    public List<TaskEntity> getComplexTask(Integer courseId) {
+        return taskService.getComplexTask(courseId);
+    }
+
+    @ApiOperation("按学生ID获取所有未完成的实验项目的信息（按截止日期升序排列，截止日期为空置于最后）")
+    @GetMapping("/getAll/unfinished/deadline/asc")
+    public List<Object> getAllByStudentIdAndUnfinishedOrderByDeadlineAsc(Integer studentId) {
+        return taskService.getAllByStudentIdAndUnfinishedOrderByDeadlineAsc(studentId);
+    }
+
+    @ApiOperation("按学生ID获取所有已完成的实验项目的信息（按截止日期升序排列，截止日期为空置于最后）")
+    @GetMapping("/getAll/finished/deadline/asc")
+    public List<Object> getAllByStudentIdAndFinishedOrderByDeadlineAsc(Integer studentId) {
+        return taskService.getAllByStudentIdAndFinishedOrderByDeadlineAsc(studentId);
     }
 
     @ApiOperation("添加实验项目")

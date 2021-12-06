@@ -80,4 +80,10 @@ public class FinishesController {
     public List<FinishesEntity> getAllSubmitRecords(Integer studentId) {
         return finishesService.getAllSubmitRecords(studentId);
     }
+
+    @ApiOperation("获取所有提交记录以及得分情况（若有）以及课程和实验项目的详细信息")
+    @GetMapping("/get/record/detail")
+    public List<Object> getAllScoresOfSubmitRecordsInDetail(Integer studentId) {
+        return finishesService.getAllScoresOfSubmitRecordsInDetail(studentId);
+    }
 }
