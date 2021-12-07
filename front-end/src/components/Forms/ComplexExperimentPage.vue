@@ -41,14 +41,26 @@ export default {
     },
     mounted () {
         this.taskId = this.$route.params.taskId
-        this.taskName = this.$route.params.taskName
-        this.deadline = this.$route.params.deadline
+        // this.taskName = this.$route.params.taskName
+        // this.deadline = this.$route.params.deadline
+
+
 
         /**
          * 还差日期比较的功能还没做 => 超过截止日期后无法提交
          */
 
         this.studentId = localStorage.getItem("userId")
+
+        fetch(this.$URL + "/task/get?id=" + this.taskId, {
+            method: "GET"
+        }).then(response => {
+            let result = response.json()
+            result.then(res => {
+                this.taskName = res.name
+                this.deadline = res.deadline
+            })
+        })
 
         fetch(this.$URL + "/finishes/isFinished?studentId=" + this.studentId + "&taskId=" + this.taskId, {
             method: "GET"

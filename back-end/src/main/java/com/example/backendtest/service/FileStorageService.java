@@ -63,8 +63,15 @@ public class FileStorageService {
         return this.fileStorageLocation.toString();
     }
 
+    public String getOriginalFileName(MultipartFile file) {
+        return StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+    }
+
+    /**
+     * 上传文件到根目录的方法
+     */
     public String storeFile(MultipartFile file) {
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        String fileName = getOriginalFileName(file);
 
         try {
             //检查文件名是否含有非法字符
@@ -81,21 +88,21 @@ public class FileStorageService {
         }
     }
 
-    public void storeAndRename(MultipartFile file, String newFileName, String location) {
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-
+    /**
+     * 上传文件到指定位置的方法
+     */
+    public void storeToSpecifiedDirectory(MultipartFile file, String location) {
+        String fileName = getOriginalFileName(file);
         try {
             //检查文件名是否含有非法字符
             if (fileName.contains((".."))) {
                 throw new FileStorageException("文件名含有非法路径序列" + fileName);
             }
 
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
-            String avatarLocation = this.fileStorageLocation.toString() + location;
-//            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-
-            File targetFile = new File(avatarLocation, newFileName);
-            logger.info("fileStorageLocation: "+avatarLocation);
+            // 生成文件新存放位置
+            String targetLocation = this.fileStorageLocation.toString() + location;
+            File targetFile = new File(targetLocation, fileName);
+            logger.info("fileStorageLocation: "+ targetLocation);
             if (!targetFile.exists()) {
                 targetFile.mkdirs();
             }
@@ -108,9 +115,82 @@ public class FileStorageService {
         }
     }
 
+    /**
+     * 上传文件并重命名的方法
+     */
+    public void storeToSpecifiedDirectoryAndRename(MultipartFile file, String newFileName, String location) {
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+
+        try {
+            //检查文件名是否含有非法字符
+            if (fileName.contains((".."))) {
+                throw new FileStorageException("文件名含有非法路径序列" + fileName);
+            }
+
+//            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            String targetLocation = this.fileStorageLocation.toString() + location;
+//            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+            File targetFile = new File(targetLocation, newFileName);
+            logger.info("fileStorageLocation: "+ targetLocation);
+            if (!targetFile.exists()) {
+                targetFile.mkdirs();
+            }
+
+            file.transferTo(targetFile);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new FileStorageException("存储文件" + fileName + "失败，请重新上传" , e);
+        }
+    }
+
+    /**
+     * 为了精简Controller的体量，把以上两个上传文件在Controller中的实现搬到Service里。
+     */
+
+    public JSONObject uploadFile(MultipartFile file) {
+        String fileName = storeFile(file);
+
+//        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+//                .path("/file/downloadFile/")
+//                .path(fileName)
+//                .toUriString();
+//
+//        return new UploadFileResponse(fileName,
+//                fileDownloadUri,
+//                file.getContentType(),
+//                file.getSize());
+        JSONObject json = new JSONObject();
+        json.put("status", 200);
+        json.put("message", "成功上传文件到根目录");
+        return json;
+    }
+
+    public JSONObject uploadFileToSpecifiedDirectory(MultipartFile file, String location) {
+        storeToSpecifiedDirectory(file, location);
+        JSONObject json = new JSONObject();
+        json.put("status", 200);
+        json.put("message", "成功上传文件到目录: " + location);
+        return json;
+    }
+
+    public JSONObject uploadFileToSpecifiedDirectoryAndRename(MultipartFile file, String newFileName, String location) {
+        storeToSpecifiedDirectoryAndRename(file, newFileName, location);
+        JSONObject json = new JSONObject();
+        json.put("status", 200);
+        json.put("message", "成功上传文件到目录: " + location);
+        return json;
+    }
+
+
+
+    /**
+     * 上传头像的供Controller调用的方法
+     */
     public UploadFileResponse storeAvatar(MultipartFile file, Integer id) {
         String newFileName = "avatar_" + id +".jpg";
-        this.storeAndRename(file, newFileName, "/avatar");
+        this.storeToSpecifiedDirectoryAndRename(file, newFileName, "/avatar");
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/file/downloadFile/"+"/avatar/")

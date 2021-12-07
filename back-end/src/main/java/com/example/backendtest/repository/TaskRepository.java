@@ -41,6 +41,7 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Integer> {
      * asc => 按截止日期升序排列，即ddl越靠前排越前
      * nulls last => ddl为空排最后
      */
+
     @Query(value = "select t2.studentId, t2.courseId, c.name as courseName, " +
             "t1.id as taskId, t1.name as taskName, t1.deadline, t1.type " +
             "from TaskEntity t1, TakesEntity t2, CourseEntity c " +

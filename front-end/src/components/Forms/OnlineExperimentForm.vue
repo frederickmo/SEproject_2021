@@ -2,7 +2,7 @@
   <va-card>
       <div style="height: 10px" />
       <a-space style="margin-bottom: 20px">
-      <div style="font-size: 30px; font-weight: bold">实验报告：{{taskName}}</div>
+      <div style="font-size: 30px; font-weight: bold">实验报告：{{this.taskName}}</div>
       <div v-show="isSubmitted"><va-icon color="#89d7bc" name="check_circle" />已提交</div>
       <div v-show="!isSubmitted"><va-icon name="cancel" />未提交</div>
       </a-space>
@@ -144,10 +144,16 @@ export default {
         }
     },
     mounted () {
+        // console.log("params:", this.$route.params)
         // console.log(this.$route.params.taskId, this.$route.params.taskName)
         this.taskId = this.$route.params.taskId
-        this.taskName = this.$route.params.taskName
-        this.deadline = this.$route.params.deadline
+        // this.taskName = this.$route.params.taskName
+        // this.deadline = this.$route.params.deadline
+
+        /**
+         * 不知道为什么跨页面传参出了问题，从上一个页面传过来的参数到了本页面少了几个属性。
+         * 只好重新查询了。
+         */
 
         /**
          * 还差日期比较的功能还没做 => 超过截止日期后无法提交
@@ -155,10 +161,20 @@ export default {
 
         this.studentId = localStorage.getItem("userId")
 
+        fetch(this.$URL + "/task/get?id=" + this.taskId, {
+            method: "GET"
+        }).then(response => {
+            let result = response.json()
+            result.then(res => {
+                this.taskName = res.name
+                this.deadline = res.deadline
+            })
+        })
+
         fetch(this.$URL + "/finishes/isFinished?studentId=" + this.studentId + "&taskId=" + this.taskId, {
             method: "GET"
         }).then(response => {
-            console.log(response)
+            // console.log(response)
             let result = response.text()
             result.then(res => {
                 if (res == "true") {
@@ -175,7 +191,7 @@ export default {
             let result = response.json()
             result.then(res => {
                 this.courseId = res.courseId
-                console.log("courseId: ", this.courseId)
+                // console.log("courseId: ", this.courseId)
             })
         })
 
@@ -218,10 +234,10 @@ export default {
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(submitForm)
             }).then(response => {
-                console.log(response)
+                // console.log(response)
                 let result = response.json()
                 result.then(res => {
-                    console.log(res)
+                    // console.log(res)
                     if (res.status == 200) {
                         this.$notification.success('上传成功')
                     }

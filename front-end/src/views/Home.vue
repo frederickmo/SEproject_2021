@@ -30,7 +30,7 @@ minimizedWidth="0">
 
   <va-accordion
   v-model="value"
-  v-show="teacherHome"
+  v-show="!studentHome"
   style="font-weight: bold"
   multiply
   inset>
@@ -86,14 +86,6 @@ minimizedWidth="0">
     icon="source">
       <va-sidebar-item>
         <va-sidebar-item-content
-        @click="onClickMyCourses()">
-          <va-sidebar-item-title>
-            我的课程
-          </va-sidebar-item-title>
-        </va-sidebar-item-content>
-      </va-sidebar-item>
-      <va-sidebar-item>
-        <va-sidebar-item-content
         @click="onClickCourseManagement()">
           <va-sidebar-item-title>
             课程管理
@@ -103,21 +95,13 @@ minimizedWidth="0">
     </va-collapse>
     <va-collapse
     key="4"
-    header="考试管理"
+    header="实验项目管理"
     icon="mode">
       <va-sidebar-item>
         <va-sidebar-item-content
-        @click="onClickMyExams()">
+        @click="onClickTaskManagement()">
           <va-sidebar-item-title>
-            我的实验
-          </va-sidebar-item-title>
-        </va-sidebar-item-content>
-      </va-sidebar-item>
-      <va-sidebar-item>
-        <va-sidebar-item-content
-        @click="onClickExamManagement()">
-          <va-sidebar-item-title>
-            实验管理
+            实验项目管理
           </va-sidebar-item-title>
         </va-sidebar-item-content>
       </va-sidebar-item>
@@ -126,14 +110,6 @@ minimizedWidth="0">
     key="5"
     header="成绩管理"
     icon="emoji_events">
-      <va-sidebar-item>
-        <va-sidebar-item-content
-        @click="onClickMyGrades()">
-          <va-sidebar-item-title>
-            我的成绩
-          </va-sidebar-item-title>
-        </va-sidebar-item-content>
-      </va-sidebar-item>
       <va-sidebar-item>
         <va-sidebar-item-content
         @click="onClickGradeManagement()">
@@ -230,13 +206,13 @@ minimizedWidth="0">
     </va-collapse>
     <va-collapse
     key="4"
-    header="我的实验"
+    header="我的实验项目"
     icon="mode">
       <va-sidebar-item>
         <va-sidebar-item-content
-        @click="onClickMyExams()">
+        @click="onClickMyTasks()">
           <va-sidebar-item-title>
-            我的实验
+            我的实验项目
           </va-sidebar-item-title>
         </va-sidebar-item-content>
       </va-sidebar-item>
@@ -321,7 +297,6 @@ export default {
       activated: 0,
       identity: 0,
 
-      teacherHome: false,
       studentHome: true,
 
     }
@@ -350,13 +325,12 @@ export default {
         // localStorage.setItem("password", this.password)
         localStorage.setItem("username", this.name)
         localStorage.setItem("gender", this.gender)
+        localStorage.setItem("userIdentity", this.identity)
 
-        if (this.identity == 0 || this.identity == 1) {
-          this.teacherHome = false
-          this.studentHome = true
-        } else {
-          this.teacherHome = true
+        if (this.identity == 2 || this.identity == 3 || this.identity == 4) {
           this.studentHome = false
+        } else {
+          this.studentHome = true
         }
 
         this.$router.push({
@@ -378,9 +352,9 @@ export default {
     },
 
     myAvatarUrl() {
-      console.log("看看哪个先加载：this.id = " + this.id)
+      // console.log("看看哪个先加载：this.id = " + this.id)
       let myAvatar = this.$URL + "/file/download/avatar/avatar_" + this.id + ".jpg"
-      console.log("avatarUrl: ", myAvatar)
+      // console.log("avatarUrl: ", myAvatar)
       return myAvatar
       
     },
@@ -435,7 +409,7 @@ export default {
           }})
       }
     },
-    onClickMyExams () {
+    onClickMyTasks () {
       this.$router.push({
         name: 'MyTasks',
         params: {
@@ -443,16 +417,13 @@ export default {
         }
       })
     },
-    onClickExamManagement () {
-      if (this.identity == 0 || this.identity == 1) {
-        this.$notification.warning('无操作权限')
-      } else {
-        this.$router.push({
-          name: 'ExamManagement',
-          params: {
-            userInfo: this.userInfo
-          }})
-      }
+    onClickTaskManagement () {
+      this.$router.push({
+        name: 'TaskManagement',
+        params: {
+          userInfo: this.userInfo
+        }})
+      
     },
     onClickMyGrades () {
       this.$router.push({

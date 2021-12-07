@@ -18,7 +18,7 @@
                   <div style="line-height: 36px; width: 37%">截止日期：{{task.deadline ? task.deadline : "暂无"}}</div>
                   <div v-show="isOverdue(task.deadline)" style="line-height: 36px; width: 18%; color: #e00"><va-icon color="#e00" name="error_outline" />已逾期</div>
                   <div v-show="!isOverdue(task.deadline)" style="line-height: 36px; width: 18%"/>
-                  <div><va-button @click="switchToCourseSimple(index)" color="#e0e5df" style="color: rgb(40,40,40)">点击进入</va-button></div>
+                  <div><va-button @click="switchToTaskSimple(index)" color="#e0e5df" style="color: rgb(40,40,40)">点击进入</va-button></div>
                 </div>
               </va-card-content>
             </va-card>
@@ -38,7 +38,7 @@
                   <div style="line-height: 36px; width: 37%">截止日期：{{task.deadline ? task.deadline : "暂无"}}</div>
                   <div v-show="isOverdue(task.deadline)" style="line-height: 36px; width: 18%; color: #e00"><va-icon color="#e00" name="error_outline" />已逾期</div>
                   <div v-show="!isOverdue(task.deadline)" style="line-height: 36px; width: 18%"/>
-                  <div><va-button @click="switchToCourseComplex(index)" color="#e0e5df" style="color: rgb(40,40,40)">点击进入</va-button></div>
+                  <div><va-button @click="switchToTaskComplex(index)" color="#e0e5df" style="color: rgb(40,40,40)">点击进入</va-button></div>
                 </div>
               </va-card-content>
             </va-card>
@@ -115,10 +115,11 @@ export default {
         })
     },
   methods: {
-    switchToCourseSimple (index) {
+    switchToTaskSimple (index) {
       // console.log("调用switchToCourse时，courseId传过去了吗？ courseId的值是：" + id)
       // console.log("调用switchToCourse时，index的值是：" + index)
       // console.log(this.tasks[index])
+      console.log("taskName：" + this.simpleTasks[index].name)
       this.$router.push({
         name: 'OnlineTask',
         params: {
@@ -132,7 +133,7 @@ export default {
         }
       })
     },
-    switchToCourseComplex (index) {
+    switchToTaskComplex (index) {
       // console.log("调用switchToCourse时，courseId传过去了吗？ courseId的值是：" + id)
       // console.log("调用switchToCourse时，index的值是：" + index)
       // console.log(this.tasks[index])
