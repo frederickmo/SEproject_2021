@@ -17,6 +17,7 @@
               <va-list-item
               v-for="(notification, index) in notifications"
               :key="index"
+              v-show="showStudentVersion()"
               to="/home">
                 <!-- <va-list-item-section>
                     <va-avatar></va-avatar>
@@ -36,6 +37,11 @@
 
 
               </va-list-item>
+              <va-list-item
+              v-show="!showStudentVersion()"
+              >
+
+              </va-list-item>
           </va-list>
       </va-card-content>
   </va-card>
@@ -46,19 +52,36 @@
 export default {
     data () {
         return {
-            notifications: [
+            studentNotifications: [
                 { title: '考试通知', abstract: '这是一条占位置的通知', date: '2021-11-4'},
                 {title: '实验通知', abstract: '这是一条假装有用的通知', date: '2021-10-5'},
                 {title: '实验结束通知', abstract: '虽然现在没有任何实验可以做', date: '2021-12-31'},
                 {title: '课程结束预告', abstract: '这是一条没有用的通知', date: '2021-11-20'},
                 {title: '开课预告', abstract: '这是一门挂科率90%的课', date: '2021-12-15'},
             ],
-            userInfo: {}
+            teacherNotifications: [
+
+            ],
+            userId: '',
+            userName: '',
+            userIdentity: '',
         }
     },
     mounted () {
-        console.log(this.$route.params.userInfo)
-        this.userInfo = this.$route.params.userInfo
+        // console.log(this.$route.params.userInfo)
+        // this.userInfo = this.$route.params.userInfo
+
+        this.userId = localStorage.getItem("userId")
+        this.userIdentity = localStorage.getItem("userIdentity")
+    },
+    methods: {
+        showStudentVersion () {
+            if (this.userIdentity == 2 || this.userIdentity == 3 || this.userIdentity == 4) {
+                return false
+            } else {
+                return true
+            }
+        }
     }
 }
 </script>

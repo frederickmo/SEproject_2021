@@ -7,23 +7,25 @@
             </va-breadcrumbs>
         </div>
 
-        <va-modal
-        v-model="showModal"
-        title="修改头像">
-            <div>
-                <a-upload 
-                list-type="picture-card"
-                @preview="onPreview"
-                auto-upload="false"
-                multiple="false"
-                draggable="true"
-                accept="image/jpeg, image/png"
-                :action="getUploadUrl()"
+        <a-modal
+        v-model:visible="showModal">
+            <template #title>
+                上传头像
+            </template>
+            <el-upload
+                ref="upload"
+                :action="getUploadAvatarUrl()"
+                :auto-upload="false"
                 :data="additionalData()"
-                />
-                <!--TODO: 现在头像是自动上传的 / 命名还有点问题-->
-            </div>
-        </va-modal>
+                style="text-align: center"
+                :before-upload="beforeAvatarUpload"
+            >
+                <template #trigger>
+                <va-button gradient :rounded="false">选择文件</va-button>
+                </template>
+                <va-button style="margin-left: 20px" flat :rounded="false" @click="submitUpload">上传</va-button>
+            </el-upload> 
+        </a-modal>
 
         <va-card>
             <va-card-title style="font-size: 20px">修改基本信息</va-card-title>
@@ -98,6 +100,10 @@ export default {
     },
     methods: {
         onSubmit () {
+
+            /**
+             * 修改了当提交信息为空时候的逻辑，现在在后端进行检查了，若提交空信息给后端则不修改。
+             */
             console.log(this.name, this.gender)
             if (this.genderInput == '男') {
                 this.genderSubmit = 1
@@ -145,15 +151,31 @@ export default {
                 )
             });   
         },
-        getUploadUrl() {
+        getUploadAvatarUrl() {
             return this.$URL + "/file/upload/avatar"
+        },
+        beforeAvatarUpload(file) {
+            // console.log("file.type: " + file.type)
+            const isIMAGE = (file.type === 'image/jpeg' || file.type === 'image/png')
+            const isLt2M = file.size / 1024 / 1024 < 2
+
+            if (!isIMAGE) {
+                this.$notification.error('请上传jpg或png格式的图片')
+            }
+            if (!isLt2M) {
+                this.$$notification.error('图片大小请小于2M')
+            }
+            return isIMAGE && isLt2M
         },
         renameAvatar() {
             return "avatar_" + this.id;
         },
         additionalData() {
             return {"id": this.id}
-        }
+        },
+        submitUpload() {
+            this.$refs.upload.submit()
+        },
     }
 }
 </script>

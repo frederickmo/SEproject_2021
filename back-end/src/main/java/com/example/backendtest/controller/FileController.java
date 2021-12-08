@@ -56,36 +56,23 @@ public class FileController {
 
     @ApiOperation("上传单个文件")
     @PostMapping("/upload")
-    public UploadFileResponse uploadFile(@RequestParam("file")MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/file/downloadFile/")
-                .path(fileName)
-                .toUriString();
-
-        return new UploadFileResponse(fileName,
-                    fileDownloadUri,
-                    file.getContentType(),
-                    file.getSize());
+    public JSONObject uploadFile(@RequestParam("file")MultipartFile file) {
+        return fileStorageService.uploadFile(file);
     }
 
-    @ApiOperation("上传文件并重命名")
-    @PostMapping("/upload/rename")
-    public UploadFileResponse uploadAndRename(@RequestParam("file")MultipartFile file, String newFileName, String location) {
+    @ApiOperation("上传文件到指定位置")
+    @ApiImplicitParam(name = "location", value = "路径值（包含左'/'不含右'/'）")
+    @PostMapping("/upload/redirect")
+    public JSONObject uploadFileToSpecifiedDirectory(@RequestParam("file")MultipartFile file, String location) {
+        return fileStorageService.uploadFileToSpecifiedDirectory(file, location);
+    }
+
+    @ApiOperation("上传文件到指定位置并重命名")
+    @ApiImplicitParam(name = "location", value = "路径值（包含左'/'不含右'/'）")
+    @PostMapping("/upload/redirect/rename")
+    public JSONObject uploadFileToSpecifiedDirectoryAndRename(@RequestParam("file")MultipartFile file, String newFileName, String location) {
         // location 带左'/'不带右'/'
-        fileStorageService.storeAndRename(file, newFileName, location);
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/file/downloadFile/" + location + "/")
-                .path(newFileName)
-                .toUriString();
-
-        return new UploadFileResponse(newFileName,
-                fileDownloadUri,
-                file.getContentType(),
-                file.getSize());
-
+        return fileStorageService.uploadFileToSpecifiedDirectoryAndRename(file, newFileName, location);
     }
 
     @ApiOperation("以ID上传头像并重命名")
@@ -96,7 +83,7 @@ public class FileController {
 
     @ApiOperation("上传多个文件")
     @PostMapping("/uploadMultipleFiles")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+    public List<JSONObject> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.stream(files)
                 .map(this::uploadFile)
                 .collect(Collectors.toList());
@@ -196,7 +183,7 @@ public class FileController {
     }
 
     @ApiOperation("删除服务器上的文件")
-    @PostMapping("deleteFile")
+    @DeleteMapping("deleteFile")
     public Object deleteFile(String path)
     {
         if(FtpUtil.deleteFile(path)==true)
@@ -207,7 +194,7 @@ return "wrong delete";
 
 
     @ApiOperation("通过excel文件展示小项目的题目到前端")
-    @RequestMapping("/changeExcelIntoJson")
+    @PostMapping("/changeExcelIntoJson")
     @ResponseBody
     /**
      * 通过excel文件展示小项目的题目到前端

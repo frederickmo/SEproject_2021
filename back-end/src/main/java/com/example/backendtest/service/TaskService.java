@@ -28,7 +28,7 @@ public class TaskService {
     public TaskEntity getByTaskId(Integer id) {
         Optional<TaskEntity> taskOptional = taskRepository.findById(id);
         if (taskOptional.isEmpty()) {
-            throw new IllegalStateException("该实验项目不存在！");
+            throw new IllegalStateException("该实验项目不存在");
         } else {
             return taskOptional.get();
         }
@@ -59,9 +59,9 @@ public class TaskService {
         Optional<TaskEntity> taskOptional = taskRepository.findById(task.getId());
         Optional<CourseEntity> courseOptional = courseRepository.findById(task.getCourseId());
         if (taskOptional.isPresent()) {
-            throw new IllegalStateException("该实验项目已存在！");
+            throw new IllegalStateException("该实验项目已存在");
         } else if (courseOptional.isEmpty()) {
-            throw new IllegalStateException("该实验项目所属课程不存在！");
+            throw new IllegalStateException("该实验项目所属课程不存在");
         }
         else {
             taskRepository.save(task);
@@ -89,14 +89,13 @@ public class TaskService {
 
     /**
      * 通过课程id找到小型项目
-     * @param courseId
      * @return 返回所有找到的小型项目
      */
-    public List<TaskEntity> getSmallCourse(Integer courseId) {
+    public List<TaskEntity> getSimpleTask(Integer courseId) {
 
-        Optional<List<TaskEntity>> tasksOptional = taskRepository.findByCourseId(courseId,1);
-        if (tasksOptional.isPresent()) {
-            throw new IllegalStateException("该课程下无小型实验项目！");
+        Optional<List<TaskEntity>> tasksOptional = taskRepository.findByCourseIdAndType(courseId,0);
+        if (tasksOptional.isEmpty()) {
+            throw new IllegalStateException("该课程下无小型实验项目");
         } else {
             return tasksOptional.get();
         }
@@ -104,30 +103,40 @@ public class TaskService {
 
     /**
      * 通过课程id找到大型项目
-     * @param courseId
      * @return 返回所有找到的大型项目
      */
-    public List<TaskEntity> getBigCourse(Integer courseId) {
-        Optional<List<TaskEntity>> tasksOptional = taskRepository.findByCourseId(courseId,0);
+    public List<TaskEntity> getComplexTask(Integer courseId) {
+        Optional<List<TaskEntity>> tasksOptional = taskRepository.findByCourseIdAndType(courseId,1);
         if (tasksOptional.isEmpty()) {
-            throw new IllegalStateException("该课程下无大型实验项目！");
+            throw new IllegalStateException("该课程下无大型实验项目");
         } else {
             return tasksOptional.get();
         }
     }
 
-    public JSONObject removeTask(Integer taskId) {
-        boolean taskExists = taskRepository.existsById(taskId);
-        if (!taskExists) {
-            throw new IllegalStateException("该课程不存在！");
+    /**
+     * 按学号查询学生选课的所有未完成的实验项目的信息
+     * @return (学生ID, 课程ID, 课程名, 项目ID, 项目名, 截止时间)
+     */
+    public List<Object> getAllByStudentIdAndUnfinishedOrderByDeadlineAsc(Integer studentId) {
+        Optional<List<Object>> tasksOptional = taskRepository.findAllByCourseIdAndUnfinishedOrderByDeadlineAsc(studentId);
+        if (tasksOptional.isEmpty()) {
+            throw new IllegalStateException("该学生选修的课程中无任何未完成的实验项目");
         } else {
-            taskRepository.deleteById(taskId);
-            JSONObject json = new JSONObject();
-            json.put("status", 200);
-            json.put("message", "删除成功");
-            log.info("删除课程项目 => taskId: " + taskId);
-            return json;
+            return tasksOptional.get();
         }
+    }
 
+    /**
+     * 按学号查询学生选课的所有已完成的实验项目的信息
+     * @return (学生ID, 课程ID, 课程名, 项目ID, 项目名, 截止时间)
+     */
+    public List<Object> getAllByStudentIdAndFinishedOrderByDeadlineAsc(Integer studentId) {
+        Optional<List<Object>> tasksOptional = taskRepository.findAllByCourseIdAndFinishedOrderByDeadlineAsc(studentId);
+        if (tasksOptional.isEmpty()) {
+            throw new IllegalStateException("该学生选修的课程中无任何已完成的实验项目");
+        } else {
+            return tasksOptional.get();
+        }
     }
 }

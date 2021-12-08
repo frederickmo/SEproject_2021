@@ -80,4 +80,22 @@ public class FinishesController {
     public List<FinishesEntity> getAllSubmitRecords(Integer studentId) {
         return finishesService.getAllSubmitRecords(studentId);
     }
+
+    @ApiOperation("按学生ID获取所有提交记录以及得分情况（若有）以及课程和实验项目的详细信息")
+    @GetMapping("/get/record/detail/student")
+    public List<Object> getAllScoresOfSubmitRecordsInDetail(Integer studentId) {
+        return finishesService.getAllScoresOfSubmitRecordsByStudentIdInDetail(studentId);
+    }
+
+    @ApiOperation("按学生ID和课程ID获取所有提交记录以及得分情况（若有）以及课程和实验项目的详细信息")
+    @GetMapping("/get/record/detail/studentAndCourse")
+    public List<Object> getAllScoresOfSubmitRecordsByStudentIdAndCourseIdInDetail(Integer studentId, Integer courseId) {
+        return finishesService.getAllScoresOfSubmitRecordsByStudentIdAndCourseIdInDetail(studentId, courseId);
+    }
+
+    @ApiOperation("按学生ID获取所有提交记录以及得分情况（若有）以及课程和实验项目的详细信息（按课程ID聚集）")
+    @GetMapping("/get/record/detail/student/groupByCourse")
+    public List<List<Object>> getAllScoresOfSubmitRecordsByStudentIdGroupByCourseIdInDetail(Integer studentId) {
+        return finishesService.getAllScoresOfSubmitRecordsByStudentIdGroupByCourseIdInDetail(studentId);
+    }
 }

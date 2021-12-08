@@ -3,6 +3,7 @@ package com.example.backendtest.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.model.FinishesEntity;
+import com.example.backendtest.model.TakesEntity;
 import com.example.backendtest.repository.FinishesRepository;
 import com.example.backendtest.util.TimeUtil;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,6 +35,7 @@ public class FinishesService {
 
    private final FinishesRepository finishesRepository;
    private final FileStorageService fileStorageService;
+   private final TakesService takesService;
 
 
     /**
@@ -128,7 +131,7 @@ public class FinishesService {
                                         String newFileName,
                                         String location) {
        log.info("获取到的studentId: " + studentId + " taskId: " + taskId);
-       fileStorageService.storeAndRename(file, newFileName, location);
+       fileStorageService.storeToSpecifiedDirectoryAndRename(file, newFileName, location);
        FinishesEntity finishes = new FinishesEntity();
        finishes.setTaskId(taskId);
        finishes.setStudentId(studentId);
@@ -149,6 +152,57 @@ public class FinishesService {
             throw new IllegalStateException("该学生无提交记录");
         } else {
             return submitRecords.get();
+        }
+    }
+
+    /**
+     * 这个接口不是现在需要的，但是暂时保留了
+     */
+    public List<Object> getAllScoresOfSubmitRecordsByStudentIdInDetail(Integer studentId) {
+        Optional<List<Object>> recordsOptional = finishesRepository.findAllByStudentIdInDetail(studentId);
+        if (recordsOptional.isEmpty()) {
+            throw new IllegalStateException("该学生无实验项目提交记录");
+        } else {
+            return recordsOptional.get();
+        }
+    }
+
+    /**
+     * 这个接口不是现在需要的，但是暂时保留了
+     */
+    public List<Object> getAllScoresOfSubmitRecordsByStudentIdAndCourseIdInDetail(Integer studentId, Integer courseId) {
+        Optional<List<Object>> recordsOptional = finishesRepository.findAllByStudentIdAndCourseIdInDetail(studentId, courseId);
+        if (recordsOptional.isEmpty()) {
+            throw new IllegalStateException("该学生该门课程无成绩记录");
+        } else {
+            return recordsOptional.get();
+        }
+    }
+
+    /**
+     * 调用Repository里的按学生ID和课程ID查找该课程的所有实验项目的提交记录的方法，
+     * 将结果按照课程ID进行分组返回得分情况。
+     * 由于每次查询某门课程的得分情况的返回值是一个List<Object>(Object内部也是一个List)，
+     * 因此最终的返回结果是一个List<List<Object>(三维数组)。
+     */
+    public List<List<Object>> getAllScoresOfSubmitRecordsByStudentIdGroupByCourseIdInDetail(Integer studentId) {
+        // 先得到该学生所有选课
+        List<TakesEntity> courses = takesService.getAllCoursesByStudentId(studentId);
+        List<List<Object>> scoresOfSubmitRecordsGroupByCourseId = new ArrayList<>();
+        for (TakesEntity course : courses) {
+            Optional<List<Object>> recordsOptional = finishesRepository.findAllByStudentIdAndCourseIdInDetail(studentId, course.getCourseId());
+            // 没有成绩不计入
+            if (recordsOptional.isEmpty()) {
+                log.info("学生ID：" + studentId + " 在课程ID " + course.getCourseId() + " 下无成绩记录");
+                break;
+            } else {
+                scoresOfSubmitRecordsGroupByCourseId.add(recordsOptional.get());
+            }
+        }
+        if (scoresOfSubmitRecordsGroupByCourseId.isEmpty()) {
+            throw new IllegalStateException("该学生无实验项目提交记录");
+        } else {
+            return scoresOfSubmitRecordsGroupByCourseId;
         }
     }
 
