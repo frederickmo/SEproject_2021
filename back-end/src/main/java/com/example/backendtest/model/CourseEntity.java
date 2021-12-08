@@ -10,6 +10,7 @@ public class CourseEntity {
     private String name;
     private Integer semester;
     private Integer year;
+    private Integer manager;
 
     @Id
     @Column(name = "id")
@@ -56,9 +57,17 @@ public class CourseEntity {
     public Integer getYear() {
         return year;
     }
-
     public void setYear(Integer year) {
         this.year = year;
+    }
+
+    @Basic
+    @Column(name = "manager")
+    public Integer getManager() {
+        return manager;
+    }
+    public void setManager(Integer manager) {
+        this.manager = manager;
     }
 
     @Override
