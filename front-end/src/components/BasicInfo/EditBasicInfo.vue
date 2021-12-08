@@ -134,6 +134,13 @@ export default {
                         this.$notification.success("修改成功");
                         localStorage.setItem("gender", this.gender)
                         localStorage.setItem("username", this.name)
+                        /**
+                         * 以下replace语句是用来跳转到一个空白页面{name: 'Refresh'}实现当前界面自动重新加载的效果
+                         * 
+                         * 经实践，填path比填name更快。
+                         */
+                        // this.$router.replace({name: 'Refresh'})
+                        this.$router.replace({path: '/refresh'})
                     } else {
                         this.$notification.error("修改失败")
                     }

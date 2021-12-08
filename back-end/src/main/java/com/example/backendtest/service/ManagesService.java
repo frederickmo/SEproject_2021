@@ -1,11 +1,14 @@
 package com.example.backendtest.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.backendtest.model.CourseEntity;
+import com.example.backendtest.model.FileEntity;
 import com.example.backendtest.model.ManagesEntity;
 import com.example.backendtest.model.UserEntity;
 import com.example.backendtest.repository.ManagesRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +24,42 @@ public class ManagesService {
 
     private ManagesRepository managesRepository;
 
+    public List<ManagesEntity> getAllByTeacherId(Integer teacherId) {
+        Optional<List<ManagesEntity>> managesOptional = managesRepository.findAllByTeacherId(teacherId);
+        if(managesOptional.isEmpty()) {
+            throw new IllegalStateException("该教师无管理课程");
+        } else {
+            return managesOptional.get();
+        }
+    }
 
+    public List<ManagesEntity> getAllByCourseId(Integer courseId) {
+        Optional<List<ManagesEntity>> managesOptional = managesRepository.findAllByCourseId(courseId);
+        if (managesOptional.isEmpty()) {
+            throw new IllegalStateException("该课程无管理教师");
+        } else {
+            return managesOptional.get();
+        }
+    }
+
+    public List<CourseEntity> getAllByTeacherIdInDetail(Integer teacherId) {
+        Optional<List<CourseEntity>> coursesOptional = managesRepository.findAllByTeacherIdInDetail(teacherId);
+        if (coursesOptional.isEmpty()) {
+            throw new IllegalStateException("该教师无管理课程");
+        } else {
+            return coursesOptional.get();
+        }
+    }
+
+    public List<UserEntity> getAllByCourseIdInDetail(Integer courseId) {
+        Optional<List<UserEntity>> teachersOptional = managesRepository.findAllByCourseIdInDetail(courseId);
+        if (teachersOptional.isEmpty()) {
+            //参照外码约束，以下情况一般来说不会发生
+            throw new IllegalStateException("该课程无管理教师");
+        } else {
+            return teachersOptional.get();
+        }
+    }
 
     public JSONObject checkExist(int uploadID,int courseID) {
         Optional<ManagesEntity> managesTemp = managesRepository.findById(uploadID,courseID);
@@ -33,7 +71,7 @@ public class ManagesService {
             return json;
         }
         JSONObject json = new JSONObject();
-        json.put("status", 500);
+        json.put("status", 404);
         json.put("message", "教师授课关系不存在");
         json.put("boolean",false);
         return json;

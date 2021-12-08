@@ -128,15 +128,6 @@ minimizedWidth="0">
         </va-sidebar-item-title>
       </va-sidebar-item-content>
     </va-sidebar-item>
-    <va-sidebar-item>
-      <va-sidebar-item-content
-      style="text-align: center;" 
-      @click="this.$router.push({name: 'About'})">
-        <va-sidebar-item-title>
-          About
-        </va-sidebar-item-title>
-      </va-sidebar-item-content>
-    </va-sidebar-item>
   </va-accordion>
 
   <va-accordion

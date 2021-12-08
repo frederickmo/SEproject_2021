@@ -2,17 +2,16 @@ package com.example.backendtest.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.model.FinishesEntity;
+import com.example.backendtest.model.UserEntity;
 import com.example.backendtest.service.FileStorageService;
 import com.example.backendtest.service.FinishesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 @Api(tags = "作业管理")
 @RestController
@@ -70,9 +69,8 @@ public class FinishesController {
     public JSONObject submitComplexTask(@RequestParam("file")MultipartFile file,
                                         Integer studentId,
                                         Integer taskId,
-                                        String newFileName,
                                         String location) {
-        return finishesService.submitComplexTask(file, studentId, taskId, newFileName, location);
+        return finishesService.submitComplexTask(file, studentId, taskId, location);
     }
 
     @ApiOperation("获取所有提交记录")
@@ -97,5 +95,23 @@ public class FinishesController {
     @GetMapping("/get/record/detail/student/groupByCourse")
     public List<List<Object>> getAllScoresOfSubmitRecordsByStudentIdGroupByCourseIdInDetail(Integer studentId) {
         return finishesService.getAllScoresOfSubmitRecordsByStudentIdGroupByCourseIdInDetail(studentId);
+    }
+
+    @ApiOperation("按项目ID获取所有已经提交的学生的信息")
+    @GetMapping("/get/record/detail/task/finished")
+    public List<Object> getAllFinishedRecordsByTaskId(Integer taskId) {
+        return finishesService.getAllFinishedRecordsByTaskId(taskId);
+    }
+
+    @ApiOperation("按项目ID获取所有未提交已给分的学生信息")
+    @GetMapping("/get/record/detail/task/unfinished/scoreGiven")
+    public List<Object> getAllUnfinishedRecordsScoreGivenByTaskId(Integer taskId){
+        return finishesService.getAllUnfinishedRecordsScoreGivenByTaskId(taskId);
+    }
+
+    @ApiOperation("按项目ID获取所有未提交未给分的学生实体(UserEntity)")
+    @GetMapping("/get/record/detail/task/unfinished/scoreNotGiven")
+    public List<UserEntity> getAllUnfinishedRecordsScoreNotGivenByTaskId(Integer taskId) {
+        return finishesService.getAllUnfinishedRecordsScoreNotGivenByTaskId(taskId);
     }
 }

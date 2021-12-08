@@ -10,7 +10,17 @@ const routes = [{
         path: '/home',
         name: 'Home',
         component: Home,
-        children: [{
+        children: [
+            {
+                path: '/refresh',
+                name: 'Refresh',
+                component: () => 
+                    import ("../components/Refresh.vue")
+            },
+            
+            
+            
+            {
                 path: '/home/announcement',
                 name: 'Announcement',
                 component: () =>
@@ -97,6 +107,18 @@ const routes = [{
                 name: 'GradeManagement',
                 component: () =>
                     import ('../components/GradeManagement/GradeManagement.vue')
+            },
+            {
+                path: '/home/grademanagement/course',
+                name: 'GradeManagementCoursePage',
+                component: () =>
+                    import ('../components/GradeManagement/GradeManagementCoursePage.vue')
+            },
+            {
+                path: '/home/grademanagement/course/task',
+                name: 'GradeManagementTaskPage',
+                component: () => 
+                    import ('../components/GradeManagement/GradeManagementTaskPage.vue')
             },
 
 

@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @ApiOperation("更新用户信息")
-    @PutMapping("update")
+    @PostMapping("update")
     public JSONObject updateUserInfo(@RequestBody UserEntity user) {
         return userService.updateUserInfo(user);
     }

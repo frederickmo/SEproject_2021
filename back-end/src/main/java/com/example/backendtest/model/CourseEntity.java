@@ -82,6 +82,7 @@ public class CourseEntity {
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (semester != null ? !semester.equals(that.semester) : that.semester != null) return false;
         if (year != null ? !year.equals(that.year) : that.year != null) return false;
+        if (manager != null ? !manager.equals(that.manager) : that.manager != null) return false;
 
         return true;
     }
@@ -93,6 +94,7 @@ public class CourseEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (semester != null ? semester.hashCode() : 0);
         result = 31 * result + (year != null ? year.hashCode() : 0);
+        result = 31 * result + (manager != null ? manager.hashCode() : 0);
         return result;
     }
 }

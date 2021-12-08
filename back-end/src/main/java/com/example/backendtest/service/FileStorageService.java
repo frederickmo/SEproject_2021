@@ -91,7 +91,7 @@ public class FileStorageService {
     /**
      * 上传文件到指定位置的方法
      */
-    public void storeToSpecifiedDirectory(MultipartFile file, String location) {
+    public String storeToSpecifiedDirectory(MultipartFile file, String location) {
         String fileName = getOriginalFileName(file);
         try {
             //检查文件名是否含有非法字符
@@ -113,6 +113,7 @@ public class FileStorageService {
             e.printStackTrace();
             throw new FileStorageException("存储文件" + fileName + "失败，请重新上传" , e);
         }
+        return fileName;
     }
 
     /**
@@ -168,10 +169,11 @@ public class FileStorageService {
     }
 
     public JSONObject uploadFileToSpecifiedDirectory(MultipartFile file, String location) {
-        storeToSpecifiedDirectory(file, location);
+        String fileName = storeToSpecifiedDirectory(file, location);
         JSONObject json = new JSONObject();
         json.put("status", 200);
         json.put("message", "成功上传文件到目录: " + location);
+        json.put("fileName", fileName);
         return json;
     }
 

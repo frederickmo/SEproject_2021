@@ -4,6 +4,7 @@ package com.example.backendtest.service;
 import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.model.FinishesEntity;
 import com.example.backendtest.model.TakesEntity;
+import com.example.backendtest.model.UserEntity;
 import com.example.backendtest.repository.FinishesRepository;
 import com.example.backendtest.util.TimeUtil;
 import lombok.AllArgsConstructor;
@@ -12,16 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.nio.Buffer;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -66,9 +62,14 @@ public class FinishesService {
 
         String body = taskBody.toJSONString();
         BufferedWriter writer = null;
-        String location = fileStorageService.getFileStorageLocation() + "/taskUpload/" + courseId + "/" + taskId;
+        // NOTICE: 此处虽然本身文件就是由后端创建的，但是为了和大型项目统一所以也放在单独的文件夹了。
+        // 但方便之处是可以自行覆盖上次提交的作业。
+        String location = fileStorageService.getFileStorageLocation()
+                + "/taskUpload/" + courseId + "/" + taskId + "/" + studentId;
 
-        File file = new File(location + "/" + taskId + "_" +  studentId + ".json");
+        String fileName = taskId + "_" + studentId + ".json";
+
+        File file = new File(location + "/" + fileName);
 
         /**
          * 若需要上传的实验文件夹不存在则创建
@@ -88,7 +89,10 @@ public class FinishesService {
             }
         }
         try {
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false), StandardCharsets.UTF_8));
+            writer = new BufferedWriter(
+                    new OutputStreamWriter(
+                            new FileOutputStream(file, false),
+                            StandardCharsets.UTF_8));
             writer.write(body);
         } catch (IOException e) {
             e.printStackTrace();
@@ -105,12 +109,10 @@ public class FinishesService {
         finishes.setTaskId(taskId);
         finishes.setStudentId(studentId);
         finishes.setFinishTime(Timestamp.valueOf(LocalDateTime.now()));
-        finishes.setFinished(1);
 
-        // TODO: 后来想到上传的本质还是存到本地，而且后端本地无法读取到完整的下载路径返回给前端，
-        // => 举例： http://localhost:8081/file/download 这个路径前面的localhost后端是无法获取到的，
-        // 所以这个返回一个url的属性是无法存到数据库里的，用户需要的话自己用下载文件的接口去文件夹里找算了。
-        finishes.setAnswer("true");
+        // fileName: "{taskId}_{studentId}.json"
+        finishes.setAnswer(fileName);
+        finishes.setFinished(1);
 
         /**
          * 下面的语句如果在用户填入的ID不存在时会报SQLIntegrityConstraintViolationException，但是暂时不知道咋解决
@@ -128,16 +130,15 @@ public class FinishesService {
     public JSONObject submitComplexTask(MultipartFile file,
                                         Integer studentId,
                                         Integer taskId,
-                                        String newFileName,
                                         String location) {
        log.info("获取到的studentId: " + studentId + " taskId: " + taskId);
-       fileStorageService.storeToSpecifiedDirectoryAndRename(file, newFileName, location);
+       String fileName = fileStorageService.storeToSpecifiedDirectory(file, location);
        FinishesEntity finishes = new FinishesEntity();
        finishes.setTaskId(taskId);
        finishes.setStudentId(studentId);
        finishes.setFinishTime(Timestamp.valueOf(LocalDateTime.now()));
        finishes.setFinished(1);
-       finishes.setAnswer("true");
+       finishes.setAnswer(fileName);
        finishesRepository.save(finishes);
 
        JSONObject json = new JSONObject();
@@ -146,6 +147,10 @@ public class FinishesService {
        return json;
     }
 
+
+    /**
+     * 获取学生的所有课程所有项目的提交记录
+     */
     public List<FinishesEntity> getAllSubmitRecords(Integer studentId) {
         Optional<List<FinishesEntity>> submitRecords = finishesRepository.findAllByStudentId(studentId);
         if (submitRecords.isEmpty()) {
@@ -207,7 +212,32 @@ public class FinishesService {
     }
 
 
+    public List<Object> getAllFinishedRecordsByTaskId(Integer taskId) {
+        Optional<List<Object>> recordsOptional = finishesRepository.findAllSubmitRecordsByTaskId(taskId);
+        if (recordsOptional.isEmpty()) {
+            throw new IllegalStateException("该项目无已提交的学生记录");
+        } else {
+            return recordsOptional.get();
+        }
+    }
 
+    public List<Object> getAllUnfinishedRecordsScoreGivenByTaskId(Integer taskId) {
+        Optional<List<Object>> recordsOptional = finishesRepository.findAllUnfinishedRecordsByTaskId(taskId);
+        if (recordsOptional.isEmpty()) {
+            throw new IllegalStateException("该项目无已给分的未提交的学生记录");
+        } else {
+            return recordsOptional.get();
+        }
+    }
+
+    public List<UserEntity> getAllUnfinishedRecordsScoreNotGivenByTaskId(Integer taskId) {
+        Optional<List<UserEntity>> recordOptional = finishesRepository.findAllUnfinishedStudentsByTaskId(taskId);
+        if (recordOptional.isEmpty()) {
+            throw new IllegalStateException("该项目无未给分的未提交的学生记录");
+        } else {
+            return recordOptional.get();
+        }
+    }
 
 
     /**
