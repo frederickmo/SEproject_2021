@@ -80,4 +80,20 @@ public class CourseService {
             return json;
         }
     }
+
+    public JSONObject update(CourseEntity course) {
+        boolean courseExists = courseRepository.existsById(course.getId());
+        if (!courseExists) {
+            throw new IllegalStateException("该课程不存在");
+        } else {
+            courseRepository.update(course.getId(),course.getDescription(),course.getName(),course.getSemester()
+            ,course.getYear(),course.getManager());
+             log.info("修改课程: 课程ID " + course.getId());
+            JSONObject json = new JSONObject();
+            json.put("status", 200);
+            json.put("message", "修改课程成功！");
+            return json;
+        }
+    }
+
 }

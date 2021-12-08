@@ -53,4 +53,10 @@ public class CourseController {
     public JSONObject remove(Integer courseId) {
         return courseService.remove(courseId);
     }
+
+
+    @ApiOperation("修改课程信息")
+    @PutMapping("/updateCourse")
+    public JSONObject updateCourse(@RequestBody CourseEntity course){return courseService.update(course);}
+
 }
