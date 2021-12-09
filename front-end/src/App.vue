@@ -13,7 +13,7 @@ export default {
   mounted () {
     // this.$router.push({name: 'Auth'})
     this.$router.push({name: 'Login'})
-  }
+  },
 }
 </script>
 

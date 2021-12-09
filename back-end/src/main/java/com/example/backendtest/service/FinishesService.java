@@ -1,6 +1,7 @@
 package com.example.backendtest.service;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.model.FinishesEntity;
 import com.example.backendtest.model.TakesEntity;
@@ -46,6 +47,47 @@ public class FinishesService {
        }
    }
 
+   public FinishesEntity getByStudentIdAndTaskId(Integer studentId, Integer taskId) {
+       Optional<FinishesEntity> finishesOptional = finishesRepository.findById(studentId, taskId);
+       if (finishesOptional.isEmpty()) {
+           throw new IllegalStateException("该学生无提交该作业的记录");
+       } else {
+           return finishesOptional.get();
+       }
+   }
+
+   public JSONObject getOnlineTaskJsonFile(Integer studentId, Integer taskId) {
+       Optional<FinishesEntity> finishesOptional = finishesRepository.findById(studentId, taskId);
+       if (finishesOptional.isEmpty()) {
+           throw new IllegalStateException("该学生无提交该作业的记录");
+       } else if (finishesOptional.get().getAnswer() == null) {
+           throw new IllegalStateException("该学生提交的作业名未知");
+       } else {
+           String fileName = finishesOptional.get().getAnswer();
+           String jsonStr = "";
+           try {
+               File jsonFile = new File(fileStorageService.getFileStorageLocation() + "/taskUpload/"
+                       + taskId + "/" + studentId + "/" + fileName);
+//               log.info("jsonFile: " + jsonFile.toString());
+               FileReader fileReader = new FileReader(jsonFile);
+               Reader reader = new InputStreamReader(new FileInputStream(jsonFile), "utf-8");
+               int ch = 0;
+               StringBuffer sb = new StringBuffer();
+               while((ch = reader.read()) != -1) {
+                   sb.append((char) ch);
+               }
+               fileReader.close();
+               reader.close();
+               jsonStr = sb.toString();
+//               log.info("jsonStr:" + jsonStr);
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+
+           return JSON.parseObject(jsonStr);
+       }
+   }
+
     public JSONObject submitOnlineTask(JSONObject taskBody) {
 
         /**
@@ -65,7 +107,7 @@ public class FinishesService {
         // NOTICE: 此处虽然本身文件就是由后端创建的，但是为了和大型项目统一所以也放在单独的文件夹了。
         // 但方便之处是可以自行覆盖上次提交的作业。
         String location = fileStorageService.getFileStorageLocation()
-                + "/taskUpload/" + courseId + "/" + taskId + "/" + studentId;
+                + "/taskUpload/" + taskId + "/" + studentId;
 
         String fileName = taskId + "_" + studentId + ".json";
 
@@ -212,6 +254,10 @@ public class FinishesService {
     }
 
 
+    /**
+     * 以下三个接口本身是给前端调用的，但是由于组件库的原因，把二维数组转json数组实在是太麻烦了，所以在后端修改数据返回的格式，
+     * 把以下三个接口合并成一个接口进行返回。
+     */
     public List<Object> getAllFinishedRecordsByTaskId(Integer taskId) {
         Optional<List<Object>> recordsOptional = finishesRepository.findAllSubmitRecordsByTaskId(taskId);
         if (recordsOptional.isEmpty()) {
@@ -239,6 +285,13 @@ public class FinishesService {
         }
     }
 
+    /**
+     * 由以上三个接口合并的接口
+     */
+    public List<JSONObject> getAllFinishedOrUnfinishedRecordsByTaskId(Integer taskId) {
+//        Optional<List<Object>>
+        return null;
+    }
 
     /**
      * 这个接口有两个问题：

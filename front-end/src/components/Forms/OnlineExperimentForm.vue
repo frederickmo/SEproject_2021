@@ -42,48 +42,49 @@
       <va-form>
           <a-space>
             <span class="label">学号</span>
-            <va-input v-model="form_studentid" />
+            <a-input v-model="form_studentid" allow-clear />
             <span class="label">姓名</span>
-          <va-input v-model="form_name" />
+          <a-input v-model="form_name" allow-clear />
           <span class="label">合作者</span>
-          <va-input v-model="form_cooperator" />
+          <a-input v-model="form_cooperator" allow-clear />
           </a-space>
           <div style="height: 20px" />
           <a-space>
               <span class="label">实验地点</span>
-              <va-input v-model="form_place" />
+              <a-input v-model="form_place" allow-clear />
               <span class="label">实验时间</span>
               <a-date-picker v-model="form_date" />
           </a-space>
           <div style="height: 20px" />
           <a-space>
               <span class="label">实验目的</span>
-              <va-input class="long-text" type="textarea" v-model="form_aim" />
+              <!-- <va-input class="long-text" type="textarea" v-model="form_aim" /> -->
+              <a-textarea class="long-text" v-model="form_aim" auto-size />
           </a-space>
           <div style="height: 20px" />
           <a-space>
               <span class="label">实验原理</span>
-              <va-input class="long-text" type="textarea" v-model="form_principle" />
+              <a-textarea class="long-text" v-model="form_principle" auto-size />
           </a-space>
           <div style="height: 20px" />
           <a-space>
               <span class="label">实验设备</span>
-              <va-input class="long-text" type="textarea" v-model="form_device" />
+              <a-textarea class="long-text" v-model="form_device" auto-size />
           </a-space>
           <div style="height: 20px" />
           <a-space>
               <span class="label">实验步骤</span>
-              <va-input class="long-text" type="textarea" v-model="form_procedure" />
+              <a-textarea class="long-text" v-model="form_procedure" auto-size />
           </a-space>
           <div style="height: 20px" />
           <a-space>
               <span class="label">实验现象</span>
-              <va-input class="long-text" type="textarea" v-model="form_phenomenon" />
+              <a-textarea class="long-text" v-model="form_phenomenon" auto-size />
           </a-space>
           <div style="height: 20px" />
           <a-space>
               <span class="label">分析讨论</span>
-              <va-input class="long-text" type="textarea" v-model="form_conclusion" />
+              <a-textarea class="long-text" v-model="form_conclusion" auto-size />
           </a-space>
           <div style="height: 30px" />
           <va-button color="#9fbcc2" gradient @click="submitTask">提交</va-button>
@@ -240,6 +241,7 @@ export default {
                     // console.log(res)
                     if (res.status == 200) {
                         this.$notification.success('上传成功')
+                        this.$router.go(-1)
                     }
                 })
             })

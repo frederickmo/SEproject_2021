@@ -6,6 +6,9 @@ import { VuesticPlugin } from 'vuestic-ui'
 import 'vuestic-ui/dist/vuestic-ui.css'
 import { URL } from './global'
 
+// import axios from 'axios'  //引入axios
+// Vue.prototype.$http = axios
+
 
 import ArcoVue from '@arco-design/web-vue';
 import ArcoVueIcon from '@arco-design/web-vue/es/icon';

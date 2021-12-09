@@ -51,7 +51,7 @@ public class FileController {
 //    @Autowired
     private ManagesService managesService;
 
-    @Autowired
+//    @Autowired
     private TakesService takesService;
 
     @ApiOperation("上传单个文件")

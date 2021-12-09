@@ -58,6 +58,18 @@ public class FinishesController {
         return finishesService.isTaskFinished(studentId, taskId);
     }
 
+    @ApiOperation("按学生ID和项目ID查询具体信息")
+    @GetMapping("/get")
+    public FinishesEntity getByStudentIdAndTaskId(Integer studentId, Integer taskId) {
+        return finishesService.getByStudentIdAndTaskId(studentId, taskId);
+    }
+
+    @ApiOperation("按学生ID和项目ID获取原json文件")
+    @GetMapping("/get/onlineReport")
+    public JSONObject getOnlineReportJsonFile(Integer studentId, Integer taskId) {
+        return finishesService.getOnlineTaskJsonFile(studentId, taskId);
+    }
+
     @ApiOperation("提交在线实验报告")
     @PostMapping("/upload/online")
     public JSONObject submitOnlineTask(@RequestBody JSONObject taskBody) {

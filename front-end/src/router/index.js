@@ -17,6 +17,12 @@ const routes = [{
                 component: () => 
                     import ("../components/Refresh.vue")
             },
+            {
+                path: '/redirecttohome',
+                name: 'RedirectToHome',
+                component: () =>
+                    import ('../components/RedirectToHome.vue')
+            },
             
             
             
@@ -136,6 +142,12 @@ const routes = [{
                 name: 'ComplexTask',
                 component: () => 
                     import ("../components/Forms/ComplexExperimentPage.vue")
+            },
+            {
+                path: '/home/grademanagement/course/task/check',
+                name: 'OnlineReportCheck',
+                component: () => 
+                    import ("../components/Forms/OnlineReportCheckPage.vue")
             }
         ]
     },

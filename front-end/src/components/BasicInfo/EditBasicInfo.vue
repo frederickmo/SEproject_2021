@@ -8,7 +8,10 @@
         </div>
 
         <a-modal
-        v-model:visible="showModal">
+        v-model:visible="showModal"
+        hide-cancel="true"
+        @ok="handleModalOk"
+        >
             <template #title>
                 上传头像
             </template>
@@ -183,6 +186,13 @@ export default {
         submitUpload() {
             this.$refs.upload.submit()
         },
+        handleModalOk() {
+            /**
+             * TODO: 这里会直接跳转到登录前的界面，需要后续借助SA-TOKEN实现已登录自动跳转
+             */
+            location.reload()
+            
+        }
     }
 }
 </script>
