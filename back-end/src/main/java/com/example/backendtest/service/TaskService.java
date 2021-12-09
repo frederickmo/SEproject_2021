@@ -147,12 +147,21 @@ public class TaskService {
         }
         else
         {
+<<<<<<< Updated upstream
             taskRepository.updateTaskInformation(taskEntity.getId(),taskEntity.getCourseId(),taskEntity.getName()
                     ,taskEntity.getDescription(),taskEntity.getDeadline(),taskEntity.getType(),taskEntity.getUrl());
             JSONObject json = new JSONObject();
             json.put("status", 200);
             json.put("message", "项目信息修改成功");
             return json;
+=======
+           taskRepository.updateTaskInformation(taskEntity.getId(),taskEntity.getCourseId(),taskEntity.getName()
+                   ,taskEntity.getDescription(),taskEntity.getDeadline(),taskEntity.getType(),taskEntity.getUrl());
+            JSONObject json = new JSONObject();
+            json.put("status", 200);
+            json.put("message", "项目信息修改成功");
+           return json;
+>>>>>>> Stashed changes
         }
     }
 }

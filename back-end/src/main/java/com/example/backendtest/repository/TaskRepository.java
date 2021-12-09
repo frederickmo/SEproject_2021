@@ -7,7 +7,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import com.example.backendtest.model.TakesEntity;
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 import javax.transaction.Transactional;
 import java.sql.Date;
 import java.util.List;
