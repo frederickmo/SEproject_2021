@@ -51,5 +51,5 @@ public class NoticeController {
     {
         return noticeService.updateNotice(Id,postedId,topic,content,type,updatedTime);
     }
-    
+
 }

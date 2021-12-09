@@ -3,9 +3,13 @@ package com.example.backendtest.repository;
 import com.example.backendtest.model.FinishesEntity;
 import com.example.backendtest.model.TaskEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import com.example.backendtest.model.TakesEntity;
 
+
+import javax.transaction.Transactional;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,4 +68,10 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Integer> {
             "and f.finished = 1 " +
             "order by t1.deadline asc nulls last")
     public Optional<List<Object>> findAllByCourseIdAndFinishedOrderByDeadlineAsc(Integer studentId);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update TaskEntity s set s.courseId = ?2,s.name=?3,s.description=?4,s.deadline =?5,s.type=?6 ,s.url=?7 where s.id = ?1")
+    void updateTaskInformation(int id, Integer courseId, String name, String description, Date deadline, Integer type, String url);
+
 }
