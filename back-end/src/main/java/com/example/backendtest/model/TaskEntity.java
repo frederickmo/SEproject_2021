@@ -1,11 +1,7 @@
 package com.example.backendtest.model;
 
-import io.swagger.models.auth.In;
-
 import javax.persistence.*;
 import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = "task", schema = "backend_demo", catalog = "")

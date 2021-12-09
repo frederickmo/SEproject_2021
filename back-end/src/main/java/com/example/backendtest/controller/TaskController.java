@@ -66,5 +66,12 @@ public class TaskController {
         return taskService.remove(taskId);
     }
 
+    @ApiOperation("根据项目id修改项目的详细信息")
+    @PostMapping("/updateTaskInformation")
+    public JSONObject updateTaskInformation(TaskEntity taskEntity)
+    {
+        return taskService.updateTaskInformation(taskEntity);
+    }
+
 
 }

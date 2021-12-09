@@ -52,6 +52,7 @@ public class ManagesController {
         return managesService.getAllByCourseId(courseId);
     }
 
+
     @ApiOperation("按教师ID获取其管理所有课程详细信息")
     @GetMapping("/get/teacher/detail")
     public List<CourseEntity> getAllByTeacherIdInDetail(Integer teacherId) {

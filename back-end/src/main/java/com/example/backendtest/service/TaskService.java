@@ -139,4 +139,20 @@ public class TaskService {
             return tasksOptional.get();
         }
     }
+
+    public JSONObject updateTaskInformation(TaskEntity taskEntity) {
+        if(taskRepository.findById(taskEntity.getId()).isEmpty())
+        {
+            throw  new IllegalStateException("不存在该实验项目");
+        }
+        else
+        {
+            taskRepository.updateTaskInformation(taskEntity.getId(),taskEntity.getCourseId(),taskEntity.getName()
+                    ,taskEntity.getDescription(),taskEntity.getDeadline(),taskEntity.getType(),taskEntity.getUrl());
+            JSONObject json = new JSONObject();
+            json.put("status", 200);
+            json.put("message", "项目信息修改成功");
+            return json;
+        }
+    }
 }
