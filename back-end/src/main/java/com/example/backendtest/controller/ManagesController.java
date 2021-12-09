@@ -51,10 +51,7 @@ public class ManagesController {
     public List<ManagesEntity> getAllByCourseId(Integer courseId) {
         return managesService.getAllByCourseId(courseId);
     }
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 
     @ApiOperation("按教师ID获取其管理所有课程详细信息")
     @GetMapping("/get/teacher/detail")

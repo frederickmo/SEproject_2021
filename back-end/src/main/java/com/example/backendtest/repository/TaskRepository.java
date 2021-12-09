@@ -7,10 +7,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import com.example.backendtest.model.TakesEntity;
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 import javax.transaction.Transactional;
 import java.sql.Date;
 import java.util.List;
@@ -72,6 +68,16 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Integer> {
             "order by t1.deadline asc nulls last")
     public Optional<List<Object>> findAllByCourseIdAndFinishedOrderByDeadlineAsc(Integer studentId);
 
+    /**
+     * 修改task的详细信息
+     * @param id
+     * @param courseId
+     * @param name
+     * @param description
+     * @param deadline
+     * @param type
+     * @param url
+     */
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update TaskEntity s set s.courseId = ?2,s.name=?3,s.description=?4,s.deadline =?5,s.type=?6 ,s.url=?7 where s.id = ?1")

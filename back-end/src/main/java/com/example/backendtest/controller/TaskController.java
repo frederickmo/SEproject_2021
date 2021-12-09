@@ -67,17 +67,10 @@ public class TaskController {
     }
 
     @ApiOperation("根据项目id修改项目的详细信息")
-<<<<<<< Updated upstream
     @PostMapping("/updateTaskInformation")
     public JSONObject updateTaskInformation(TaskEntity taskEntity)
     {
         return taskService.updateTaskInformation(taskEntity);
-=======
-    @PutMapping("/updateTaskInformation")
-    public JSONObject updateTaskInformation(TaskEntity taskEntity)
-    {
-            return taskService.updateTaskInformation(taskEntity);
->>>>>>> Stashed changes
     }
 
 
