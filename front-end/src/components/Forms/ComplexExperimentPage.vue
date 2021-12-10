@@ -96,7 +96,7 @@ export default {
         additionalData() {
             return {
                 "newFileName": this.taskId + "_" + this.studentId + ".pdf",
-                "location": "/taskUpload/" + this.courseId + "/" + this.taskId,
+                "location": "/taskUpload/" + this.taskId + "/" + this.studentId,
                 "studentId": this.studentId,
                 "taskId": this.taskId
             }

@@ -19,7 +19,7 @@
                         <span class="label">学号</span>
                         <a-input v-model="form_studentid" readonly />
                         <span class="label">姓名</span>
-                    <a-input v-model="form_name" allow-clear />
+                    <a-input v-model="form_name" readonly />
                     <span class="label">合作者</span>
                     <a-input v-model="form_cooperator" readonly />
                     </a-space>
@@ -28,7 +28,8 @@
                         <span class="label">实验地点</span>
                         <a-input v-model="form_place" readonly />
                         <span class="label">实验时间</span>
-                        <a-date-picker v-model="form_date" />
+                        <!-- <a-date-picker v-model="form_date" allow-clear="false" readonly /> -->
+                        <a-input v-model="form_date" readonly />
                     </a-space>
                     <div style="height: 20px" />
                     <a-space>
@@ -202,5 +203,7 @@ export default {
 </script>
 
 <style>
-
+.long-text {
+    width: 800px;
+}
 </style>

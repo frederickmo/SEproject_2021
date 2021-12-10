@@ -11,7 +11,7 @@
         <va-card-content>
            <!-- <va-data-table :items="scorelist" /> -->
            <div v-for="(item,index) in scorelist" :key="index">
-             <h1>{{name[index]}}</h1>
+             <h1>{{name[index+1]}}</h1>
              <br>
             <el-table :data="scorelist[index]" style="width: 100%">
               <el-table-column prop="2" label="项目ID"  />
