@@ -6,6 +6,10 @@ import { VuesticPlugin } from 'vuestic-ui'
 import 'vuestic-ui/dist/vuestic-ui.css'
 import { URL } from './global'
 
+// import store from "@src/store/store"
+
+
+
 // import axios from 'axios'  //引入axios
 // Vue.prototype.$http = axios
 
@@ -18,3 +22,13 @@ const app = createApp(App)
 app.config.globalProperties.$URL=URL
 installElementPlus(app)
 app.use(router).use(VuesticPlugin).use(ArcoVue).use(ArcoVueIcon).mount('#app')
+
+// Vue.use(Vuex)
+
+// new Vue({
+//     el: '#app',
+//     router,
+//     store,
+//     components: { App },
+//     template: '<App/>'
+// })

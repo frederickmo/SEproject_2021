@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("finishes")
 @AllArgsConstructor
+@CrossOrigin
 public class FinishesController {
 
 //    @Autowired
@@ -31,7 +32,7 @@ public class FinishesController {
      * @return
      */
     @ApiOperation("检查学生是否有权利上传该task")
-    @PostMapping("/checkStudentForTask")
+    @GetMapping("/checkStudentForTask")
     public JSONObject checkStudentForTask(Integer studentId, Integer taskId)
     {
         return finishesService.checkStudentForTask(studentId,taskId);

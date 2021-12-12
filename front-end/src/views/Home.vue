@@ -251,7 +251,10 @@ minimizedWidth="0">
       <EditPersonalInfo v-if="mainIndex==2" /> -->
 
       <!-- 这里改成了嵌套路由 -->
+
+      <transition name="fade">
       <router-view />
+      </transition>
 
     </el-main>
   </el-container>
@@ -456,6 +459,20 @@ body,
   margin: 0px;
   /*统一设置高度为100%*/
   height: 100%;
+}
+
+.fade-enter {
+  opacity:0;
+}
+.fade-leave{
+  opacity:1;
+}
+.fade-enter-active{
+  transition:opacity .5s;
+}
+.fade-leave-active{
+  opacity:0;
+  transition:opacity .5s;
 }
 
 </style>

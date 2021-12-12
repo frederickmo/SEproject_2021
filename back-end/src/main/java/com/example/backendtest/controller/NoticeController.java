@@ -7,10 +7,7 @@ import com.example.backendtest.service.NoticeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.Date;
@@ -19,8 +16,9 @@ import java.util.List;
 
 @Api(tags = "公告管理")
 @RestController
-@RequestMapping("topic")
+@RequestMapping("notice")
 @AllArgsConstructor
+@CrossOrigin
 public class NoticeController {
 
     private NoticeService noticeService;
@@ -50,6 +48,13 @@ public class NoticeController {
     public JSONObject deleteNotice(int Id,int postedId, String topic, String content, int type, Date updatedTime)
     {
         return noticeService.updateNotice(Id,postedId,topic,content,type,updatedTime);
+    }
+
+    @ApiOperation("更改公告")
+    @PostMapping("/update")
+    public JSONObject update(@RequestBody NoticeEntity notice) {
+//        return noticeService.update(notice);
+        return null;
     }
 
 }

@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("takes")
 @AllArgsConstructor
+@CrossOrigin
 public class TakesController {
 
     private final TakesService takesService;

@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("task")
 @AllArgsConstructor
+@CrossOrigin
 public class TaskController {
 
     private final TaskService taskService;
@@ -67,8 +68,9 @@ public class TaskController {
     }
 
     @ApiOperation("根据项目id修改项目的详细信息")
-    @PostMapping("/updateTaskInformation")
-    public JSONObject updateTaskInformation(TaskEntity taskEntity)
+//    @PostMapping("/updateTaskInformation")
+    @PutMapping("/update")
+    public JSONObject updateTaskInformation(@RequestBody TaskEntity taskEntity)
     {
         return taskService.updateTaskInformation(taskEntity);
     }

@@ -1,111 +1,106 @@
 <template>
-  <va-card>
-      <div style="height: 10px" />
-      <a-space style="margin-bottom: 20px">
-      <div style="font-size: 30px; font-weight: bold">实验报告：{{this.taskName}}</div>
-      <div v-show="isSubmitted"><va-icon color="#89d7bc" name="check_circle" />已提交</div>
-      <div v-show="!isSubmitted"><va-icon name="cancel" />未提交</div>
-      </a-space>
-      <div />
-      <a-space style="margin-bottom: 20px">
-          <span class="label">获取实验说明文档：</span>
-          <va-button color="#e2e0df" style="color: black" @click="getTaskGuide">点击获取</va-button>
-          </a-space>
-      <!-- <a-form ref="formRef" v-model="form" @submit="onHandleSubmit" style="width: 100%">
-          <a-space>
-            <a-form-item style="width: 250px" field='id' label='学号'
-            :rules="[{required:true,message:'请填入学号'}, {type:'number',max: 7,message: '请填入正确格式的学号'}]">
-                <a-input v-model="form.id"/>
-            </a-form-item>
-            <a-form-item style="width: 250px" field='name' label='姓名'
-            :rules="[{required: true, message: '请填入姓名'}]">
-                <a-input v-model="form.name"/>
-            </a-form-item>
-            <a-form-item style="width: 250px" field='cooperator' label='合作者'>
-                <a-input v-model="form.cooperator" />
-            </a-form-item>
-          </a-space>
-          <a-space>
-              <a-form-item style="width: 300px" field="place" label="实验地点">
-                  <a-input v-model="form.place" />
-              </a-form-item>
-              <a-form-item style="width: 300px" field='date' label='实验时间'>
-                  <a-date-picker v-model="form.date" />
-              </a-form-item>
-          </a-space>
-          <a-form-item style="width: 600px" field="aim" label="实验目的">
-              <a-input type="textarea" :rows="5" />
-          </a-form-item>
+    <div>
+        <div style="margin-bottom: 10px">
+            <va-breadcrumbs separator=">">
+                <va-breadcrumbs-item label="实验管理" disabled />
+                <va-breadcrumbs-item label="我的实验" to="/home/mytasks" />
+                <va-breadcrumbs-item label="实验项目" to="/home/task/onlinetask" />
+            </va-breadcrumbs>
+      </div>
+      <a-modal v-model:visible="showModal" @ok="handleModalOk">
+          <template #title>
+              提示
+          </template>
+          <div>
+            您已经提交，此次提交将会覆盖之前的提交。是否重新提交？
+          </div>
+      </a-modal>
 
-      </a-form> -->
+        <va-card>
+            <div style="height: 15px" />
+            <va-alert v-show="isOverdue()" style="width: 80%; font-size: 16px; font-weight: bold" icon="info" color="#f3d989" >
+                该实验报告已逾期。您现在仅可查看，无法进行提交。
+            </va-alert>
+            <div style="height: 20px" />
+            <a-space style="margin-bottom: 20px">
+            <div style="font-size: 30px; font-weight: bold">实验报告：{{this.taskName}}</div>
+            <div v-show="isSubmitted"><va-icon color="#89d7bc" name="check_circle" />已提交</div>
+            <div v-show="!isSubmitted"><va-icon name="cancel" />未提交</div>
+            </a-space>
+            <div />
+            <a-space style="margin-bottom: 20px">
+                <span class="label">获取实验说明文档：</span>
+                <va-button color="#e2e0df" style="color: black" @click="getTaskGuide">点击获取</va-button>
+                </a-space>
 
-      <va-form>
-          <a-space>
-            <span class="label">学号</span>
-            <a-input v-model="form_studentid" allow-clear />
-            <span class="label">姓名</span>
-          <a-input v-model="form_name" allow-clear />
-          <span class="label">合作者</span>
-          <a-input v-model="form_cooperator" allow-clear />
-          </a-space>
-          <div style="height: 20px" />
-          <a-space>
-              <span class="label">实验地点</span>
-              <a-input v-model="form_place" allow-clear />
-              <span class="label">实验时间</span>
-              <a-date-picker v-model="form_date" />
-          </a-space>
-          <div style="height: 20px" />
-          <a-space>
-              <span class="label">实验目的</span>
-              <!-- <va-input class="long-text" type="textarea" v-model="form_aim" /> -->
-              <a-textarea class="long-text" v-model="form_aim" auto-size />
-          </a-space>
-          <div style="height: 20px" />
-          <a-space>
-              <span class="label">实验原理</span>
-              <a-textarea class="long-text" v-model="form_principle" auto-size />
-          </a-space>
-          <div style="height: 20px" />
-          <a-space>
-              <span class="label">实验设备</span>
-              <a-textarea class="long-text" v-model="form_device" auto-size />
-          </a-space>
-          <div style="height: 20px" />
-          <a-space>
-              <span class="label">实验步骤</span>
-              <a-textarea class="long-text" v-model="form_procedure" auto-size />
-          </a-space>
-          <div style="height: 20px" />
-          <a-space>
-              <span class="label">实验现象</span>
-              <a-textarea class="long-text" v-model="form_phenomenon" auto-size />
-          </a-space>
-          <div style="height: 20px" />
-          <a-space>
-              <span class="label">分析讨论</span>
-              <a-textarea class="long-text" v-model="form_conclusion" auto-size />
-          </a-space>
-          <div style="height: 30px" />
-          <va-button color="#9fbcc2" gradient @click="submitTask">提交</va-button>
-          <div style="height: 30px" />
-      </va-form>
+            <va-form>
+                <a-space>
+                    <span class="label">学号</span>
+                    <a-input v-model="form_studentid" allow-clear />
+                    <span class="label">姓名</span>
+                <a-input v-model="form_name" allow-clear />
+                <span class="label">合作者</span>
+                <a-input v-model="form_cooperator" allow-clear />
+                </a-space>
+                <div style="height: 20px" />
+                <a-space>
+                    <span class="label">实验地点</span>
+                    <a-input v-model="form_place" allow-clear />
+                    <span class="label">实验时间</span>
+                    <a-date-picker v-model="form_date" />
+                </a-space>
+                <div style="height: 20px" />
+                <a-space>
+                    <span class="label">实验目的</span>
+                    <!-- <va-input class="long-text" type="textarea" v-model="form_aim" /> -->
+                    <a-textarea class="long-text" v-model="form_aim" auto-size />
+                </a-space>
+                <div style="height: 20px" />
+                <a-space>
+                    <span class="label">实验原理</span>
+                    <a-textarea class="long-text" v-model="form_principle" auto-size />
+                </a-space>
+                <div style="height: 20px" />
+                <a-space>
+                    <span class="label">实验设备</span>
+                    <a-textarea class="long-text" v-model="form_device" auto-size />
+                </a-space>
+                <div style="height: 20px" />
+                <a-space>
+                    <span class="label">实验步骤</span>
+                    <a-textarea class="long-text" v-model="form_procedure" auto-size />
+                </a-space>
+                <div style="height: 20px" />
+                <a-space>
+                    <span class="label">实验现象</span>
+                    <a-textarea class="long-text" v-model="form_phenomenon" auto-size />
+                </a-space>
+                <div style="height: 20px" />
+                <a-space>
+                    <span class="label">分析讨论</span>
+                    <a-textarea class="long-text" v-model="form_conclusion" auto-size />
+                </a-space>
+                <div style="height: 30px" />
+                <va-button color="#9fbcc2" gradient @click="handleSubmitButton">提交</va-button>
+                <div style="height: 30px" />
+            </va-form>
 
-      <!-- <div>
-          <div>Values:</div>
-          <div>ID: {{form_studentid}}</div>
-          <div>姓名: {{form_name}}</div>
-          <div>合作者: {{form_cooperator}}</div>
-          <div>实验时间: {{form_date}}</div>
-          <div>实验地点: {{form_place}}</div>
-          <div>实验目的: {{form_aim}}</div>
-          <div>实验原理: {{form_principle}}</div>
-          <div>实验设备: {{form_device}}</div>
-          <div>实验步骤: {{form_procedure}}</div>
-          <div>实验现象: {{form_phenomenon}}</div>
-          <div>分析讨论: {{form_conclusion}}</div>
-      </div> -->
-  </va-card>
+            <!-- <div>
+                <div>Values:</div>
+                <div>ID: {{form_studentid}}</div>
+                <div>姓名: {{form_name}}</div>
+                <div>合作者: {{form_cooperator}}</div>
+                <div>实验时间: {{form_date}}</div>
+                <div>实验地点: {{form_place}}</div>
+                <div>实验目的: {{form_aim}}</div>
+                <div>实验原理: {{form_principle}}</div>
+                <div>实验设备: {{form_device}}</div>
+                <div>实验步骤: {{form_procedure}}</div>
+                <div>实验现象: {{form_phenomenon}}</div>
+                <div>分析讨论: {{form_conclusion}}</div>
+            </div> -->
+        </va-card>
+    </div>
 </template>
 
 <script>
@@ -169,6 +164,7 @@ export default {
             result.then(res => {
                 this.taskName = res.name
                 this.deadline = res.deadline
+                // console.log("deadline: " , this.deadline)
             })
         })
 
@@ -198,14 +194,39 @@ export default {
 
     },
     methods: {
+        isOverdue () {
+        /**
+         * now的写法用当前时间转日期再转时间来进行比较的原因是
+         * 如果直接用当前时间和设定的ddl(只精确到日期)来比较的话，
+         * ddl转时间是当天的0点整，但是设定的ddl本身意义应该是到当天结束为止。
+         * 所以把当前时间转换为当天0点整再进行比较就能等效上述效果。
+         */
+        let deadline_date = new Date(this.deadline)
+        let now = new Date(new Date().toLocaleDateString())
+        if (now <= deadline_date || this.deadline == null || this.deadline == undefined || this.deadline == '') {
+            return false
+        } else {
+            return true
+        }
+        },
         getTaskGuide() {
             window.open(this.$URL + "/file/download/taskGuide/" + this.courseId + "/" + this.taskId + ".pdf");
         },
-        submitTask () {
-
-            if (this.isSubmitted) {
-                this.$notification.warning('您当前已提交，此次提交将会覆盖之前提交的文件')
+        handleSubmitButton() {
+            if (this.isOverdue()) {
+                this.$notification.error('该实验已逾期，无法提交。')
             }
+            else if (this.isSubmitted) {
+                this.showModal = !this.showModal
+            } else {
+                this.submitTask()
+            }
+            // this.submitTask()
+        },
+        handleModalOk() {
+            this.submitTask()
+        },
+        submitTask () {
 
             let submitForm = {
                 courseId: this.courseId,
@@ -240,7 +261,7 @@ export default {
                 result.then(res => {
                     // console.log(res)
                     if (res.status == 200) {
-                        this.$notification.success('上传成功')
+                        this.$notification.success('提交成功！')
                         this.$router.go(-1)
                     }
                 })

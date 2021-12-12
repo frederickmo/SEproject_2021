@@ -14,6 +14,10 @@ import java.util.List;
 @RestController
 @RequestMapping("course")
 @AllArgsConstructor
+// @CrossOrigin确实可以处理所有跨域问题，就先这么用吧。
+// p.s. GET, POST能够跨域是因为这俩(还有HEAD)请求属于简单请求，PUT/DELETE等属于非简单请求。
+// 浏览器对于简单请求和非简单请求的处理方式是不一样的。
+@CrossOrigin
 public class CourseController {
 
     private final CourseService courseService;
@@ -56,7 +60,7 @@ public class CourseController {
 
 
     @ApiOperation("修改课程信息")
-    @PutMapping("/updateCourse")
+    @PutMapping("/update")
     public JSONObject updateCourse(@RequestBody CourseEntity course){return courseService.update(course);}
 
 }
