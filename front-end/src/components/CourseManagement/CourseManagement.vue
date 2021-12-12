@@ -9,8 +9,34 @@
     <va-card>
       <va-card-title style="font-size: 20px">课程管理</va-card-title>
         <va-card-content>
-            暂无操作
+            <va-card 
+            v-for="(course, index) in courses"
+            :key="index"
+            color="#b5c4b1" 
+            gradient
+            style="margin-bottom: 10px"
+            >
+              <va-card-content style="rgb(60, 60, 60); font-weight: bold">
+                <div style="display: flex">
+                  <!-- va-card高度: 76px -->
+                  <!-- va-card高度: 36px -->
+                  <div style="line-height: 36px; width: 90%; font-size: 18px">{{course.name}}</div>
+                  <div>
+                    <va-button  @click="modifyCourse(course.id,index)" color="#e0e5df" style="color: rgb(40,40,40); ">点击修改</va-button>
+                    <!-- </div>
+                  <div> -->
+                  <div style="height: 2px" />
+                  <va-button @click="deleteCourse(course.id)" color="#e0e5df" style="color: rgb(40,40,40)">点击删除</va-button>
+                  </div>
+                  
+                  
+                </div>
+              </va-card-content>
+              
+            </va-card>
+            
         </va-card-content>
+        <va-button @click="add()" color="#e0e5df" style="color: rgb(40,40,40)">新增课程</va-button>
     </va-card>
   </div>
   
@@ -18,10 +44,90 @@
 
 <script>
 export default {
+  data () {
+    return {
+      id: '',
+      name: '',
+      email: '',
+      password: '',
+      identity: 0,
+      activated: 0,
 
+      courses: [],
+    }
+  },
+  mounted () {
+
+    this.id = localStorage.getItem("userId")
+    console.log("id: ", this.id)
+
+    fetch(this.$URL + "/manages/get/teacher/detail?teacherId=" + this.id, {
+      method: "GET"
+    }).then(response => {
+      console.log(response)
+      let result = response.json()
+      result.then(res => {
+        console.log(res)
+        this.courses = res
+      })
+    })
+  },
+  methods: {
+    
+    deleteCourse (courseId)
+    {
+        fetch(this.$URL + "/manages/delete?courseId=" + courseId+"&teacherId="+this.id, {
+      method: "GET"
+    }).then(response => {
+      console.log(response)
+      let result = response.json()
+      result.then(res => {
+        console.log(res)
+        //this.courses = res
+        fetch(this.$URL + "/manages/get/teacher/detail?teacherId=" + this.id, {
+      method: "GET"
+    }).then(response => {
+      console.log(response)
+      let result = response.json()
+      result.then(res => {
+        console.log(res)
+        this.courses = res
+      })
+    })
+      })
+    })
+    },
+    modifyCourse (courseId,index)
+    {
+        localStorage.setItem("courseId", courseId)
+        console.log("设置courseID了吗？courseId=" + localStorage.getItem("courseId"))
+        this.$router.push({
+        name: 'CourseModify',
+        params: {
+          courseId: this.courses[index].id,
+          name: this.courses[index].name,
+          description: this.courses[index].description,
+          year: this.courses[index].year,
+          semester: this.courses[index].semester
+        }
+      })    
+    },
+    add()
+    {
+       
+        this.$router.push({
+        name: 'Courseadd',
+        
+      })     
+    }
+  }
 }
 </script>
 
 <style>
-
+.modi
+{
+  height: 20px;
+  width: 100%;
+}
 </style>
