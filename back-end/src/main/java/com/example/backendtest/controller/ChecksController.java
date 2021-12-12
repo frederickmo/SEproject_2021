@@ -6,15 +6,13 @@ import com.example.backendtest.service.ChecksService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(tags = "教师批改记录管理")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/checks")
+@CrossOrigin
 public class ChecksController {
 
     private ChecksService checksService;

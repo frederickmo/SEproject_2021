@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/file")
 @AllArgsConstructor
+@CrossOrigin
 public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);

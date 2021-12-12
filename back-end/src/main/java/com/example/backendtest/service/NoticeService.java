@@ -17,7 +17,8 @@ import java.util.List;
 @Slf4j
 public class NoticeService {
 
-private NoticeRepository noticeRepository;
+    private final NoticeRepository noticeRepository;
+
     public JSONObject addNotice(int postedId, String topic, String content, int type, Date updatedTime) {
         if(noticeRepository.findByTopic(topic).isPresent())
         {
