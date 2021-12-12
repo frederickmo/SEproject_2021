@@ -19,8 +19,8 @@ public class NoticeService {
 
     private final NoticeRepository noticeRepository;
 
-    public JSONObject addNotice(int postedId, String topic, String content, int type, Date updatedTime) {
-        if(noticeRepository.findByTopic(topic).isPresent())
+    public JSONObject addNotice(NoticeEntity notice) {
+        if(noticeRepository.findByTopic(notice.getTopic()).isPresent())
         {
             JSONObject json = new JSONObject();
             json.put("status", 500);
@@ -28,13 +28,7 @@ public class NoticeService {
             return json;
         }
         else {
-            NoticeEntity noticeEntity = new NoticeEntity();
-            noticeEntity.setPostedId(postedId);
-            noticeEntity.setTopic(topic);
-            noticeEntity.setContent(content);
-            noticeEntity.setType(type);
-            noticeEntity.setUpdatedTime(updatedTime);
-            noticeRepository.save(noticeEntity);
+            noticeRepository.save(notice);
             JSONObject json = new JSONObject();
             json.put("status", 200);
             json.put("message", "已添加存在");
@@ -43,12 +37,15 @@ public class NoticeService {
     }
 
     public List<NoticeEntity> showNoticeByTime() {
-        if (noticeRepository.findAll().isEmpty()){throw  new IllegalStateException("没有公告");}
+        if (noticeRepository.findAll().isEmpty())
+        {
+            throw  new IllegalStateException("没有公告");
+        }
         return noticeRepository.showNoticeByTime();
     }
 
-    public JSONObject deleteNotice(String topic) {
-        if(noticeRepository.findByTopic(topic).isEmpty())
+    public JSONObject deleteNotice(int id) {
+        if(noticeRepository.findById(id).isEmpty())
         {
             JSONObject json = new JSONObject();
             json.put("status", 500);
@@ -57,7 +54,7 @@ public class NoticeService {
         }
         else
         {
-            noticeRepository.deleteByTopic(topic);
+            noticeRepository.deleteById(id);
             JSONObject json = new JSONObject();
             json.put("status", 200);
             json.put("message", "公告删除成功");
@@ -65,14 +62,17 @@ public class NoticeService {
         }
     }
 
-    public JSONObject updateNotice(int id, int postedId, String topic, String content, int type, Date updatedTime) {
-        if(noticeRepository.findById(id).isEmpty())
+    public JSONObject updateNotice(NoticeEntity notice) {
+        if(noticeRepository.findById(notice.getId()).isEmpty())
         {
-            throw  new IllegalStateException("公告编号不存在");
+            JSONObject json = new JSONObject();
+            json.put("status", 500);
+            json.put("message", "不存在该该公告");
+            return json;
         }
         else
         {
-            noticeRepository.updateNotice(id,postedId,topic,content,type,updatedTime);
+            noticeRepository.updateNotice(notice.getId(),notice.getPostedId(),notice.getTopic(),notice.getContent(),notice.getType(),notice.getUpdatedTime());
             JSONObject json = new JSONObject();
             json.put("status", 200);
             json.put("message", "公告修改成功");
