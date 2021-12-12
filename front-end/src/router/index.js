@@ -10,11 +10,10 @@ const routes = [{
         path: '/home',
         name: 'Home',
         component: Home,
-        children: [
-            {
+        children: [{
                 path: '/refresh',
                 name: 'Refresh',
-                component: () => 
+                component: () =>
                     import ("../components/Refresh.vue")
             },
             {
@@ -23,9 +22,9 @@ const routes = [{
                 component: () =>
                     import ('../components/RedirectToHome.vue')
             },
-            
-            
-            
+
+
+
             {
                 path: '/home/announcement',
                 name: 'Announcement',
@@ -75,12 +74,22 @@ const routes = [{
             {
                 path: '/home/course',
                 name: 'CoursePage',
-                component: () => 
+                component: () =>
                     import ('../components/CourseManagement/CoursePage.vue')
             },
+            {
+                path: '/home/course',
+                name: 'CourseModify',
+                component: () =>
+                    import ('../components/CourseManagement/CourseModify.vue')
+            },
+            {
+                path: '/home/course',
+                name: 'Courseadd',
+                component: () =>
+                    import ('../components/CourseManagement/Courseadd.vue')
+            },
 
-
-            
             {
                 path: '/home/mytasks',
                 name: 'MyTasks',
@@ -123,7 +132,7 @@ const routes = [{
             {
                 path: '/home/grademanagement/course/task',
                 name: 'GradeManagementTaskPage',
-                component: () => 
+                component: () =>
                     import ('../components/GradeManagement/GradeManagementTaskPage.vue')
             },
 
@@ -133,20 +142,20 @@ const routes = [{
             {
                 path: '/home/task/onlinetask',
                 name: 'OnlineTask',
-                component: () => 
+                component: () =>
                     import ('../components/Forms/OnlineExperimentForm.vue')
             },
 
             {
                 path: '/home/task/complextask',
                 name: 'ComplexTask',
-                component: () => 
+                component: () =>
                     import ("../components/Forms/ComplexExperimentPage.vue")
             },
             {
                 path: '/home/grademanagement/course/task/check',
                 name: 'OnlineReportCheck',
-                component: () => 
+                component: () =>
                     import ("../components/Forms/OnlineReportCheckPage.vue")
             }
         ]
