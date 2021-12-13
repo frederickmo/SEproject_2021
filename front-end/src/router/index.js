@@ -108,8 +108,18 @@ const routes = [{
                 component: () =>
                     import ('../components/TaskManagement/TaskManagement.vue')
             },
-
-
+            {
+                path: '/home/taskmanagement',
+                name: 'TaskManagePage',
+                component: () =>
+                    import ('../components/TaskManagement/TaskManagePage.vue')
+            },
+            {
+                path: '/home/taskmanagement',
+                name: 'TaskModify',
+                component: () =>
+                    import ('../components/TaskManagement/TaskModify.vue')
+            },
 
             {
                 path: '/home/mygrades',
