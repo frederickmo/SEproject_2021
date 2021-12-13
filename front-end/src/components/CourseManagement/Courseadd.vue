@@ -1,0 +1,139 @@
+<template>
+  <va-card gradient color="#e0e5df">
+      <va-card-content style="text-align: left">
+          <div class="course-title">课程名字：<va-input
+      class="mb-4"
+      v-model="this.courseName"
+      placeholder="请输入课程名字"
+      outline
+    />
+
+</div>
+<div class="course-id">课程id：<va-input
+      class="mb-4"
+      v-model="this.courseId"
+      placeholder="请输入课程id"
+      outline
+    /></div>
+          <div class="course-description">课程描述：<va-input
+      class="mb-4"
+      v-model="this.courseDescription"
+      placeholder="请输入课程描述"
+      outline
+    /></div>
+            <div class="course-year">开设年份：
+                <a-year-picker v-model="this.year" style="width: 200px;" />
+            </div>
+            <div class="course-semester">学年：<va-input
+      class="mb-4"
+      v-model="this.semester"
+      placeholder="请输入学年"
+      outline
+    /></div>
+            <div style="height: 20px" />
+
+            <va-button @click="addcourse()" color="#e0e5df" style="color: rgb(40,40,40)">确认添加</va-button>
+           
+      </va-card-content>
+  </va-card>
+</template>
+
+<script>
+export default {
+    data () {
+        return {
+            id: '',
+            courseId: '',
+            courseName: '',
+            courseDescription: '',
+            year: '',
+            semester: '',
+
+            course:[]
+        }
+    }, 
+    mounted () {
+          
+    },
+  methods: {
+    addcourse()
+    {
+
+        let submitForm = {
+                id: this.courseId,
+                name:this.courseName,
+                year:this.year,
+                semester:this.semester,
+                description:this.courseDescription,
+                manager:localStorage.getItem("userId")
+            }
+            fetch(this.$URL + "/course/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify(submitForm)
+            }).then(response => {
+                // console.log(response)
+                let result = response.json()
+                result.then(res => {
+                    // console.log(res)
+                    if (res.status == 200) {
+                        this.$notification.success('上传成功')
+                        this.$router.go(-1)
+                    }
+                })
+            })
+fetch(this.$URL + "/manages/add?courseId=" + this.courseId+"&teacherId="+localStorage.getItem("userId"), {
+      method: "POST"
+    }).then(response => {
+      console.log(response)
+      let result = response.json()
+      result.then(res => {
+        console.log(res)
+        //this.manage=res.manager
+      })
+    })
+
+        
+
+
+   
+    }
+  }
+}
+</script>
+
+<style>
+.course-title {
+    /* text-align: left; */
+    font-size: 25px;
+    font-weight: bold;
+    color: #656565;
+    margin-bottom: 15px
+}
+
+.course-description {
+    font-size: 25px;
+    font-weight: bold;
+    color: #656565;
+    margin-bottom: 15px
+}
+
+.course-year{
+    font-size: 25px;
+    font-weight: bold;
+    color: #656565;
+    margin-bottom: 15px
+}
+.course-semester{
+    font-size: 25px;
+    font-weight: bold;
+    color: #656565;
+    margin-bottom: 15px
+}
+.course-id{
+    font-size: 25px;
+    font-weight: bold;
+    color: #656565;
+    margin-bottom: 15px
+}
+</style>
