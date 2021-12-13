@@ -37,4 +37,11 @@ public interface ManagesRepository extends JpaRepository<ManagesEntity, ManagesE
 
     @Query(value = "select u from ManagesEntity m, UserEntity u where m.teacherId = u.id and m.courseId = ?1")
     public Optional<List<UserEntity>> findAllByCourseIdInDetail(Integer courseId);
+
+    @Query(value = "select u from CourseEntity u where u.manager = ?1")
+    public List<CourseEntity> getCourseByManagerId(Integer managerId);
+
+    @Query(value = " select u from ManagesEntity m, CourseEntity u where m.teacherId = ?1 " +
+            "and m.courseId = u.id and u.manager <> ?1")
+    public List<CourseEntity> getTeachingCourse(Integer teacherId);
 }
