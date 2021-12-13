@@ -87,7 +87,7 @@
                     <!-- </div>
                   <div> -->
                   <div style="height: 2px" /> 
-                  <va-button @click="DropManageCourse(teacher.id)" color="#e0e5df" style="color: rgb(40,40,40)">点击取消授课</va-button>
+                  <va-button @click="DropmanageCourse(teacher.id)" color="#e0e5df" style="color: rgb(40,40,40)">点击取消授课</va-button>
                   </div>
                   
                   
@@ -105,13 +105,13 @@
 export default {
     data () {
         return {
-            id: '',
+            teacherid: '',
             courseId: '',
             courseName: '',
             courseDescription: '',
             year: '',
             semester: '',
-            course_manager:'',
+            course_manage:'',
             course:[],
             student:[],
             teacher:[]
@@ -120,17 +120,17 @@ export default {
     mounted () {
         this.id = localStorage.getItem("userId")
         this.courseId = localStorage.getItem("courseId")
-        console.log("this.courseId:", this.courseId)
         console.log("从上个页面传来的params.courseId: " + this.$route.params.courseId)
         // if (this.$route.params.courseId == undefined) {
             console.log("从子路由跳到父路由，需要重新查询课程数据")
-            fetch(this.$URL + '/course/get?id=' + this.courseId, {
+             fetch(this.$URL + "/course/get?id="  + this.$route.params.courseId, {
                 method: "GET"
             }).then(response => {
                 // console.log(response)
                 let result = response.json()
                 result.then(res => {
                      console.log(res)
+                     this.course_manage=res.manager
                     this.courseName = res.name
                     this.courseDescription = res.description
                     if(res.year!=null)
@@ -167,16 +167,7 @@ export default {
       })
     })
         
-    fetch(this.$URL + "/course/get?id=" + this.courseId, {
-      method: "GET"
-    }).then(response => {
-      console.log(response)
-      let result = response.json()
-      result.then(res => {
-        console.log(res)
-        this.course_manager=res.manager
-      })
-    })
+ 
 
     },
   methods: {
@@ -233,11 +224,10 @@ export default {
     
     },
 
-    DropManageCourse(teacherid)
+    DropmanageCourse(teacherid)
     {
-      console.log("调用接口的teacherid:", teacherid)
-      console.log("该课程的责任教师：", this.course_manager)
-      if(teacherid!=this.course_manager)
+      console.log(this.course_manage+" "+ localStorage.getItem("userId"))
+      if( localStorage.getItem("userId")!=this.course_manage)
       {
         this.$notification.success('您不是责任教师，无法执行该操作')
 
