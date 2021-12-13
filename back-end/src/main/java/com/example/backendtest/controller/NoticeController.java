@@ -25,8 +25,8 @@ public class NoticeController {
 
     @ApiOperation("添加公告")
     @PostMapping("/addNotice")
-    public JSONObject addNotice(int postedId, String topic, String content, int type, Date updatedTime) throws UnsupportedEncodingException {
-          return noticeService.addNotice(postedId,topic,content,type,updatedTime);
+    public JSONObject addNotice(@RequestBody NoticeEntity notice) throws UnsupportedEncodingException {
+          return noticeService.addNotice(notice);
     }
 
     @ApiOperation("按时间顺序展示所有的公告")
@@ -37,24 +37,18 @@ public class NoticeController {
     }
 
     @ApiOperation("删除公告")
-    @PostMapping("/deleteNotice")
-    public JSONObject deleteNotice(String topic)
+    @DeleteMapping("/deleteNotice")
+    public JSONObject deleteNotice(int id)
     {
-        return noticeService.deleteNotice(topic);
+        return noticeService.deleteNotice(id);
     }
 
     @ApiOperation("更改公告")
-    @PostMapping("/updateNoticeById")
-    public JSONObject deleteNotice(int Id,int postedId, String topic, String content, int type, Date updatedTime)
+    @PutMapping("/updateNotice")
+    public JSONObject deleteNotice(@RequestBody NoticeEntity notice)
     {
-        return noticeService.updateNotice(Id,postedId,topic,content,type,updatedTime);
+        return noticeService.updateNotice(notice);
     }
 
-    @ApiOperation("更改公告")
-    @PostMapping("/update")
-    public JSONObject update(@RequestBody NoticeEntity notice) {
-//        return noticeService.update(notice);
-        return null;
-    }
 
 }

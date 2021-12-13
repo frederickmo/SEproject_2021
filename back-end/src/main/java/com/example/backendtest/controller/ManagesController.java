@@ -37,7 +37,7 @@ public class ManagesController {
         return managesService.deleteTeacherManages(teacherId,courseId);
     }
 
-    @ApiOperation("按教师ID获取其管理所有课程")
+    @ApiOperation("按教师ID获取其任课的所有课程")
     @GetMapping("/get/teacher")
     public List<ManagesEntity> getAllByTeacherId(Integer teacherId) {
         return managesService.getAllByTeacherId(teacherId);
@@ -60,5 +60,19 @@ public class ManagesController {
     @GetMapping("/get/course/detail")
     public List<UserEntity> getAllByCourseIdInDetail(Integer courseId) {
         return managesService.getAllByCourseIdInDetail(courseId);
+    }
+
+    @ApiOperation("按教师ID获得其为责任教师的课程")
+    @GetMapping("/get/course/managerId")
+    public List<CourseEntity> getCourseByManagerId(Integer managerId)
+    {
+        return managesService.getCourseByManagerId(managerId);
+    }
+
+    @ApiOperation("按教师ID获得其任课的课程（去除为责任教师的）")
+    @GetMapping("/get/teachingCourse")
+    public List<CourseEntity> getTeachingCourse(Integer teacherId)
+    {
+        return managesService.getTeachingCourse(teacherId);
     }
 }

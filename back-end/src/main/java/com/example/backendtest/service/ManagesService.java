@@ -148,4 +148,28 @@ public class ManagesService {
             return list;
         }
     }
+
+    public List<CourseEntity> getCourseByManagerId(Integer managerId) {
+        List<CourseEntity> list = managesRepository.getCourseByManagerId(managerId);
+        if(list.isEmpty())
+        {
+            throw new IllegalStateException("该教师不存在主管课程");
+        }
+        else
+        {
+            return list;
+        }
+    }
+
+    public List<CourseEntity> getTeachingCourse(Integer teacherId) {
+        List<CourseEntity> list = managesRepository.getTeachingCourse(teacherId);
+        if(list.isEmpty())
+        {
+            throw new IllegalStateException("该教师不存在除存在主管课程以外的课程");
+        }
+        else
+        {
+            return list;
+        }
+    }
 }

@@ -15,10 +15,6 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity,Integer> {
     @Query(value = "select s from NoticeEntity s where s.topic = ?1")
     public Optional<NoticeEntity> findByTopic(String topic);
 
-    @Transactional
-    @Modifying(clearAutomatically = true)
-    @Query(value = "delete from NoticeEntity s where s.topic = ?1")
-    void deleteByTopic(String topic);
 
     @Query(value = "select s from NoticeEntity s order by s.updatedTime desc")
     List<NoticeEntity> showNoticeByTime();
