@@ -82,7 +82,16 @@ export default {
                     }
                 })
             })
-
+fetch(this.$URL + "/manages/add?courseId=" + this.courseId+"&teacherId="+localStorage.getItem("userId"), {
+      method: "POST"
+    }).then(response => {
+      console.log(response)
+      let result = response.json()
+      result.then(res => {
+        console.log(res)
+        //this.manage=res.manager
+      })
+    })
 
         
 
