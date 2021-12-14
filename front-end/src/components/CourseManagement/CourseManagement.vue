@@ -126,8 +126,13 @@ export default {
       console.log(response)
       let result = response.json()
       result.then(res => {
-        console.log(res)
-        //this.courses = res
+        if (res.status == 200) {
+                        this.$notification.success('删除成功')
+                       }
+        
+        
+      
+    
         fetch(this.$URL + "/manages/get/course/managerId?managerId=" + this.id, {
       method: "GET"
     }).then(response => {

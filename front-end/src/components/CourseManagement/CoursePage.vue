@@ -73,7 +73,7 @@ export default {
         console.log("从上个页面传来的params.courseId: " + this.$route.params.courseId)
         if (this.$route.params.courseId == undefined) {
             console.log("从子路由跳到父路由，需要重新查询课程数据")
-            fetch(this.$URL + '/course/get?id=' + this.courseId, {
+            fetch(this.$URL + '/=' + this.courseId, {
                 method: "GET"
             }).then(response => {
                 // console.log(response)

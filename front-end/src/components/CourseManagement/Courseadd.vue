@@ -79,10 +79,7 @@ export default {
                     if (res.status == 200) {
                         this.$notification.success('上传成功')
                         this.$router.go(-1)
-                    }
-                })
-            })
-fetch(this.$URL + "/manages/add?courseId=" + this.courseId+"&teacherId="+localStorage.getItem("userId"), {
+                        fetch(this.$URL + "/manages/add?courseId=" + this.courseId+"&teacherId="+localStorage.getItem("userId"), {
       method: "POST"
     }).then(response => {
       console.log(response)
@@ -92,6 +89,11 @@ fetch(this.$URL + "/manages/add?courseId=" + this.courseId+"&teacherId="+localSt
         //this.manage=res.manager
       })
     })
+                    }
+                })
+            })
+            console.log(this.courseId+" "+localStorage.getItem("userId"))
+
 
         
 
