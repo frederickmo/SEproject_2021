@@ -4,10 +4,13 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.model.UserEntity;
 import com.example.backendtest.service.UserService;
+import com.example.backendtest.util.VerifyEmailUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Api(tags = "用户管理")
 @RestController
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    VerifyEmailUtil verifyEmailUtil;
 
     // 测试后端是否正常工作
     @ApiOperation("测试：返回简单字符串")
@@ -62,6 +66,18 @@ public class UserController {
     @PutMapping("update")
     public JSONObject updateUserInfo(@RequestBody UserEntity user) {
         return userService.updateUserInfo(user);
+    }
+
+    @PostMapping ("/mail")
+    @ApiOperation("发送验证码到邮箱")
+    public JSONObject sendVerifyCode(HttpServletRequest request, String email) {
+        return verifyEmailUtil.sendMail(request,email);
+    }
+
+    @GetMapping("/verify")
+    @ApiOperation("检验验证码")
+    public JSONObject verify(String inputCode, HttpServletRequest request){
+        return verifyEmailUtil.checkCode(inputCode,request);
     }
 
 }

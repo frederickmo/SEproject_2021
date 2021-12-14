@@ -40,10 +40,32 @@ spring:
       max-file-size: 200MB
       max-request-size: 215MB
 
+      ## mail config ##
+      #163 SMTP
+
+  mail:
+    host: smtp.163.com
+    #postmail information
+    #MCIWYKFGGFGQECIK
+    username: drt_test@163.com
+    password: MCIWYKFGGFGQECIK
+    default-encoding: utf-8
+
+    ## thymeleaf config##
+  thymeleaf:
+    mode: HTML5
+    encoding: UTF-8
+    cache: false
+
+    ## default config ##
+mail:
+  from:
+    addr: drt_test@163.com
+
 file:
 
-# upload-dir: /Users/dengruotao/Desktop/SEproject_2021/back-end/src/main/resources/static
-  upload-dir: /Users/frederickmo/documents/Github/SEproject_2021/back-end/src/main/resources/static
+  upload-dir: /Users/dengruotao/Desktop/SEproject_2021/back-end/src/main/resources/static
+  #upload-dir: /Users/frederickmo/documents/Github/SEproject_2021/back-end/src/main/resources/static
 #  upload-dir: /usr/test/resources
 
 
@@ -63,4 +85,7 @@ sa-token:
   token-style: uuid
   # ????????
   is-log: true
+
+
+
 
