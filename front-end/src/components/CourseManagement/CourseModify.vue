@@ -2,7 +2,8 @@
   <va-card gradient color="#e0e5df">
       <va-card-content style="text-align: left">
         <h1>修改课程信息</h1>
-          <div class="course-title">课程名字：{{this.courseName}}<va-input
+          
+          <div class="course-title" style="float: left">课程名字：<va-input
       class="mb-4"
       v-model="this.courseName"
       placeholder="请输入修改后的内容"
@@ -10,19 +11,33 @@
     />
 
 </div>
-          <div class="course-description">课程描述：{{this.courseDescription}}<va-input
+          <div class="course-description" >
+            课程描述：
+            <va-input
       class="mb-4"
       v-model="this.courseDescription"
       placeholder="请输入修改后的内容"
       outline
-    /></div>
-            <div class="course-year">开设年份：{{this.year}}<va-input
+    />
+    
+    </div>
+
+
+         
+<div style="height: 15px" />
+    
+     
+    <div class="course-year" style="float: left ">开设年份：
+      <va-input
       class="mb-4"
       v-model="this.year"
       placeholder="请输入修改后的内容"
       outline
-    /></div>
-            <div class="course-semester">学年：{{this.semester}}<va-input
+    />
+    <!-- <a-year-picker v-model="this.year" :defaultValue="2021":style="style" style="width: 200px;" /> -->
+    
+    </div>
+            <div class="course-semester" >学年：<va-input
       class="mb-4"
       v-model="this.semester"
       placeholder="请输入修改后的内容"
@@ -30,8 +45,15 @@
     /></div>
             <div style="height: 20px" />
 
-            <va-button @click="modifycourse()" color="#e0e5df" style="color: rgb(40,40,40)">确认修改</va-button>
+            <va-button @click="handleClick3" color="#e0e5df" style="color: rgb(40,40,40)">确认修改</va-button>
            
+
+           <a-modal v-model:visible="visible3" @ok="handleOk3" @cancel="handleCancel3" unmountOnClose @before-ok="handleBeforeOk3">
+    <template #title>
+      修改课程
+    </template>
+    <div>您确定要修改吗</div>
+  </a-modal>
       </va-card-content>
   </va-card>
 <div style="height: 2px" />
@@ -97,14 +119,61 @@
               </va-card-content>
               
             </va-card>
+            
       </va-card-content>
   </va-card>
+  <div style="height: 10px" />
+  <div>
+    <div>
+   
+   <va-button  @click="handleClick" color="#e0e5df" style="color: rgb(40,40,40); ">点击添加教师</va-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;               
+   <va-button  @click="handleClick1" color="#e0e5df" style="color: rgb(40,40,40); ">点击添加学生</va-button>
+  <a-modal v-model:visible="visible1" @ok="handleOk1" @cancel="handleCancel1" unmountOnClose @before-ok="handleBeforeOk1">
+    <template #title>
+      请输入学生id
+    </template>
+    <div><va-input
+      class="mb-4"
+      v-model="this.studentid"
+      placeholder="请输入学生id"
+      outline
+    /></div>
+  </a-modal>
+
+  <a-modal v-model:visible="visible" @ok="handleOk" @cancel="handleCancel" unmountOnClose @before-ok="handleBeforeOk">
+    <template #title>
+      请输入教师id
+    </template>
+    <div><va-input
+      class="mb-4"
+      v-model="this.teacherid"
+      placeholder="请输入教师id"
+      outline
+    /></div>
+  </a-modal>
+   <div style="height: 10px" />
+  </div>
+  
+  <!-- <va-button @click="handleClick" @click="deleteCourse()" color="#FF0000" style="background-color: rgb(0,0,0) text-align:center">点击删除课程</va-button>  -->
+<va-button @click="handleClick4"  color="#FF0000" style="background-color: rgb(0,0,0) text-align:center">点击删除课程</va-button> 
+  <a-modal v-model:visible="visible4" @ok="handleOk4" @cancel="handleCancel4" unmountOnClose @before-ok="handleBeforeOk4">
+    <template #title>
+      删除课程
+    </template>
+    <div>您确定要删除吗</div>
+  </a-modal>
+  </div>
+
 </template>
 
 <script>
 export default {
     data () {
         return {
+          visible: false,
+          visible1: false,
+          visible3: false,
+          visible4: false,
             teacherid: '',
             courseId: '',
             courseName: '',
@@ -112,9 +181,11 @@ export default {
             year: '',
             semester: '',
             course_manage:'',
+            studentid:'',
             course:[],
             student:[],
             teacher:[]
+
         }
     }, 
     mounted () {
@@ -171,6 +242,196 @@ export default {
 
     },
   methods: {
+     
+     handleClick() {
+      this.visible = true;
+    },
+    handleClick2(){
+      this.$modal({});
+    },
+    handleOk() {
+      // this.visible = false;
+      console.log(this.courseId+" "+this.teacherid)
+  fetch(this.$URL + "/manages/add?courseId=" + this.courseId+"&teacherId="+this.teacherid, {
+      method: "POST"
+    }).then(response => {
+      console.log(response)
+      let result = response.json()
+      result.then(res => {
+        console.log(res)
+        if(res.status==200)
+          {
+            this.$notification.success("添加教师成功")
+            console.log(this.teacher)
+            
+            fetch(this.$URL + "/manages/get/course/detail?courseId=" + this.courseId, {
+      method: "GET"
+    }).then(response => {
+      console.log(response)
+      let result = response.json()
+      result.then(res => {
+      console.log(res)
+      this.teacher=res
+      })
+    })
+          }
+          else{
+            this.$notification.error("教师id有误")
+          }
+        //this.manage=res.manager
+      })
+    })
+    this.teacherid=''
+    },
+    handleCancel() {
+      this.visible = false;
+      this.teacherid='' 
+    },
+    handleBeforeOk( done){
+      window.setTimeout(()=>{
+        done()
+      },3000)
+
+    
+  },
+   handleClick1() {
+      this.visible1 = true;
+    },
+    // handleClick2(){
+    //   this.$modal({});
+    // },
+    handleOk1() {
+      // this.visible = false;
+ let submitForm = {
+                studentId : this.studentid,
+                courseId: this.courseId,
+                
+            }
+            console.log(submitForm)
+            fetch(this.$URL + "/takes/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify(submitForm)
+            }).then(response => {
+                // console.log(response)
+                let result = response.json()
+                result.then(res => {
+                    // console.log(res)
+                    if (res.status == 200) {
+                        this.$notification.success('添加成功！')
+                         
+                        //this.$router.go(0)
+                         fetch(this.$URL + "/takes/get/course/detail?courseId=" + this.courseId, {
+      method: "GET"
+    }).then(response => {
+      console.log(response)
+      let result = response.json()
+      result.then(res => {
+        console.log(res)
+        this.student = res
+      })
+    })
+                    }
+                    else{
+                      this.$notification.error('输入学生id有误！')
+                        //this.$router.go(-1)
+                    }
+                })
+            })
+            this.studentid=''
+    },
+    handleCancel1() {
+      this.visible = false;
+      this.studentid=''
+    },
+    handleBeforeOk1( done){
+      window.setTimeout(()=>{
+        done()
+      },3000)
+
+    
+  },
+    
+
+    handleClick3() {
+      this.visible3 = true;
+    },
+    
+    handleOk3() {
+      let submitForm = {
+                id: this.courseId,
+                name:this.courseName,
+                year:this.year,
+                semester:this.semester,
+                description:this.courseDescription,
+                manager:localStorage.getItem("userId")
+            }
+            if(submitForm.year=="暂未设置")
+              submitForm.year=''
+            if(submitForm.semester=="暂未设置")
+              submitForm.semester=''
+            console.log(submitForm)
+            fetch(this.$URL + "/course/update", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify(submitForm)
+            }).then(response => {
+                // console.log(response)
+                let result = response.json()
+                result.then(res => {
+                    // console.log(res)
+                    if (res.status == 200) {
+                        this.$notification.success('修改成功')
+                        this.$router.go(-1)
+                    }
+                })
+            })
+    },
+    handleCancel3() {
+      this.visible3 = false;
+     
+    },
+    handleBeforeOk3( done){
+      window.setTimeout(()=>{
+        done()
+      },3000)
+
+    
+  },
+
+handleClick4() {
+      this.visible4 = true;
+    },
+    
+    handleOk4() {
+     var courseId=this.courseId
+      console.log(courseId)
+        fetch(this.$URL + "/course/remove?courseId=" + courseId, {
+      method: "DELETE"
+    }).then(response => {
+      console.log(response)
+      let result = response.json()
+      result.then(res => {
+        if (res.status == 200) {
+                        this.$notification.success('删除成功')
+                        this.$router.go(-1)
+                       }
+                       })
+    })
+    },
+    handleCancel4() {
+      this.visible4 = false;
+     
+    },
+    handleBeforeOk4( done){
+      window.setTimeout(()=>{
+        done()
+      },3000)
+
+    
+  },
+   
+                       
     modifycourse()
     {
       

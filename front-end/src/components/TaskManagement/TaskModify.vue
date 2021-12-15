@@ -39,18 +39,34 @@
     /></div>
             <div style="height: 20px" />
 
-            <va-button @click="modifytask()" color="#e0e5df" style="color: rgb(40,40,40)">确认修改</va-button>
+            <va-button @click="handleClick3" color="#e0e5df" style="color: rgb(40,40,40)">确认修改</va-button>
            
+
+           <a-modal v-model:visible="visible3" @ok="handleOk3" @cancel="handleCancel3" unmountOnClose @before-ok="handleBeforeOk3">
+    <template #title>
+      修改课程
+    </template>
+    <div>您确定要修改吗</div>
+  </a-modal>
       </va-card-content>
   </va-card>
-<div style="height: 2px" />
   
+<div style="height: 12px" />
+  <va-button @click="handleClick4"  color="#FF0000" style="background-color: rgb(0,0,0) text-align:center">点击删除项目</va-button> 
+  <a-modal v-model:visible="visible4" @ok="handleOk4" @cancel="handleCancel4" unmountOnClose @before-ok="handleBeforeOk4">
+    <template #title>
+      删除项目
+    </template>
+    <div>您确定要删除吗</div>
+  </a-modal>
 </template>
 
 <script>
 export default {
     data () {
         return {
+          visible3:false,
+          visible4:false,
             id: '',
             taskId:'',
             type: '',
@@ -96,6 +112,83 @@ export default {
 
     },
   methods: {
+     handleClick3() {
+      this.visible3 = true;
+    },
+    
+    handleOk3() {
+      let submitForm = {
+             courseId:this.$route.params.courseId,  
+                id: this.$route.params.taskId,
+                name:this.taskName,
+                type:this.type,
+                url:this.url,
+                description:this.taskDescription,
+                deadline:this.deadline
+            }
+            if(submitForm.url==null)
+              submitForm.url=''
+            if(submitForm.taskDescription==null)
+              submitForm.taskDescription=''
+            console.log(submitForm)
+            fetch(this.$URL + "/task/update", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify(submitForm)
+            }).then(response => {
+                // console.log(response)
+                let result = response.json()
+                result.then(res => {
+                    // console.log(res)
+                    if (res.status == 200) {
+                        this.$notification.success('修改成功')
+                        this.$router.go(-1)
+                    }
+                })
+            })
+    },
+    handleCancel3() {
+      this.visible3 = false;
+     
+    },
+    handleBeforeOk3( done){
+      window.setTimeout(()=>{
+        done()
+      },3000)
+
+    
+  },
+  handleClick4() {
+      this.visible4 = true;
+    },
+    
+    handleOk4() {
+     var courseId=this.courseId
+      console.log(courseId)
+        fetch(this.$URL + "/task/remove?taskId=" + this.$route.params.taskId, {
+      method: "DELETE"
+    }).then(response => {
+      console.log(response)
+      let result = response.json()
+      result.then(res => {
+        if (res.status == 200) {
+                        this.$notification.success('删除成功')
+                        this.$router.go(-1)
+                       }
+                       })
+    })
+    },
+    handleCancel4() {
+      this.visible4 = false;
+     
+    },
+    handleBeforeOk4( done){
+      window.setTimeout(()=>{
+        done()
+      },3000)
+
+    
+  },
     modifytask()
     {
       
@@ -130,57 +223,10 @@ export default {
                 })
             })
 
-    },
-    DropCourse(studentid)
-    {
-      console.log(this.courseId+" "+studentid)
-         fetch(this.$URL + "/takes/remove?courseId=" + this.courseId+"&studentId="+studentid, {
-      method: "DELETE"
-    }).then(response => {
-      console.log(response)
-      let result = response.json()
-      result.then(res => {
-       if (res.status == 200) {
-                        this.$notification.success('退课成功')
-                        this.$router.go(-1)
-                    }
-      })
-    })
+    }
 
+}
     
-    },
-
-    DropmanageCourse(teacherid)
-    {
-      if(teacherid!=this.manage)
-      {
-        this.$notification.success('您不是责任教师，无法执行该操作')
-
-      }
-      else{
-      if(teacherid==this.id)
-      {
-                        this.$notification.success('无法取消责任教师')
-                        //this.$router.go(-1)
-                    }
-                    else{
-      console.log(this.courseId,teacherid)
- fetch(this.$URL + "/manages/delete?courseId=" + this.courseId+"&teacherId="+teacherid, {
-      method: "DELETE"
-    }).then(response => {
-      console.log(response)
-      let result = response.json()
-      result.then(res => {
-       if (res.status == 200) {
-                        this.$notification.success('取消教师授课成功')
-                        this.$router.go(-1)
-                    }
-      })
-    })
-                    }
-    }
-    }
-  }
 }
 </script>
 

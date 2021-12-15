@@ -23,11 +23,11 @@
                   <!-- va-card高度: 36px -->
                   <div style="line-height: 36px; width: 90%; font-size: 18px">{{course.name}}</div>
                   <div>
-                    <va-button  @click="modifyCourse(course.id,index)" color="#e0e5df" style="color: rgb(40,40,40); ">点击修改</va-button>
+                    <va-button  @click="modifyCourse(course.id,index)" color="#e0e5df" style="color: rgb(40,40,40); ">点击进入</va-button>
                     <!-- </div>
                   <div> -->
-                  <div style="height: 2px" />
-                  <va-button @click="deleteCourse(course.id)" color="#e0e5df" style="color: rgb(40,40,40)">点击删除</va-button>
+                  <!-- <div style="height: 2px" />
+                  <va-button @click="deleteCourse(course.id)" color="#e0e5df" style="color: rgb(40,40,40)">点击删除</va-button> -->
                   </div>
                   
                   
