@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Api(tags = "用户管理")
 @RestController
@@ -36,6 +37,31 @@ public class UserController {
     @GetMapping("get")
     public UserEntity getUserById(Integer id) {
         return userService.getUserById(id);
+    }
+
+    @ApiOperation("获取所有教师/助教信息")
+    @GetMapping("get/teacher")
+    public List<UserEntity> getAllTeachers() {
+        return userService.getAllTeachers();
+    }
+
+    @ApiOperation("获取所有学生信息")
+    @GetMapping("get/student")
+    public List<UserEntity> getAllStudents() {
+        return userService.getAllStudents();
+    }
+
+    @ApiOperation("获取所有管理员信息")
+    @GetMapping("get/administrator")
+    public List<UserEntity> getAllAdministrators() {
+        return userService.getAllAdministrators();
+    }
+
+    // TODO: 管理员应该/有必要获取自己/其他管理员的信息吗？
+    @ApiOperation("获取所有用户信息")
+    @GetMapping("get/all")
+    public List<UserEntity> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @ApiOperation("新增用户/用户注册")

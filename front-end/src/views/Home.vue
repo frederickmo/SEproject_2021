@@ -30,10 +30,78 @@ minimizedWidth="0">
 
   <va-accordion
   v-model="value"
-  v-show="!studentHome"
+  v-show="this.identity==4"
+  style="font-weight: bold"
+  multiply
+  inset
+  >
+
+    <va-collapse
+    key="0"
+    header="基本信息"
+    icon="person_outline">
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="onClickBasicInfo()">
+          <va-sidebar-item-title>
+            查看基本信息
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="onClickEditBasicInfo()">
+          <va-sidebar-item-title>
+            修改基本信息
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+
+    <va-collapse
+    key="1"
+    header="通知公告"
+    icon="notifications"
+    >
+      <va-sidebar-item>
+        <va-sidebar-item-content @click="this.$router.push({name: 'Announcement'})">
+          <va-sidebar-item-title>通知公告</va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+    
+    <va-collapse
+    key="2"
+    header="用户管理"
+    icon="manage_accounts"
+    >
+      <va-sidebar-item>
+        <va-sidebar-item-content @click="this.$router.push({name: 'AccountManagement'})">
+          <va-sidebar-item-title>用户管理</va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+    </va-collapse>
+    
+    <va-sidebar-item>
+      <va-sidebar-item-content
+      style="text-align: center;" 
+      @click="this.$router.push({name: 'Login', params: {tabValue: 0}})">
+        <va-sidebar-item-title>
+          退出登录
+        </va-sidebar-item-title>
+      </va-sidebar-item-content>
+    </va-sidebar-item>
+
+  </va-accordion>
+
+
+  <va-accordion
+  v-model="value"
+  v-show="this.identity==2||this.identity==3"
   style="font-weight: bold"
   multiply
   inset>
+  
     <va-collapse
     key="0"
     header="通知公告"
@@ -132,7 +200,7 @@ minimizedWidth="0">
 
   <va-accordion
   v-model="value"
-  v-show="studentHome"
+  v-show="this.identity==1"
   style="font-weight: bold"
   multiply
   inset>
@@ -242,6 +310,7 @@ minimizedWidth="0">
     </va-sidebar-item> -->
   </va-accordion>
   
+
 </va-sidebar>
   <el-container>
 

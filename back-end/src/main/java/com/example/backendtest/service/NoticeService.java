@@ -36,7 +36,7 @@ public class NoticeService {
         }
     }
 
-    public List<NoticeEntity> showNoticeByTime() {
+    public List<NoticeEntity> showNoticeByTimeDesc() {
         if (noticeRepository.findAll().isEmpty())
         {
             throw  new IllegalStateException("没有公告");
