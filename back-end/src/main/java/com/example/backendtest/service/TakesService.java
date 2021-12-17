@@ -1,8 +1,11 @@
 package com.example.backendtest.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.backendtest.exception.AlreadyExistException;
+import com.example.backendtest.exception.CourseNotFoundException;
+import com.example.backendtest.exception.MyNotFoundException;
+import com.example.backendtest.exception.UserNotFoundException;
 import com.example.backendtest.model.CourseEntity;
-import com.example.backendtest.model.ManagesEntity;
 import com.example.backendtest.model.TakesEntity;
 import com.example.backendtest.model.UserEntity;
 import com.example.backendtest.repository.CourseRepository;
@@ -33,7 +36,7 @@ public class TakesService {
     public List<TakesEntity> getAllCoursesByStudentId(Integer studentId) {
         Optional<List<TakesEntity>> coursesOptional = takesRepository.findAllByStudentId(studentId);
         if (coursesOptional.isEmpty()) {
-            throw new IllegalStateException("学号为 " + " 的学生没有选修任何实验课程！");
+            throw new MyNotFoundException("学号为 " + " 的学生没有选修任何实验课程！");
         } else {
             return coursesOptional.get();
         }
@@ -47,7 +50,7 @@ public class TakesService {
     public List<TakesEntity> getAllStudentsByCourseId(Integer courseId) {
         Optional<List<TakesEntity>> studentsOptional = takesRepository.findAllByCourseId(courseId);
         if (studentsOptional.isEmpty()) {
-            throw new IllegalStateException("ID为 " + courseId + " 的课程没有学生选修！");
+            throw new MyNotFoundException("ID为 " + courseId + " 的课程没有学生选修！");
         } else {
             return studentsOptional.get();
         }
@@ -64,7 +67,7 @@ public class TakesService {
         for (TakesEntity takes : takesList) {
             Optional<CourseEntity> courseOptional = courseRepository.findById(takes.getCourseId());
             if (courseOptional.isEmpty()) {
-                throw new IllegalStateException("该学生的选课列表中，ID为 " + takes.getCourseId() + " 的课程不存在！");
+                throw new MyNotFoundException("该学生的选课列表中，ID为 " + takes.getCourseId() + " 的课程不存在！");
             } else {
                 courseList.add(courseOptional.get());
             }
@@ -83,7 +86,7 @@ public class TakesService {
         for (TakesEntity takes : takesList) {
             Optional<UserEntity> studentOptional = userRepository.findById(takes.getStudentId());
             if (studentOptional.isEmpty()) {
-                throw new IllegalStateException("该课程的选课学生中，ID为 " + takes.getStudentId() + " 的学生不存在！");
+                throw new MyNotFoundException("该课程的选课学生中，ID为 " + takes.getStudentId() + " 的学生不存在！");
             } else {
                 studentList.add(studentOptional.get());
             }
@@ -107,13 +110,19 @@ public class TakesService {
 //                + courseId + "的课了吗 => "
 //                + takesOptional.isPresent());
         if (studentOptional.isEmpty()) {
-            throw new IllegalStateException("ID为 " + studentId + " 的学生不存在！");
+            throw new UserNotFoundException("ID为 " + studentId + " 的学生不存在！");
         } else if (courseOptional.isEmpty()) {
-            throw new IllegalStateException("ID为" + courseId + " 的课程不存在！");
+            throw new CourseNotFoundException("ID为" + courseId + " 的课程不存在！");
         } else if (takesOptional.isPresent()) {
-            throw new IllegalStateException("该学生已经选修该实验课程！");
+            throw new AlreadyExistException("该学生已经选修该实验课程！");
         }
-        // TODO: 能不能把有关数据库查询的异常返回前端的错误码从500: Internal Server Error 改成别的？
+        /**
+         * TODO: 能不能把有关数据库查询的异常返回前端的错误码从500: Internal Server Error 改成别的？(已解决)
+         * ↓
+         * 已解决：定义一堆自定义异常然后在GlobalException里拦截即可。
+         */
+
+
         else {
                 takesRepository.save(takes);
                 log.info("新增选课信息： 课程ID: "
@@ -131,9 +140,9 @@ public class TakesService {
         boolean studentExists = userRepository.existsById(studentId);
         boolean courseExists = courseRepository.existsById(courseId);
         if (!studentExists) {
-            throw new IllegalStateException("该学生不存在！");
+            throw new UserNotFoundException("该学生不存在！");
         } else if (!courseExists) {
-            throw new IllegalStateException("该课程不存在！");
+            throw new CourseNotFoundException("该课程不存在！");
         } else {
             takesRepository.remove(studentId, courseId);
             log.info("新增退课信息： ID为 " + studentId + " 的学生退掉了ID为 " + courseId + " 的课程");
@@ -147,18 +156,15 @@ public class TakesService {
     public JSONObject checkExist(Integer id, Integer courseId) {
 
         Optional<TakesEntity> takesTemp = takesRepository.findById(id,courseId);
-        if (takesTemp.isPresent())
-        {
+        if (takesTemp.isEmpty()) {
+            throw new MyNotFoundException("学生 " + id + " 未选修课程 " + courseId);
+        }
+        else {
             JSONObject json = new JSONObject();
             json.put("status", 000);
             json.put("message", "学生选课关系已存在");
             json.put("boolean",true);
             return json;
         }
-        JSONObject json = new JSONObject();
-        json.put("status", 001);
-        json.put("message", "学生选课关系不存在");
-        json.put("boolean",false);
-        return json;
     }
 }

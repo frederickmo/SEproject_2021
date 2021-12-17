@@ -2,6 +2,8 @@ package com.example.backendtest.service;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.backendtest.exception.AlreadyExistException;
+import com.example.backendtest.exception.MyNotFoundException;
 import com.example.backendtest.model.NoticeEntity;
 import com.example.backendtest.repository.NoticeRepository;
 import lombok.AllArgsConstructor;
@@ -22,10 +24,7 @@ public class NoticeService {
     public JSONObject addNotice(NoticeEntity notice) {
         if(noticeRepository.findByTopic(notice.getTopic()).isPresent())
         {
-            JSONObject json = new JSONObject();
-            json.put("status", 500);
-            json.put("message", "存在同名公告");
-            return json;
+            throw new AlreadyExistException("同名公告已存在");
         }
         else {
             noticeRepository.save(notice);
@@ -39,7 +38,7 @@ public class NoticeService {
     public List<NoticeEntity> showNoticeByTimeDesc() {
         if (noticeRepository.findAll().isEmpty())
         {
-            throw  new IllegalStateException("没有公告");
+            throw new MyNotFoundException("无任何公告");
         }
         return noticeRepository.showNoticeByTime();
     }
@@ -47,10 +46,7 @@ public class NoticeService {
     public JSONObject deleteNotice(int id) {
         if(noticeRepository.findById(id).isEmpty())
         {
-            JSONObject json = new JSONObject();
-            json.put("status", 500);
-            json.put("message", "不存在该公告");
-            return json;
+            throw new MyNotFoundException("该公告不存在");
         }
         else
         {
@@ -65,10 +61,7 @@ public class NoticeService {
     public JSONObject updateNotice(NoticeEntity notice) {
         if(noticeRepository.findById(notice.getId()).isEmpty())
         {
-            JSONObject json = new JSONObject();
-            json.put("status", 500);
-            json.put("message", "不存在该该公告");
-            return json;
+            throw new MyNotFoundException("该公告不存在");
         }
         else
         {

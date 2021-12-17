@@ -1,6 +1,11 @@
 package com.example.backendtest.service;
 
+import cn.hutool.cron.task.Task;
 import com.alibaba.fastjson.JSONObject;
+import com.example.backendtest.exception.AlreadyExistException;
+import com.example.backendtest.exception.CourseNotFoundException;
+import com.example.backendtest.exception.MyNotFoundException;
+import com.example.backendtest.exception.TaskNotFoundException;
 import com.example.backendtest.model.CourseEntity;
 import com.example.backendtest.model.TaskEntity;
 import com.example.backendtest.repository.CourseRepository;
@@ -28,7 +33,7 @@ public class TaskService {
     public TaskEntity getByTaskId(Integer id) {
         Optional<TaskEntity> taskOptional = taskRepository.findById(id);
         if (taskOptional.isEmpty()) {
-            throw new IllegalStateException("该实验项目不存在");
+            throw new TaskNotFoundException("该实验项目不存在");
         } else {
             return taskOptional.get();
         }
@@ -42,7 +47,7 @@ public class TaskService {
     public List<TaskEntity> getByCourseId(Integer courseId) {
         Optional<List<TaskEntity>> tasksOptional = taskRepository.findByCourseId(courseId);
         if (tasksOptional.isEmpty()) {
-            throw new IllegalStateException("该课程下无实验项目！");
+            throw new MyNotFoundException("该课程下无实验项目！");
         } else {
             return tasksOptional.get();
         }
@@ -59,9 +64,9 @@ public class TaskService {
         Optional<TaskEntity> taskOptional = taskRepository.findById(task.getId());
         Optional<CourseEntity> courseOptional = courseRepository.findById(task.getCourseId());
         if (taskOptional.isPresent()) {
-            throw new IllegalStateException("该实验项目已存在");
+            throw new AlreadyExistException("该实验项目已存在");
         } else if (courseOptional.isEmpty()) {
-            throw new IllegalStateException("该实验项目所属课程不存在");
+            throw new CourseNotFoundException("该实验项目所属课程不存在");
         }
         else {
             taskRepository.save(task);
@@ -76,7 +81,7 @@ public class TaskService {
     public JSONObject remove(Integer taskId) {
         boolean taskExists = taskRepository.existsById(taskId);
         if (!taskExists) {
-            throw new IllegalStateException("该实验项目不存在");
+            throw new TaskNotFoundException("该实验项目不存在");
         } else {
             taskRepository.deleteById(taskId);
             log.info("删除实验项目: ID " + taskId);
@@ -95,7 +100,7 @@ public class TaskService {
 
         Optional<List<TaskEntity>> tasksOptional = taskRepository.findByCourseIdAndType(courseId,0);
         if (tasksOptional.isEmpty()) {
-            throw new IllegalStateException("该课程下无小型实验项目");
+            throw new MyNotFoundException("该课程下无小型实验项目");
         } else {
             return tasksOptional.get();
         }
@@ -108,7 +113,7 @@ public class TaskService {
     public List<TaskEntity> getComplexTask(Integer courseId) {
         Optional<List<TaskEntity>> tasksOptional = taskRepository.findByCourseIdAndType(courseId,1);
         if (tasksOptional.isEmpty()) {
-            throw new IllegalStateException("该课程下无大型实验项目");
+            throw new MyNotFoundException("该课程下无大型实验项目");
         } else {
             return tasksOptional.get();
         }
@@ -121,7 +126,7 @@ public class TaskService {
     public List<Object> getAllByStudentIdAndUnfinishedOrderByDeadlineAsc(Integer studentId) {
         Optional<List<Object>> tasksOptional = taskRepository.findAllByCourseIdAndUnfinishedOrderByDeadlineAsc(studentId);
         if (tasksOptional.isEmpty()) {
-            throw new IllegalStateException("该学生选修的课程中无任何未完成的实验项目");
+            throw new MyNotFoundException("该学生选修的课程中无任何未完成的实验项目");
         } else {
             return tasksOptional.get();
         }
@@ -134,7 +139,7 @@ public class TaskService {
     public List<Object> getAllByStudentIdAndFinishedOrderByDeadlineAsc(Integer studentId) {
         Optional<List<Object>> tasksOptional = taskRepository.findAllByCourseIdAndFinishedOrderByDeadlineAsc(studentId);
         if (tasksOptional.isEmpty()) {
-            throw new IllegalStateException("该学生选修的课程中无任何已完成的实验项目");
+            throw new MyNotFoundException("该学生选修的课程中无任何已完成的实验项目");
         } else {
             return tasksOptional.get();
         }
@@ -143,7 +148,7 @@ public class TaskService {
     public JSONObject updateTaskInformation(TaskEntity taskEntity) {
         if(taskRepository.findById(taskEntity.getId()).isEmpty())
         {
-            throw  new IllegalStateException("不存在该实验项目");
+            throw  new TaskNotFoundException("不存在该实验项目");
         }
         else
         {

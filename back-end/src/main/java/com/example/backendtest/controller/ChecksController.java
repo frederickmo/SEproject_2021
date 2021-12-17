@@ -1,5 +1,6 @@
 package com.example.backendtest.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.model.ChecksEntity;
 import com.example.backendtest.service.ChecksService;
@@ -17,6 +18,7 @@ public class ChecksController {
 
     private ChecksService checksService;
 
+    @SaCheckLogin
     @ApiOperation("新增批改记录")
     @PostMapping("/add")
     public JSONObject add(@RequestBody ChecksEntity checks) {

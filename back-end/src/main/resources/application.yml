@@ -6,8 +6,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://124.71.154.121:3306/backend_demo
-    username: user
+#    url: jdbc:mysql://124.71.154.121:3306/backend_demo
+    url: jdbc:mysql://106.15.106.190:3306/backend
+    username: admin
     password: 12345
 
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -68,7 +69,7 @@ file:
   upload-dir: /Users/frederickmo/documents/Github/SEproject_2021/back-end/src/main/resources/static
 #  upload-dir:/Users/86133/Documents/GitHub/SEproject_2021/back-end/src/main/resources/static
 #  upload-dir: /usr/test/resources
-
+#  upload-dir: /home/admin/backend
 
 # Sa-Token Configuration
 sa-token:
@@ -87,6 +88,7 @@ sa-token:
   # ????????
   is-log: true
 
+  jwt-secret-key: frederickmo
 
 
 

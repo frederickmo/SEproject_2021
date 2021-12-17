@@ -3,10 +3,15 @@ package com.example.backendtest.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.example.backendtest.exception.FailInReadingSubmitInfoException;
+import com.example.backendtest.exception.FileNameIllegalException;
+import com.example.backendtest.exception.MyNotFoundException;
+import com.example.backendtest.exception.UserNotFoundException;
 import com.example.backendtest.model.FinishesEntity;
 import com.example.backendtest.model.TakesEntity;
 import com.example.backendtest.model.UserEntity;
 import com.example.backendtest.repository.FinishesRepository;
+import com.example.backendtest.repository.UserRepository;
 import com.example.backendtest.util.TimeUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +36,7 @@ import java.util.Optional;
 public class FinishesService {
 
    private final FinishesRepository finishesRepository;
+   private final UserRepository userRepository;
    private final FileStorageService fileStorageService;
    private final TakesService takesService;
 
@@ -50,7 +56,7 @@ public class FinishesService {
    public FinishesEntity getByStudentIdAndTaskId(Integer studentId, Integer taskId) {
        Optional<FinishesEntity> finishesOptional = finishesRepository.findById(studentId, taskId);
        if (finishesOptional.isEmpty()) {
-           throw new IllegalStateException("该学生无提交该作业的记录");
+           throw new MyNotFoundException("该学生无提交该作业的记录");
        } else {
            return finishesOptional.get();
        }
@@ -59,9 +65,9 @@ public class FinishesService {
    public JSONObject getOnlineTaskJsonFile(Integer studentId, Integer taskId) {
        Optional<FinishesEntity> finishesOptional = finishesRepository.findById(studentId, taskId);
        if (finishesOptional.isEmpty()) {
-           throw new IllegalStateException("该学生无提交该作业的记录");
+           throw new MyNotFoundException("该学生无提交该作业的记录");
        } else if (finishesOptional.get().getAnswer() == null) {
-           throw new IllegalStateException("该学生提交的作业名未知");
+           throw new FileNameIllegalException("无法读取提交的作业名");
        } else {
            String fileName = finishesOptional.get().getAnswer();
            String jsonStr = "";
@@ -99,7 +105,7 @@ public class FinishesService {
        Integer taskId = taskBody.getInteger("taskId");
 
        if (studentId == null || courseId == null || taskId == null) {
-           throw new IllegalStateException("读取上传信息失败");
+           throw new FailInReadingSubmitInfoException("读取上传信息失败");
        }
 
         String body = taskBody.toJSONString();
@@ -156,17 +162,29 @@ public class FinishesService {
         finishes.setAnswer(fileName);
         finishes.setFinished(1);
 
+
+
         /**
-         * 下面的语句如果在用户填入的ID不存在时会报SQLIntegrityConstraintViolationException，但是暂时不知道咋解决
+         * TODO: 下面的语句如果在用户填入的ID不存在时会报SQLIntegrityConstraintViolationException，但是暂时不知道咋解决
+         *
+         * ↓
+         * 查询一下ID是否存在似乎就解决了。
          */
-        finishesRepository.save(finishes);
 
-        log.info("新增学生提交实验报告信息: 学生ID " + studentId + " 实验ID " + taskId);
+        if (!userRepository.existsById(studentId)) {
+            throw new UserNotFoundException("提交的学生ID不存在");
+        } else {
 
-        JSONObject json = new JSONObject();
-        json.put("status", 200);
-        json.put("message", "上传成功");
-        return json;
+            finishesRepository.save(finishes);
+
+            log.info("新增学生提交实验报告信息: 学生ID " + studentId + " 实验ID " + taskId);
+
+            JSONObject json = new JSONObject();
+            json.put("status", 200);
+            json.put("message", "上传成功");
+            return json;
+        }
+
     }
 
     public JSONObject submitComplexTask(MultipartFile file,
@@ -196,7 +214,7 @@ public class FinishesService {
     public List<FinishesEntity> getAllSubmitRecords(Integer studentId) {
         Optional<List<FinishesEntity>> submitRecords = finishesRepository.findAllByStudentId(studentId);
         if (submitRecords.isEmpty()) {
-            throw new IllegalStateException("该学生无提交记录");
+            throw new MyNotFoundException("该学生无提交记录");
         } else {
             return submitRecords.get();
         }
@@ -208,7 +226,7 @@ public class FinishesService {
     public List<Object> getAllScoresOfSubmitRecordsByStudentIdInDetail(Integer studentId) {
         Optional<List<Object>> recordsOptional = finishesRepository.findAllByStudentIdInDetail(studentId);
         if (recordsOptional.isEmpty()) {
-            throw new IllegalStateException("该学生无实验项目提交记录");
+            throw new MyNotFoundException("该学生无实验项目提交记录");
         } else {
             return recordsOptional.get();
         }
@@ -220,7 +238,7 @@ public class FinishesService {
     public List<Object> getAllScoresOfSubmitRecordsByStudentIdAndCourseIdInDetail(Integer studentId, Integer courseId) {
         Optional<List<Object>> recordsOptional = finishesRepository.findAllByStudentIdAndCourseIdInDetail(studentId, courseId);
         if (recordsOptional.isEmpty()) {
-            throw new IllegalStateException("该学生该门课程无成绩记录");
+            throw new MyNotFoundException("该学生该门课程无成绩记录");
         } else {
             return recordsOptional.get();
         }
@@ -237,7 +255,8 @@ public class FinishesService {
         List<TakesEntity> courses = takesService.getAllCoursesByStudentId(studentId);
         List<List<Object>> scoresOfSubmitRecordsGroupByCourseId = new ArrayList<>();
         for (TakesEntity course : courses) {
-            Optional<List<Object>> recordsOptional = finishesRepository.findAllByStudentIdAndCourseIdInDetail(studentId, course.getCourseId());
+            Optional<List<Object>> recordsOptional =
+                    finishesRepository.findAllByStudentIdAndCourseIdInDetail(studentId, course.getCourseId());
             // 没有成绩不计入
             if (recordsOptional.isEmpty()) {
                 log.info("学生ID：" + studentId + " 在课程ID " + course.getCourseId() + " 下无成绩记录");
@@ -247,7 +266,7 @@ public class FinishesService {
             }
         }
         if (scoresOfSubmitRecordsGroupByCourseId.isEmpty()) {
-            throw new IllegalStateException("该学生无实验项目提交记录");
+            throw new MyNotFoundException("该学生无实验项目提交记录");
         } else {
             return scoresOfSubmitRecordsGroupByCourseId;
         }

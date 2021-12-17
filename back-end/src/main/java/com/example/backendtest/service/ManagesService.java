@@ -1,6 +1,9 @@
 package com.example.backendtest.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.backendtest.exception.AlreadyExistException;
+import com.example.backendtest.exception.MyNotFoundException;
+import com.example.backendtest.exception.RoleNotMatchException;
 import com.example.backendtest.model.CourseEntity;
 import com.example.backendtest.model.FileEntity;
 import com.example.backendtest.model.ManagesEntity;
@@ -27,7 +30,7 @@ public class ManagesService {
     public List<ManagesEntity> getAllByTeacherId(Integer teacherId) {
         Optional<List<ManagesEntity>> managesOptional = managesRepository.findAllByTeacherId(teacherId);
         if(managesOptional.isEmpty()) {
-            throw new IllegalStateException("该教师无管理课程");
+            throw new MyNotFoundException("该教师无管理课程");
         } else {
             return managesOptional.get();
         }
@@ -36,7 +39,7 @@ public class ManagesService {
     public List<ManagesEntity> getAllByCourseId(Integer courseId) {
         Optional<List<ManagesEntity>> managesOptional = managesRepository.findAllByCourseId(courseId);
         if (managesOptional.isEmpty()) {
-            throw new IllegalStateException("该课程无管理教师");
+            throw new MyNotFoundException("该课程无管理教师");
         } else {
             return managesOptional.get();
         }
@@ -45,7 +48,7 @@ public class ManagesService {
     public List<CourseEntity> getAllByTeacherIdInDetail(Integer teacherId) {
         Optional<List<CourseEntity>> coursesOptional = managesRepository.findAllByTeacherIdInDetail(teacherId);
         if (coursesOptional.isEmpty()) {
-            throw new IllegalStateException("该教师无管理课程");
+            throw new MyNotFoundException("该教师无管理课程");
         } else {
             return coursesOptional.get();
         }
@@ -55,7 +58,7 @@ public class ManagesService {
         Optional<List<UserEntity>> teachersOptional = managesRepository.findAllByCourseIdInDetail(courseId);
         if (teachersOptional.isEmpty()) {
             //参照外码约束，以下情况一般来说不会发生
-            throw new IllegalStateException("该课程无管理教师");
+            throw new MyNotFoundException("该课程无管理教师");
         } else {
             return teachersOptional.get();
         }
@@ -63,34 +66,28 @@ public class ManagesService {
 
     public JSONObject checkExist(int uploadID,int courseID) {
         Optional<ManagesEntity> managesTemp = managesRepository.findById(uploadID,courseID);
-        if (managesTemp.isPresent()) {
+        if (managesTemp.isEmpty()) {
+            throw new MyNotFoundException("教师 " + uploadID + " 未授课课程 " + courseID);
+        } else {
             JSONObject json = new JSONObject();
             json.put("status", 200);
-            json.put("message", "教师授课关系已存在");
+            json.put("message", "教师授课关系存在");
             json.put("boolean",true);
             return json;
         }
-        JSONObject json = new JSONObject();
-        json.put("status", 404);
-        json.put("message", "教师授课关系不存在");
-        json.put("boolean",false);
-        return json;
     }
 
     public JSONObject addTeacherManages(Integer teacherId, Integer courseId) {
         Optional<ManagesEntity> managesTemp = managesRepository.findById(teacherId,courseId);
         if (managesTemp.isPresent()) {
-            JSONObject json = new JSONObject();
-            json.put("status", 500);
-            json.put("message", "教师授课关系已存在");
-            return json;
+            throw new AlreadyExistException("该教师已经授课该课程");
     }
         else
         {
             Optional<UserEntity> userTemp = managesRepository.checkTeacherId(teacherId);
              if(userTemp.isEmpty())
              {
-                 throw new IllegalStateException("该人不是教师/助教");
+                 throw new RoleNotMatchException("该人不是教师/助教");
              }
              else
              {
@@ -110,17 +107,14 @@ public class ManagesService {
     public JSONObject deleteTeacherManages(Integer teacherId, Integer courseId) {
         Optional<ManagesEntity> managesTemp = managesRepository.findById(teacherId,courseId);
         if (managesTemp.isEmpty()) {
-            JSONObject json = new JSONObject();
-            json.put("status", 500);
-            json.put("message", "该授课关系不存在");
-            return json;
+            throw new MyNotFoundException("该教师未参与该课程的授课");
         }
         else
         {
             Optional<UserEntity> userTemp = managesRepository.checkTeacherId(teacherId);
             if(userTemp.isEmpty())
             {
-                throw new IllegalStateException("该人不是教师/助教");
+                throw new RoleNotMatchException("该人不是教师/助教");
             }
             else
             {
@@ -141,7 +135,7 @@ public class ManagesService {
         List<ManagesEntity> list = managesRepository.findAllById(courseId);
         if(list.isEmpty())
         {
-            throw new IllegalStateException("该课程不存在在执教关系");
+            throw new MyNotFoundException("该课程无教师任课");
         }
         else
         {
@@ -153,7 +147,7 @@ public class ManagesService {
         List<CourseEntity> list = managesRepository.getCourseByManagerId(managerId);
         if(list.isEmpty())
         {
-            throw new IllegalStateException("该教师不存在主管课程");
+            throw new MyNotFoundException("该教师无主管课程");
         }
         else
         {
@@ -165,7 +159,7 @@ public class ManagesService {
         List<CourseEntity> list = managesRepository.getTeachingCourse(teacherId);
         if(list.isEmpty())
         {
-            throw new IllegalStateException("该教师不存在除存在主管课程以外的课程");
+            throw new MyNotFoundException("该教师不存在除存在主管课程以外的课程");
         }
         else
         {

@@ -1,5 +1,6 @@
 package com.example.backendtest.service;
 
+import com.example.backendtest.exception.AlreadyExistException;
 import com.example.backendtest.model.FileEntity;
 import com.example.backendtest.model.TakesEntity;
 import com.example.backendtest.model.TestContext;
@@ -30,7 +31,7 @@ public class FileService {
     public String addFile(FileEntity file) {
         Optional<FileEntity> fileTemp = fileRepository.findById(file.getUrl());
         if (fileTemp.isPresent()) {
-            throw new IllegalStateException("该文件已存在");
+            throw new AlreadyExistException("该文件已存在");
         }
          else {
             fileRepository.save(file);

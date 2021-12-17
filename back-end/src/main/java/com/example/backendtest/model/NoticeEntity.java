@@ -2,6 +2,7 @@ package com.example.backendtest.model;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "notice", schema = "backend_demo", catalog = "")
@@ -68,6 +69,10 @@ public class NoticeEntity {
     public Date getUpdatedTime() {
         return updatedTime;
     }
+
+//    public void setUpdatedTime(Timestamp updatedTime) {
+//        this.updatedTime = updatedTime;
+//    }
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;

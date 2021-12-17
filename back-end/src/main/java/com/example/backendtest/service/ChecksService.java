@@ -1,6 +1,9 @@
 package com.example.backendtest.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.backendtest.exception.StudentNotFoundException;
+import com.example.backendtest.exception.TaskNotFoundException;
+import com.example.backendtest.exception.TeacherNotFoundException;
 import com.example.backendtest.model.ChecksEntity;
 import com.example.backendtest.model.FinishesEntity;
 import com.example.backendtest.repository.ChecksRepository;
@@ -27,11 +30,11 @@ public class ChecksService {
 
     public JSONObject add(ChecksEntity checks) {
         if (!userRepository.existsById(checks.getTeacherId())) {
-            throw new IllegalStateException("该教师不存在");
+            throw new TeacherNotFoundException("该教师不存在");
         } else if (!userRepository.existsById(checks.getStudentId())) {
-            throw new IllegalStateException("该学生不存在");
+            throw new StudentNotFoundException("该学生不存在");
         } else if (!taskRepository.existsById(checks.getTaskId())) {
-            throw new IllegalStateException("该实验项目不存在");
+            throw new TaskNotFoundException("该实验项目不存在");
         }
         Optional<FinishesEntity> finishesOptional = finishesRepository.findById(checks.getStudentId(), checks.getTaskId());
         if (finishesOptional.isPresent()) {

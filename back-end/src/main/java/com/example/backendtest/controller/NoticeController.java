@@ -1,6 +1,7 @@
 package com.example.backendtest.controller;
 
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.model.NoticeEntity;
 import com.example.backendtest.service.NoticeService;
@@ -23,12 +24,14 @@ public class NoticeController {
 
     private NoticeService noticeService;
 
+    @SaCheckLogin
     @ApiOperation("添加公告")
     @PostMapping("/add")
     public JSONObject addNotice(@RequestBody NoticeEntity notice) throws UnsupportedEncodingException {
           return noticeService.addNotice(notice);
     }
 
+    @SaCheckLogin
     @ApiOperation("按发布时间顺序展示所有的公告(发布时间越近越靠前)")
     @GetMapping("/get/time/desc")
     public List<NoticeEntity> showNoticeByTimeDesc()
@@ -36,6 +39,7 @@ public class NoticeController {
         return noticeService.showNoticeByTimeDesc();
     }
 
+    @SaCheckLogin
     @ApiOperation("删除公告")
     @DeleteMapping("/remove")
     public JSONObject deleteNotice(int id)
@@ -43,6 +47,7 @@ public class NoticeController {
         return noticeService.deleteNotice(id);
     }
 
+    @SaCheckLogin
     @ApiOperation("更改公告")
     @PutMapping("/update")
     public JSONObject deleteNotice(@RequestBody NoticeEntity notice)
