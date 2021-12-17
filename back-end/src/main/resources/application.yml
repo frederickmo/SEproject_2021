@@ -51,6 +51,8 @@ spring:
     username: drt_test@163.com
     password: MCIWYKFGGFGQECIK
     default-encoding: utf-8
+    port: 465
+    properties: { mail.smtp.ssl.enable: "true" }
 
     ## thymeleaf config##
   thymeleaf:
