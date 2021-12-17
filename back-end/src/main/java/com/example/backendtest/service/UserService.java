@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -100,6 +101,43 @@ public class UserService {
             throw new IllegalStateException("ID为 " + id + " 的用户不存在");
         } else {
             return userOptional.get();
+        }
+    }
+
+    public List<UserEntity> getAllTeachers() {
+        List<UserEntity> allTeachers = userRepository.findAllTeachers();
+        if (allTeachers.isEmpty()) {
+            throw new IllegalStateException("系统中无任何教师或助教");
+        } else {
+            return allTeachers;
+        }
+    }
+
+    public List<UserEntity> getAllStudents() {
+        List<UserEntity> allStudents = userRepository.findAllStudents();
+        if (allStudents.isEmpty()) {
+            throw new IllegalStateException("系统中无任何学生");
+        } else {
+            return allStudents;
+        }
+    }
+
+    public List<UserEntity> getAllAdministrators() {
+        List<UserEntity> allAdministrators = userRepository.findAllAdministrators();
+        if (allAdministrators.isEmpty()) {
+            // 这个情况也是有点搞笑，我自己管理员账户调这个接口怎么可能系统中无管理员呢。。。。。
+            throw new IllegalStateException("系统中无任何管理员");
+        } else {
+            return allAdministrators;
+        }
+    }
+
+    public List<UserEntity> getAllUsers() {
+        List<UserEntity> allUsers = userRepository.findAll();
+        if (allUsers.isEmpty()) {
+            throw new IllegalStateException("系统中无任何用户");
+        } else {
+            return allUsers;
         }
     }
 

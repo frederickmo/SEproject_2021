@@ -126,7 +126,7 @@ export default {
             console.log("现在提交的是哪个name？", req.name)
 
             fetch(this.$URL + "/user/update", {
-                method: "POST",
+                method: "PUT",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(req)
             }).then(response => {

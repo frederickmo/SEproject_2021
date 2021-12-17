@@ -9,40 +9,27 @@
   <va-card>
       <va-card-title style="font-size: 20px">公告列表</va-card-title>
       <va-card-content>
-          <va-list>
-              <!-- <va-list-label style="font-size: 20px">
-                  公告列表
-              </va-list-label> -->
+          <el-table
+          stripe
+          :data="
+          notifications.filter(
+              (data) =>
+                !search | data.topic.toLowerCase().includes(search.toLowerCase())
+            )"
+          >
+            <el-table-column label="标题" prop="topic" />
+            <!-- <el-table-column label="预览" prop="content" /> -->
+            <el-table-column label="发布时间" prop="updatedTime" />
+            <el-table-column align="right">
+                <template #header>
+                    <el-input v-model="search" size="mini" placeholder="输入关键词查找" />
+                </template>
+                <template #default="scope">
+                    <a-button @click="handleShowNotificationDetail(scope.$index)">查看</a-button>
+                </template>
+            </el-table-column>
 
-              <va-list-item
-              v-for="(notification, index) in notifications"
-              :key="index"
-              v-show="showStudentVersion()"
-              to="/home">
-                <!-- <va-list-item-section>
-                    <va-avatar></va-avatar>
-                </va-list-item-section> -->
-                <va-list-item-section style="text-align: left; font-size: 16px">
-                    <va-list-item-label style="font-weight: bold">{{notification.title}}</va-list-item-label>
-                <va-list-item-label caption>{{notification.abstract}}</va-list-item-label>
-                </va-list-item-section>
-                
-                <va-list-item-section style="text-align: right">
-                    <va-list-item-label>{{notification.date}}</va-list-item-label>
-                </va-list-item-section>
-
-                <va-list-item-section icon>
-                    <va-icon name="remove_red_eye" color="gray" />
-                </va-list-item-section>
-
-
-              </va-list-item>
-              <va-list-item
-              v-show="!showStudentVersion()"
-              >
-
-              </va-list-item>
-          </va-list>
+          </el-table>
       </va-card-content>
   </va-card>
   </div>
@@ -65,6 +52,9 @@ export default {
             userId: '',
             userName: '',
             userIdentity: '',
+
+            notifications: [],
+            search: '',
         }
     },
     mounted () {
@@ -73,6 +63,14 @@ export default {
 
         this.userId = localStorage.getItem("userId")
         this.userIdentity = localStorage.getItem("userIdentity")
+
+        fetch(this.$URL + "/notice/get/time/desc", {
+            method: "GET"
+        }).then(response => response.json())
+        .then(res => {
+            console.log(res)
+            this.notifications = res
+        })
     },
     methods: {
         showStudentVersion () {
@@ -81,6 +79,12 @@ export default {
             } else {
                 return true
             }
+        },
+        handleShowNotificationDetail(index) {
+            this.$modal.info({
+                title: this.notifications[index].topic,
+                content: this.notifications[index].content
+            })
         }
     }
 }

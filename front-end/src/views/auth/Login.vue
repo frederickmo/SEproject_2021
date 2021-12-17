@@ -41,7 +41,7 @@ export default {
     },
     mounted () {
 
-        this.id = 10001
+        this.id = 101
         this.password = 12345
 
         fetch(this.$URL + "/user/isLogin", {
@@ -61,7 +61,7 @@ export default {
 
         console.log('params from the last page:')
         console.log(this.$route.params.id, this.$route.params.password)
-        this.id = this.$route.params.id ? this.$route.params.id : 10001
+        this.id = this.$route.params.id ? this.$route.params.id : 101
         this.password = this.$route.params.password ? this.$route.params.password : 12345
     },
     methods: {

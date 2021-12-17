@@ -147,6 +147,15 @@ const routes = [{
             },
 
 
+            // AccountManagement / 账户管理
+            {
+                path: '/home/accountmanagement',
+                name: 'AccountManagement',
+                component: () =>
+                    import ('../components/AccountManagement/AccountManagement.vue')
+            },
+
+
 
             // Forms / 在线表格
             {
