@@ -64,7 +64,7 @@ public class CourseService {
             courseRepository.save(course);
             log.info("新增课程 => 课程ID: " + course.getId() + " 课程名: " + course.getName());
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "课程添加成功");
             return json;
         }
@@ -78,7 +78,7 @@ public class CourseService {
             courseRepository.deleteById(courseId);
             log.info("删除课程: 课程ID " + courseId);
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "删除课程成功！");
             return json;
         }
@@ -93,7 +93,7 @@ public class CourseService {
             ,course.getYear(),course.getManager());
              log.info("修改课程: 课程ID " + course.getId());
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "修改课程成功！");
             return json;
         }

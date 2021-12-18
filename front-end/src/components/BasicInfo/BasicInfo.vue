@@ -88,7 +88,8 @@ export default {
     this.id = localStorage.getItem("userId")
     this.password = localStorage.getItem("password")
     fetch(this.$URL + "/user/get?id=" + this.id, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then((res) => {
       var result = res.json()
       result.then((res) => {

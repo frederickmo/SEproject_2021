@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -27,10 +28,11 @@ public class NoticeService {
             throw new AlreadyExistException("同名公告已存在");
         }
         else {
+            notice.setUpdatedTime(Date.valueOf(LocalDate.now()));
             noticeRepository.save(notice);
             JSONObject json = new JSONObject();
-            json.put("status", 200);
-            json.put("message", "已添加存在");
+            json.put("code", 200);
+            json.put("message", "添加成功");
             return json;
         }
     }
@@ -52,7 +54,7 @@ public class NoticeService {
         {
             noticeRepository.deleteById(id);
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "公告删除成功");
             return json;
         }
@@ -67,7 +69,7 @@ public class NoticeService {
         {
             noticeRepository.updateNotice(notice.getId(),notice.getPostedId(),notice.getTopic(),notice.getContent(),notice.getType(),notice.getUpdatedTime());
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "公告修改成功");
             return json;
         }

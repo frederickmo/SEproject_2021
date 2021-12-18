@@ -96,7 +96,8 @@ export default {
     console.log("studentId: " + this.studentId)
 
     fetch(this.$URL + "/task/getAll/finished/deadline/asc?studentId=" + this.studentId, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       // console.log(response)
       let result = response.json()
@@ -107,7 +108,8 @@ export default {
     })
 
     fetch(this.$URL + "/task/getAll/unfinished/deadline/asc?studentId=" + this.studentId, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       // console.log(response)
       let result = response.json()

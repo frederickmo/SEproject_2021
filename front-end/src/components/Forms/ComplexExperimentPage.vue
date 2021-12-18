@@ -74,7 +74,8 @@ export default {
         this.studentId = localStorage.getItem("userId")
 
         fetch(this.$URL + "/task/get?id=" + this.taskId, {
-            method: "GET"
+            method: "GET",
+            headers: { "satoken": localStorage.getItem("token") }
         }).then(response => {
             let result = response.json()
             result.then(res => {
@@ -84,7 +85,8 @@ export default {
         })
 
         fetch(this.$URL + "/finishes/isFinished?studentId=" + this.studentId + "&taskId=" + this.taskId, {
-            method: "GET"
+            method: "GET",
+            headers: { "satoken": localStorage.getItem("token") }
         }).then(response => {
             console.log(response)
             let result = response.text()
@@ -98,7 +100,8 @@ export default {
         })
 
         fetch(this.$URL + "/task/get?id=" + this.taskId, {
-            method: "GET"
+            method: "GET",
+            headers: { "satoken": localStorage.getItem("token") }
         }).then(response => {
             let result = response.json()
             result.then(res => {

@@ -180,7 +180,7 @@ public class FinishesService {
             log.info("新增学生提交实验报告信息: 学生ID " + studentId + " 实验ID " + taskId);
 
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "上传成功");
             return json;
         }
@@ -202,7 +202,7 @@ public class FinishesService {
        finishesRepository.save(finishes);
 
        JSONObject json = new JSONObject();
-       json.put("status", 200);
+       json.put("code", 200);
        json.put("message", "提交成功！");
        return json;
     }
@@ -304,67 +304,4 @@ public class FinishesService {
         }
     }
 
-    /**
-     * 由以上三个接口合并的接口
-     */
-    public List<JSONObject> getAllFinishedOrUnfinishedRecordsByTaskId(Integer taskId) {
-//        Optional<List<Object>>
-        return null;
-    }
-
-    /**
-     * 这个接口有两个问题：
-     * ①用户不能主动上传url，即使能，从业务逻辑的角度，也不应该让用户上传一个url
-     * ②关于是否已经提交，应该先查询是否已经提交再进行提交，不能提交之后再告诉你已经提交过了
-     * => 所以我在上面另外写了一个查询是否已经提交的接口
-     */
-    public JSONObject uploadHomework(Integer studentId, Integer taskId,String url) {
-        Optional<FinishesEntity> finishesEntity = finishesRepository.findById(studentId,taskId);
-        if(finishesEntity.isPresent())
-        {
-            JSONObject json = new JSONObject();
-            json.put("status", 001);
-            json.put("message", "该作业已提交，是否考虑重新提交");
-            json.put("boolean",false);
-            return json;
-        }
-            else
-        {
-            FinishesEntity finishesEntity2 = new FinishesEntity();
-            finishesEntity2.setFinished(1);
-            finishesEntity2.setStudentId(studentId);
-            finishesEntity2.setTaskId(taskId);
-            finishesEntity2.setAnswer(url);
-            finishesEntity2.setScore(null);
-            TimeUtil timeUtil =new TimeUtil();
-            finishesEntity2.setFinishTime(timeUtil.getTimestampNow());
-            finishesRepository.save(finishesEntity2);
-            JSONObject json = new JSONObject();
-            json.put("status", 200);
-            json.put("message", "成功提交");
-            json.put("boolean",true);
-            return json;
-        }
-    }
-
-    public JSONObject checkStudentForTask(Integer studentId, Integer taskId) {
-        List<Object> list = finishesRepository.getStudentCourseTaskList(studentId,taskId);
-       if(list.isEmpty())
-        {
-            JSONObject json = new JSONObject();
-            json.put("status", 000);
-            json.put("message", "学生，课程，任务关系不匹配");
-            json.put("boolean",false);
-            return json;
-        }
-        else
-        {
-            JSONObject json = new JSONObject();
-            json.put("status", 001);
-            json.put("message", "学生，课程，任务关系匹配");
-            json.put("boolean",true);
-            return json;
-        }
-
-    }
 }

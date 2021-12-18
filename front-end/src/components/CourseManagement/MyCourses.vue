@@ -50,7 +50,8 @@ export default {
     console.log("id: ", this.id)
 
     fetch(this.$URL + "/takes/get/student/detail?studentId=" + this.id, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()

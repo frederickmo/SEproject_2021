@@ -72,7 +72,7 @@ public class TaskService {
             taskRepository.save(task);
             log.info("成功添加实验项目 => ID: " + task.getId());
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "成功添加实验项目");
             return json;
         }
@@ -86,7 +86,7 @@ public class TaskService {
             taskRepository.deleteById(taskId);
             log.info("删除实验项目: ID " + taskId);
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "成功删除实验项目");
             return json;
         }
@@ -155,7 +155,7 @@ public class TaskService {
             taskRepository.updateTaskInformation(taskEntity.getId(),taskEntity.getCourseId(),taskEntity.getName()
                     ,taskEntity.getDescription(),taskEntity.getDeadline(),taskEntity.getType(),taskEntity.getUrl());
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "项目信息修改成功");
             return json;
         }

@@ -53,7 +53,7 @@ export default {
         }
     }, 
     mounted () {
-          
+          this.id = localStorage.getItem("userId")
     },
   methods: {
     addcourse()
@@ -69,7 +69,10 @@ export default {
             }
             fetch(this.$URL + "/course/add", {
                 method: "POST",
-                headers: { "Content-Type": "application/json"},
+                headers: {
+                    "Content-Type": "application/json",
+                    "satoken": localStorage.getItem("token")
+                },
                 body: JSON.stringify(submitForm)
             }).then(response => {
                 // console.log(response)
@@ -79,16 +82,17 @@ export default {
                     if (res.status == 200) {
                         this.$notification.success('上传成功')
                         this.$router.go(-1)
-                        fetch(this.$URL + "/manages/add?courseId=" + this.courseId+"&teacherId="+localStorage.getItem("userId"), {
-      method: "POST"
-    }).then(response => {
-      console.log(response)
-      let result = response.json()
-      result.then(res => {
-        console.log(res)
-        //this.manage=res.manager
-      })
-    })
+                        fetch(this.$URL + "/manages/add?courseId=" + this.courseId + "&teacherId=" + this.id, {
+                            method: "POST",
+                            headers: { "satoken": localStorage.getItem("token") }
+                        }).then(response => {
+                        console.log(response)
+                        let result = response.json()
+                        result.then(res => {
+                            console.log(res)
+                            //this.manage=res.manager
+                        })
+                        })
                     }
                 })
             })

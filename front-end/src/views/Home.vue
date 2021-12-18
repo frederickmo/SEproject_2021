@@ -28,6 +28,7 @@ textColor="dark"
 width="12rem"
 minimizedWidth="0">
 
+<!-- 以下是管理员的边栏 -->
   <va-accordion
   v-model="value"
   v-show="this.identity==4"
@@ -94,7 +95,7 @@ minimizedWidth="0">
 
   </va-accordion>
 
-
+<!-- 以下是教师/助教的边栏 -->
   <va-accordion
   v-model="value"
   v-show="this.identity==2||this.identity==3"
@@ -198,6 +199,7 @@ minimizedWidth="0">
     </va-sidebar-item>
   </va-accordion>
 
+<!-- 以下是学生的边栏 -->
   <va-accordion
   v-model="value"
   v-show="this.identity==1"
@@ -373,10 +375,9 @@ export default {
 
     fetch(this.$URL + "/user/get?id=" + this.id, {
       method: "GET",
-    }).then((res) => {
-      console.log(res)
-      var result = res.json()
-      result.then((result) => {
+      headers: { "satoken": localStorage.getItem("token") }
+    }).then(res => res.json())
+      .then((result) => {
         console.log(result)
         this.id = result.id
         this.name = result.name
@@ -401,18 +402,10 @@ export default {
         })
 
       })
-    })
 
 
   },
   methods: {
-    showByIdentity () {
-      if (this.identity == 0 && this.identity == 1) {
-        return false
-      } else {
-        return true
-      }
-    },
 
     myAvatarUrl() {
       // console.log("看看哪个先加载：this.id = " + this.id)

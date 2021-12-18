@@ -74,7 +74,8 @@ export default {
         if (this.$route.params.courseId == undefined) {
             console.log("从子路由跳到父路由，需要重新查询课程数据")
             fetch(this.$URL + '/=' + this.courseId, {
-                method: "GET"
+                method: "GET",
+                headers: { "satoken": localStorage.getItem("token") }
             }).then(response => {
                 // console.log(response)
                 let result = response.json()
@@ -96,7 +97,8 @@ export default {
         }
 
         fetch(this.$URL + "/task/get/simple?courseId=" + this.courseId, {
-            method: "GET"
+            method: "GET",
+            headers: { "satoken": localStorage.getItem("token") }
         }).then(response => {
             // console.log(response)
             let result = response.json()
@@ -106,7 +108,8 @@ export default {
             })
         })
         fetch(this.$URL + "/task/get/complex?courseId=" + this.courseId, {
-          method: "GET"
+          method: "GET",
+          headers: { "satoken": localStorage.getItem("token") }
         }).then(response => {
           let result = response.json()
           result.then(res => {

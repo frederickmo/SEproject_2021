@@ -88,7 +88,8 @@ export default {
         // if (this.$route.params.courseId == undefined) {
             console.log(this.$route.params.taskId)
             fetch(this.$URL + '/task/get?id=' + this.$route.params.taskId, {
-                method: "GET"
+                method: "GET",
+                headers: { "satoken": localStorage.getItem("token") }
             }).then(response => {
                 console.log(response)
                 let result = response.json()
@@ -133,7 +134,10 @@ export default {
             console.log(submitForm)
             fetch(this.$URL + "/task/update", {
                 method: "PUT",
-                headers: { "Content-Type": "application/json"},
+                headers: {
+                  "Content-Type": "application/json",
+                  "satoken": localStorage.getItem("token")
+                },
                 body: JSON.stringify(submitForm)
             }).then(response => {
                 // console.log(response)
@@ -166,7 +170,8 @@ export default {
      var courseId=this.courseId
       console.log(courseId)
         fetch(this.$URL + "/task/remove?taskId=" + this.$route.params.taskId, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()
@@ -209,7 +214,10 @@ export default {
             console.log(submitForm)
             fetch(this.$URL + "/task/update", {
                 method: "PUT",
-                headers: { "Content-Type": "application/json"},
+                headers: {
+                  "Content-Type": "application/json",
+                  "satoken": localStorage.getItem("token")
+                },
                 body: JSON.stringify(submitForm)
             }).then(response => {
                 // console.log(response)

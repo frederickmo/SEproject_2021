@@ -117,6 +117,13 @@ public class UserController {
     }
 
     @SaCheckLogin
+    @ApiOperation("查询某ID用户是否是当前登录用户")
+    @GetMapping("isLogin/id")
+    public int isLoginById(Integer id) {
+        return userService.isLoginById(id);
+    }
+
+    @SaCheckLogin
     @ApiOperation("更新用户信息")
     @PutMapping("update")
     public JSONObject updateUserInfo(@RequestBody UserEntity user) {

@@ -104,7 +104,8 @@ export default {
     this.teacherId = localStorage.getItem("userId")
 
     fetch(this.$URL + "/task/get?id=" + this.taskId, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => response.json())
     .then(res => {
       this.taskType = res.type
@@ -114,7 +115,8 @@ export default {
      * 异步查询：把三个fetch的结果放在一个json数组里
      */
     fetch(this.$URL + "/finishes/get/record/detail/task/finished?taskId=" + this.taskId, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => response.json())
     .then(res => {
       this.submitRecords = res
@@ -132,7 +134,8 @@ export default {
         // console.log("ONE\nnow totalrecords: ", this.totalRecords)
     }).then(async () => {
       fetch(this.$URL + "/finishes/get/record/detail/task/unfinished/scoreGiven?taskId=" + this.taskId, {
-        method: "GET"
+        method: "GET",
+        headers: { "satoken": localStorage.getItem("token") }
     }).then(response => response.json())
     .then(res => {
         this.notSubmitScoreGivenRecords = res
@@ -151,7 +154,8 @@ export default {
         // console.log("TWO\nnow totalrecords: ", this.totalRecords)
     }).then(async () => {
       fetch(this.$URL + "/finishes/get/record/detail/task/unfinished/scoreNotGiven?taskId=" + this.taskId, {
-        method: "GET"
+        method: "GET",
+        headers: { "satoken": localStorage.getItem("token") }
       }).then(response => response.json())
       .then(res => {
         // console.log(res)
@@ -221,7 +225,10 @@ export default {
       fetch(this.$URL + "/checks/add", {
         method: "POST",
         body: JSON.stringify(req),
-        headers: { "Content-Type": "application/json" }
+        headers: {
+          "Content-Type": "application/json",
+          "satoken": localStorage.getItem("token")
+        }
       }).then(response => {
         console.log(response)
         let result = response.json()

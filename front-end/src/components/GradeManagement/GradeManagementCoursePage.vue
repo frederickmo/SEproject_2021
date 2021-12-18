@@ -50,7 +50,8 @@ export default {
     this.courseId = localStorage.getItem("courseId") ? localStorage.getItem("courseId") : this.$route.params.courseId
 
     fetch(this.$URL + "/task/get/course?courseId=" + this.courseId, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()

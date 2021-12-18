@@ -74,7 +74,8 @@ export default {
     },
     mounted () {
         fetch(this.$URL + "/file/getAll?path=/courseResource", {
-            method: "GET"
+            method: "GET",
+            headers: { "satoken": localStorage.getItem("token") }
         }).then((response) => {
             let result = response.json()
             result.then((res) => {

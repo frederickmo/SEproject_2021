@@ -70,7 +70,7 @@ public class ManagesService {
             throw new MyNotFoundException("教师 " + uploadID + " 未授课课程 " + courseID);
         } else {
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "教师授课关系存在");
             json.put("boolean",true);
             return json;
@@ -96,7 +96,7 @@ public class ManagesService {
                  managesRepository.save(managesEntity);
                  log.info("新增课程关系 => 课程ID: " + courseId + " 教师/助教ID: " + teacherId);
                  JSONObject json = new JSONObject();
-                 json.put("status", 200);
+                 json.put("code", 200);
                  json.put("message", "课程关系添加成功");
                  return json;
              }
@@ -123,7 +123,7 @@ public class ManagesService {
                 managesRepository.delete(managesEntity);
                 log.info("删除课程关系 => 课程ID: " + courseId + " 教师/助教ID: " + teacherId);
                 JSONObject json = new JSONObject();
-                json.put("status", 200);
+                json.put("code", 200);
                 json.put("message", "课程关系删除成功");
                 return json;
             }

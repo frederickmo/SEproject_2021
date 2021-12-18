@@ -29,24 +29,24 @@ public class FinishesController {
     /**
      * 这个接口可以保证学生，课程，任务三者是相对的才可以提交
      */
-    @SaCheckLogin
-    @ApiOperation("检查学生是否有权利上传该task")
-    @GetMapping("/checkStudentForTask")
-    public JSONObject checkStudentForTask(Integer studentId, Integer taskId)
-    {
-        return finishesService.checkStudentForTask(studentId,taskId);
-    }
+//    @SaCheckLogin
+//    @ApiOperation("检查学生是否有权利上传该task")
+//    @GetMapping("/checkStudentForTask")
+//    public JSONObject checkStudentForTask(Integer studentId, Integer taskId)
+//    {
+//        return finishesService.checkStudentForTask(studentId,taskId);
+//    }
 
     /**
      * 把上传作业记录到数据库中
      */
-    @SaCheckLogin
-    @ApiOperation("学生上传作业")
-    @PostMapping("/uploadHomework")
-    public JSONObject uploadHomework(Integer studentId, Integer taskId,String url)
-    {
-        return finishesService.uploadHomework(studentId,taskId,url);
-    }
+//    @SaCheckLogin
+//    @ApiOperation("学生上传作业")
+//    @PostMapping("/uploadHomework")
+//    public JSONObject uploadHomework(Integer studentId, Integer taskId,String url)
+//    {
+//        return finishesService.uploadHomework(studentId,taskId,url);
+//    }
 
     @SaCheckLogin
     @ApiOperation("查询某项实验报告是否提交")

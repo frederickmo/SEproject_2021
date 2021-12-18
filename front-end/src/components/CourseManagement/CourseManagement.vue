@@ -94,7 +94,8 @@ export default {
     console.log("id: ", this.id)
 
     fetch(this.$URL + "/manages/get/course/managerId?managerId=" + this.id, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()
@@ -105,7 +106,8 @@ export default {
     })
 
     fetch(this.$URL + "/manages/get/teachingCourse?teacherId=" + this.id, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()
@@ -120,27 +122,29 @@ export default {
     deleteCourse (courseId)
     {
       console.log(courseId)
-        fetch(this.$URL + "/course/remove?courseId=" + courseId, {
-      method: "DELETE"
+      fetch(this.$URL + "/course/remove?courseId=" + courseId, {
+        method: "DELETE",
+        headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()
       result.then(res => {
         if (res.status == 200) {
-                        this.$notification.success('删除成功')
-                       }
+          this.$notification.success('删除成功')
+        }
         
         
       
     
-        fetch(this.$URL + "/manages/get/course/managerId?managerId=" + this.id, {
-      method: "GET"
-    }).then(response => {
-      console.log(response)
-      let result = response.json()
-      result.then(res => {
-        console.log(res)
-        this.courses = res
+      fetch(this.$URL + "/manages/get/course/managerId?managerId=" + this.id, {
+        method: "GET",
+        headers: { "satoken": localStorage.getItem("token") }
+      }).then(response => {
+        console.log(response)
+        let result = response.json()
+        result.then(res => {
+          console.log(res)
+          this.courses = res
       })
     })
       })

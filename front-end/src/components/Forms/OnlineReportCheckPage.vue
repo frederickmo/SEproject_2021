@@ -117,7 +117,8 @@ export default {
         this.markedStudentScore = this.$route.params.score
 
         fetch(this.$URL + "/task/get?id=" + this.taskId, {
-            method: "GET"
+            method: "GET",
+            headers: { "satoken": localStorage.getItem("token") }
         }).then(response => response.json())
         .then(res => {
             this.taskName = res.name
@@ -126,7 +127,8 @@ export default {
 
 
         fetch(this.$URL + "/finishes/get?studentId=" + this.studentId + "&taskId=" + this.taskId, {
-            method: "GET"
+            method: "GET",
+            headers: { "satoken": localStorage.getItem("token") }
         }).then(response => response.json())
         .then(res => {
             console.log(res)
@@ -136,7 +138,8 @@ export default {
         }).then(async() => {
             console.log("先打印那个？2")
             fetch(this.$URL + "/finishes/get/onlineReport?studentId=" + this.studentId + "&taskId=" + this.taskId, {
-                method: "GET"
+                method: "GET",
+                headers: { "satoken": localStorage.getItem("token") }
             }).then(response => response.json())
             .then(res => {
                 console.log(res)
@@ -173,7 +176,10 @@ export default {
             fetch(this.$URL + "/checks/add", {
                 method: "POST",
                 body: JSON.stringify(req),
-                headers: { "Content-Type": "application/json" }
+                headers: {
+                    "Content-Type": "application/json",
+                    "satoken": localStorage.getItem("token")
+                }
             }).then(response => {
                 console.log(response)
                 let result = response.json()

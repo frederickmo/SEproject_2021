@@ -163,7 +163,7 @@ public class FileStorageService {
 //                file.getContentType(),
 //                file.getSize());
         JSONObject json = new JSONObject();
-        json.put("status", 200);
+        json.put("code", 200);
         json.put("message", "成功上传文件到根目录");
         return json;
     }
@@ -171,7 +171,7 @@ public class FileStorageService {
     public JSONObject uploadFileToSpecifiedDirectory(MultipartFile file, String location) {
         String fileName = storeToSpecifiedDirectory(file, location);
         JSONObject json = new JSONObject();
-        json.put("status", 200);
+        json.put("code", 200);
         json.put("message", "成功上传文件到目录: " + location);
         json.put("fileName", fileName);
         return json;
@@ -180,7 +180,7 @@ public class FileStorageService {
     public JSONObject uploadFileToSpecifiedDirectoryAndRename(MultipartFile file, String newFileName, String location) {
         storeToSpecifiedDirectoryAndRename(file, newFileName, location);
         JSONObject json = new JSONObject();
-        json.put("status", 200);
+        json.put("code", 200);
         json.put("message", "成功上传文件到目录: " + location);
         return json;
     }

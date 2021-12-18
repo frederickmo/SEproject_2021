@@ -195,7 +195,8 @@ export default {
         // if (this.$route.params.courseId == undefined) {
             console.log("从子路由跳到父路由，需要重新查询课程数据")
              fetch(this.$URL + "/course/get?id="  + this.$route.params.courseId, {
-                method: "GET"
+                method: "GET",
+                headers: { "satoken": localStorage.getItem("token") }
             }).then(response => {
                 // console.log(response)
                 let result = response.json()
@@ -217,7 +218,8 @@ export default {
             })
 
         fetch(this.$URL + "/takes/get/course/detail?courseId=" + this.courseId, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()
@@ -228,7 +230,8 @@ export default {
     })
 
         fetch(this.$URL + "/manages/get/course/detail?courseId=" + this.courseId, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()
@@ -253,7 +256,8 @@ export default {
       // this.visible = false;
       console.log(this.courseId+" "+this.teacherid)
   fetch(this.$URL + "/manages/add?courseId=" + this.courseId+"&teacherId="+this.teacherid, {
-      method: "POST"
+      method: "POST",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()
@@ -265,7 +269,8 @@ export default {
             console.log(this.teacher)
             
             fetch(this.$URL + "/manages/get/course/detail?courseId=" + this.courseId, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()
@@ -322,7 +327,8 @@ export default {
                          
                         //this.$router.go(0)
                          fetch(this.$URL + "/takes/get/course/detail?courseId=" + this.courseId, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()
@@ -373,7 +379,10 @@ export default {
             console.log(submitForm)
             fetch(this.$URL + "/course/update", {
                 method: "PUT",
-                headers: { "Content-Type": "application/json"},
+                headers: { 
+                  "Content-Type": "application/json",
+                  "satoken": localStorage.getItem("token")  
+                },
                 body: JSON.stringify(submitForm)
             }).then(response => {
                 // console.log(response)
@@ -407,7 +416,8 @@ handleClick4() {
      var courseId=this.courseId
       console.log(courseId)
         fetch(this.$URL + "/course/remove?courseId=" + courseId, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()
@@ -451,7 +461,10 @@ handleClick4() {
             console.log(submitForm)
             fetch(this.$URL + "/course/update", {
                 method: "PUT",
-                headers: { "Content-Type": "application/json"},
+                headers: {
+                  "Content-Type": "application/json",
+                  "satoken": localStorage.getItem("token")
+                },
                 body: JSON.stringify(submitForm)
             }).then(response => {
                 // console.log(response)
@@ -470,7 +483,8 @@ handleClick4() {
     {
       console.log(this.courseId+" "+studentid)
          fetch(this.$URL + "/takes/remove?courseId=" + this.courseId+"&studentId="+studentid, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()
@@ -502,7 +516,8 @@ handleClick4() {
                     else{
       console.log(this.courseId,teacherid)
  fetch(this.$URL + "/manages/delete?courseId=" + this.courseId+"&teacherId="+teacherid, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
       console.log(response)
       let result = response.json()

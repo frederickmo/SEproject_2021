@@ -20,6 +20,7 @@
                 :action="getUploadAvatarUrl()"
                 :auto-upload="false"
                 :data="additionalData()"
+                :headers="headers()"
                 style="text-align: center"
                 :before-upload="beforeAvatarUpload"
             >
@@ -91,14 +92,13 @@ export default {
     mounted () {
         this.id = localStorage.getItem("userId")
         fetch(this.$URL + "/user/get?id=" + this.id, {
-        method: "GET"
-        }).then((res) => {
-        var result = res.json()
-        result.then((res) => {
+        method: "GET",
+        headers: { "satoken": localStorage.getItem("token") }
+        }).then(res => res.json())
+        .then((res) => {
             console.log(res)
             this.name = res.name
             this.gender = res.gender
-        })
         })
     },
     methods: {
@@ -127,27 +127,28 @@ export default {
 
             fetch(this.$URL + "/user/update", {
                 method: "PUT",
-                headers: {"Content-Type": "application/json"},
+                headers: {
+                    "Content-Type": "application/json",
+                    "satoken": localStorage.getItem("token")
+                },
                 body: JSON.stringify(req)
-            }).then(response => {
-                let result = response.json()
-                result.then(res => {
-                    console.log(res)
-                    if (res.status == 200) {
-                        this.$notification.success("修改成功");
-                        localStorage.setItem("gender", this.gender)
-                        localStorage.setItem("username", this.name)
-                        /**
-                         * 以下replace语句是用来跳转到一个空白页面{name: 'Refresh'}实现当前界面自动重新加载的效果
-                         * 
-                         * 经实践，填path比填name更快。
-                         */
-                        // this.$router.replace({name: 'Refresh'})
-                        this.$router.replace({path: '/refresh'})
-                    } else {
-                        this.$notification.error("修改失败")
-                    }
-                })
+            }).then(response => response.json())
+            .then(res => {
+                console.log(res)
+                if (res.status == 200) {
+                    this.$notification.success("修改成功");
+                    localStorage.setItem("gender", this.gender)
+                    localStorage.setItem("username", this.name)
+                    /**
+                     * 以下replace语句是用来跳转到一个空白页面{name: 'Refresh'}实现当前界面自动重新加载的效果
+                     * 
+                     * 经实践，填path比填name更快。
+                     */
+                    // this.$router.replace({name: 'Refresh'})
+                    this.$router.replace({path: '/refresh'})
+                } else {
+                    this.$notification.error("修改失败")
+                }
             })
             
         },
@@ -159,7 +160,7 @@ export default {
                     <img style="max-width: 100%" src={file.url || URL.createObjectURL(file.originFile)} />
                 </div>
                 )
-            });   
+            });
         },
         getUploadAvatarUrl() {
             return this.$URL + "/file/upload/avatar"
@@ -181,7 +182,14 @@ export default {
             return "avatar_" + this.id;
         },
         additionalData() {
-            return {"id": this.id}
+            return {
+                "id": this.id
+            }
+        },
+        headers(){
+            return {
+                "satoken": localStorage.getItem("token")
+            }
         },
         submitUpload() {
             this.$refs.upload.submit()

@@ -56,7 +56,8 @@ export default {
     this.studentId = localStorage.getItem("userId")
     this.password = localStorage.getItem("password")
     fetch(this.$URL + "/finishes/get/record/detail/student/groupByCourse?studentId=" + this.studentId, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then((res) => {
       var result = res.json()
       result.then((res) => {
@@ -104,7 +105,8 @@ export default {
     }),
 
     fetch(this.$URL + "/takes/get/student/detail?studentId=" + this.studentId, {
-      method: "GET"
+      method: "GET",
+      headers: { "satoken": localStorage.getItem("token") }
     }).then((res) =>{
       var result = res.json()
       result.then((res) => {

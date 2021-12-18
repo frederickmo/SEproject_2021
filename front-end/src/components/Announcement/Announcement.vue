@@ -6,9 +6,38 @@
             <va-breadcrumbs-item label="公告列表" to="/home/announcement" />
         </va-breadcrumbs>
       </div>
+      <a-modal
+      v-model:visible="modalVisible"
+      >
+          <template #title>
+              新增公告
+          </template>
+          <a-form :model="form">
+              <a-form-item field="topic" label="标题">
+                  <a-input v-model="form.topic" placeholder="输入公告标题" allow-clear />
+              </a-form-item>
+              <a-form-item field="content" label="详细内容">
+                  <a-textarea v-model="form.content" :auto-size="{minRows: 3, maxRows: 8}" placeholder="输入公告内容" allow-clear />
+              </a-form-item>
+              <a-form-item>
+                  <a-radio-group v-model="form.type">
+                      <a-radio value="0">所有人可见</a-radio>
+                      <a-radio value="1">仅学生可见</a-radio>
+                      <a-radio value="2">仅教师可见</a-radio>
+                      <a-radio value="3">仅管理员可见</a-radio>
+                  </a-radio-group>
+              </a-form-item>
+              <a-form-item>
+                  <a-button @click="submitForm">提交</a-button>
+              </a-form-item>
+          </a-form>
+      </a-modal>
   <va-card>
       <va-card-title style="font-size: 20px">公告列表</va-card-title>
       <va-card-content>
+          <div style="text-align: left">
+              <a-button @click="this.modalVisible=!this.modalVisible">新增公告</a-button>
+              </div>
           <el-table
           stripe
           :data="
@@ -55,6 +84,15 @@ export default {
 
             notifications: [],
             search: '',
+
+            modalVisible: false,
+
+            form: {
+                topic: '',
+                content: '',
+                postedId: '',
+                type: ''
+            }
         }
     },
     mounted () {
@@ -63,9 +101,11 @@ export default {
 
         this.userId = localStorage.getItem("userId")
         this.userIdentity = localStorage.getItem("userIdentity")
+        console.log("userId: ", this.userId)
 
         fetch(this.$URL + "/notice/get/time/desc", {
-            method: "GET"
+            method: "GET",
+            headers: { "satoken": localStorage.getItem("token") }
         }).then(response => response.json())
         .then(res => {
             console.log(res)
@@ -84,6 +124,26 @@ export default {
             this.$modal.info({
                 title: this.notifications[index].topic,
                 content: this.notifications[index].content
+            })
+        },
+        submitForm() {
+            this.form.postedId = this.userId
+            console.log("打印一下form：", this.form)
+            fetch(this.$URL + "/notice/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "satoken": localStorage.getItem("token")
+                },
+                body: JSON.stringify(this.form)
+            }).then(res => res.json())
+            .then(res => {
+                console.log(res)
+                if (res.code == 200) {
+                    this.$notification.success("添加成功")
+                    this.$router.replace({path: '/refresh'})
+
+                }
             })
         }
     }

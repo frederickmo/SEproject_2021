@@ -45,19 +45,19 @@ export default {
         this.password = 12345
 
         fetch(this.$URL + "/user/isLogin", {
-            method: "GET"
-        }).then((res) => {
-            let result = res.text()
-            result.then(res => {
-                console.log(res)
-                if (res == 1) {
-                    this.$notification.success("当前用户已登录")
-                    this.$router.push({name: 'Home'})
-                } else {
-                    return
-                }
-            })
+            method: "GET",
+            headers: { "satoken": localStorage.getItem("token") }
+        }).then(res => res.text())
+        .then(res => {
+            console.log(res)
+            if (res == 1) {
+                this.$notification.success("当前用户已登录")
+                this.$router.push({name: 'Home'})
+            } else {
+                return
+            }
         })
+        
 
         console.log('params from the last page:')
         console.log(this.$route.params.id, this.$route.params.password)
@@ -78,54 +78,20 @@ export default {
                 return
             } else {
                 fetch(this.$URL + "/user/login?id=" + this.id + "&password=" + this.password, {
-                    method: "GET",
-                }).then((res) => {
-                    let result = res.json()
-                    result.then((res) => {
+                    method: "GET"
+                }).then(res => res.json())
+                .then((res) => {
                         console.log(res)
-                        if (res.status==200) {
+                        if (res.code == 200) {
                             this.$notification.success("登录成功")
                             localStorage.setItem("userId", this.id)
                             localStorage.setItem("password", this.password)
+                            localStorage.setItem("token", res.data.tokenValue)
                             this.$router.push({name: 'Home'})
                         } else {
                             this.$notification.error("用户不存在或密码错误")
                         }
                     })
-
-                })
-
-                // fetch(this.$URL + "/login?username=" + this.id + "&password=" + this.password)
-                // .then((res) => {
-                //     console.log(res)
-                //     console.log(res.status)
-                //     if (res.status == 200) {
-                //         this.$notification.success('登陆成功')
-                //         this.$router.push({
-                //             name: 'Home',
-                //             params: {
-                //                 id: this.id,
-                //                 password: this.password
-                //             }
-                //         })
-                //     }
-                //     else {
-                //         this.$notification.error('登录失败')
-                //         return
-                //     }
-                // })
-
-
-
-
-
-                // this.$router.push({
-                //     name: 'Home',
-                //     params: {
-                //         id: this.id,
-                //         password: this.password
-                //     }
-                // })
             }
         },
     }

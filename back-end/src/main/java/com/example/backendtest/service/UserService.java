@@ -1,5 +1,6 @@
 package com.example.backendtest.service;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.alibaba.fastjson.JSONObject;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.LoginException;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +42,7 @@ public class UserService {
             userRepository.save(user);
             log.info("新增用户: 用户ID " + user.getId());
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "注册成功！");
             return json;
         }
@@ -54,7 +56,7 @@ public class UserService {
             userRepository.deleteById(id);
             log.info("删除用户: ID为 " + id + " 的用户被移除");
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "用户删除成功！");
             return json;
         }
@@ -67,6 +69,15 @@ public class UserService {
             return 0;
         }
     }
+
+    public int isLoginById(Integer id) {
+        if (StpUtil.getLoginIdAsInt() == id) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
 
 //    public JSONObject login(Integer id, String password) {
 //        Optional<UserEntity> userOptional = userRepository.findById(id);
@@ -101,7 +112,7 @@ public class UserService {
             if (userOptional.get().getPassword().equals(password)) {
                 StpUtil.login(id);
                 log.info("用户 " + id + " 登录");
-                return SaResult.ok("登陆成功");
+                return SaResult.ok("登陆成功").setData(StpUtil.getTokenInfo());
             } else {
                 throw new PasswordNotCorrectException("密码错误");
             }
@@ -179,7 +190,7 @@ public class UserService {
             }
             userRepository.save(userOptional.get());
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "修改成功");
             return json;
         }

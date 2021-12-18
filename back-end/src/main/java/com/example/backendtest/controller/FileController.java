@@ -100,7 +100,7 @@ public class FileController {
      * 以下是获取根目录文件的API
      */
 
-    @SaCheckLogin
+//    @SaCheckLogin
     @ApiOperation("下载根目录文件")
     @GetMapping("/download/{fileName:.+}")
 //    @GetMapping("/downloadFile")
@@ -117,7 +117,7 @@ public class FileController {
      * @param request http请求
      * @return 源文件
      */
-    @SaCheckLogin
+//    @SaCheckLogin
     @ApiOperation("下载根目录以下某个目录的文件")
     @GetMapping("/download/{dirName}/{fileName:.+}")
     public ResponseEntity<Resource> download(@PathVariable String fileName, @PathVariable String dirName, HttpServletRequest request) {
@@ -130,7 +130,7 @@ public class FileController {
      * 然后把dirName拼一下应该就可以了
      * 注意有几层目录，@PathVariable的dirName就得写几个
      */
-    @SaCheckLogin
+//    @SaCheckLogin
     @ApiOperation("获取根目录以下两层某目录的文件")
     @GetMapping("/download/{dirName1}/{dirName2}/{fileName:.+}")
     public ResponseEntity<Resource> download2(@PathVariable String fileName,
@@ -141,7 +141,7 @@ public class FileController {
         return fileStorageService.downloadFile(fileName, dirName, request);
     }
 
-    @SaCheckLogin
+//    @SaCheckLogin
     @ApiOperation("获取根目录以下三层某目录的文件")
     @GetMapping("/download/{dirName1}/{dirName2}/{dirName3}/{fileName:.+}")
     public ResponseEntity<Resource> download3(@PathVariable String fileName,
@@ -153,7 +153,7 @@ public class FileController {
         return fileStorageService.downloadFile(fileName, dirName, request);
     }
 
-    @SaCheckLogin
+//    @SaCheckLogin
     @ApiOperation("获取某一目录所有文件")
     @ApiImplicitParam(name = "path", value = "路径值（包含左'/'不含右'/'）")
     @GetMapping("/getAll")

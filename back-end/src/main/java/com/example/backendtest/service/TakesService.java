@@ -130,7 +130,7 @@ public class TakesService {
                         + " 新增选课学生 ID: "
                         + takes.getStudentId());
                 JSONObject json = new JSONObject();
-                json.put("status", 200);
+                json.put("code", 200);
                 json.put("message", "新增选课成功");
                 return json;
         }
@@ -147,7 +147,7 @@ public class TakesService {
             takesRepository.remove(studentId, courseId);
             log.info("新增退课信息： ID为 " + studentId + " 的学生退掉了ID为 " + courseId + " 的课程");
             JSONObject json = new JSONObject();
-            json.put("status", 200);
+            json.put("code", 200);
             json.put("message", "退课成功");
             return json;
         }
@@ -161,7 +161,7 @@ public class TakesService {
         }
         else {
             JSONObject json = new JSONObject();
-            json.put("status", 000);
+            json.put("code", 000);
             json.put("message", "学生选课关系已存在");
             json.put("boolean",true);
             return json;

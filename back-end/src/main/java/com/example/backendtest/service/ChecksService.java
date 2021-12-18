@@ -63,7 +63,7 @@ public class ChecksService {
                 " 的实验项目 " + checks.getTaskId() +
                 " 的成绩：" + checks.getScore());
         JSONObject json = new JSONObject();
-        json.put("status", 200);
+        json.put("code", 200);
         json.put("message", "新增批改记录成功");
         return json;
 
