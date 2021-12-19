@@ -86,7 +86,7 @@ minimizedWidth="0">
     <va-sidebar-item>
       <va-sidebar-item-content
       style="text-align: center;" 
-      @click="this.$router.push({name: 'Login', params: {tabValue: 0}})">
+      @click="handleLogout">
         <va-sidebar-item-title>
           退出登录
         </va-sidebar-item-title>
@@ -191,7 +191,7 @@ minimizedWidth="0">
     <va-sidebar-item>
       <va-sidebar-item-content
       style="text-align: center;" 
-      @click="this.$router.push({name: 'Login', params: {tabValue: 0}})">
+      @click="handleLogout">
         <va-sidebar-item-title>
           退出登录
         </va-sidebar-item-title>
@@ -294,7 +294,7 @@ minimizedWidth="0">
     <va-sidebar-item>
       <va-sidebar-item-content
       style="text-align: center;" 
-      @click="this.$router.push({name: 'Login', params: {tabValue: 0}})">
+      @click="handleLogout">
         <va-sidebar-item-title>
           退出登录
         </va-sidebar-item-title>
@@ -500,6 +500,24 @@ export default {
           }})
       }
     },
+
+    handleLogout() {
+      console.log("当前登录的id：", this.id)
+      fetch(this.$URL + "/user/logout?id=" + this.id, {
+        method: "GET",
+        headers: { "satoken": localStorage.getItem("token") }
+      })
+      .then(res => res.json())
+      .then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$notification.success("成功注销")
+          this.$router.replace({name: 'Login'})
+        } else {
+          this.$notification.error("注销失败")
+        }
+      })
+    }
   }
 }
 </script>

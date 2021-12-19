@@ -8,15 +8,20 @@
       </div>
       <a-modal
       v-model:visible="modalVisible"
+      footer="false"
+      hide-cancel
+      ok-text="取消"
       >
           <template #title>
               新增公告
           </template>
           <a-form :model="form">
-              <a-form-item field="topic" label="标题">
+              <a-form-item field="topic" label="标题" :rules="[{required: true, message: '请输入公告标题'}]"
+              :validate-trigger="['change', 'input']"
+              >
                   <a-input v-model="form.topic" placeholder="输入公告标题" allow-clear />
               </a-form-item>
-              <a-form-item field="content" label="详细内容">
+              <a-form-item field="content" label="详细内容" :rules="[{required: true, message: '请输入公告内容'}]">
                   <a-textarea v-model="form.content" :auto-size="{minRows: 3, maxRows: 8}" placeholder="输入公告内容" allow-clear />
               </a-form-item>
               <a-form-item>
@@ -31,6 +36,25 @@
                   <a-button @click="submitForm">提交</a-button>
               </a-form-item>
           </a-form>
+      </a-modal>
+      <a-modal
+      v-model:visible="displayAnnouncementModalVisible"
+      hide-cancel
+      ok-text="关闭"
+      >
+          <template #title>
+              {{displayAnnouncement.topic}}
+          </template>
+          <a-textarea v-show="!modifyAnnouncementStatus" v-model="this.displayAnnouncement.content" 
+          auto-size
+          readonly />
+          <a-textarea v-show="modifyAnnouncementStatus" v-model="this.displayAnnouncement.content" 
+          auto-size />
+          <a-button v-show="!modifyAnnouncementStatus"
+          @click="this.modifyAnnouncementStatus=!this.modifyAnnouncementStatus">
+          点击修改
+          </a-button>
+          <a-button v-show="modifyAnnouncementStatus" @click="confirmModifyAnnouncement">确认提交</a-button>
       </a-modal>
   <va-card>
       <va-card-title style="font-size: 20px">公告列表</va-card-title>
@@ -86,12 +110,20 @@ export default {
             search: '',
 
             modalVisible: false,
+            displayAnnouncementModalVisible: false,
+
+            modifyAnnouncementStatus: false,
 
             form: {
                 topic: '',
                 content: '',
                 postedId: '',
-                type: ''
+                type: 0
+            },
+
+            displayAnnouncement: {
+                topic: '',
+                content: ''
             }
         }
     },
@@ -121,14 +153,25 @@ export default {
             }
         },
         handleShowNotificationDetail(index) {
-            this.$modal.info({
-                title: this.notifications[index].topic,
-                content: this.notifications[index].content
-            })
+            // this.$modal.info({
+            //     title: this.notifications[index].topic,
+            //     content: this.notifications[index].content
+            // })
+            this.displayAnnouncement.topic = this.notifications[index].topic
+            this.displayAnnouncement.content = this.notifications[index].content
+            this.displayAnnouncementModalVisible = !this.displayAnnouncementModalVisible
+
         },
         submitForm() {
             this.form.postedId = this.userId
             console.log("打印一下form：", this.form)
+            if (!this.form.topic.length) {
+                this.$message.info("请输入公告标题")
+                return
+            } else if (!this.form.content.length) {
+                this.$message.info("请输入公告内容")
+                return
+            }
             fetch(this.$URL + "/notice/add", {
                 method: "POST",
                 headers: {
@@ -145,6 +188,14 @@ export default {
 
                 }
             })
+        },
+        confirmModifyAnnouncement() {
+            /**
+             * TODO: 这里还没写呢，明天白天在写
+             */
+
+            this.$message.success("修改成功")
+            this.$router.replace({path: '/refresh'})
         }
     }
 }
