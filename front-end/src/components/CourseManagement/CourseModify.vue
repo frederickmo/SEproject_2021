@@ -57,10 +57,17 @@
       </va-card-content>
   </va-card>
 <div style="height: 2px" />
-  <va-card gradient color="#e0e5df">
+
+
+
+  <va-card v-if="this.on==0" gradient color="#e0e5df">
       <va-card-content style="text-align: left">
         <h1>修改课程成员</h1>
-           <va-card 
+        <div style="display: flex">
+                  <a-button style="margin-right: 10px" @click="this.status=1">学生管理</a-button>
+                  <a-button @click="this.status=2">教师管理</a-button>
+              </div>
+           <!-- <va-card 
             v-for="(student, index) in student"
             :key="index"
             color="#b5c4b1" 
@@ -70,14 +77,12 @@
               <va-card-content style="rgb(60, 60, 60); font-weight: bold">
                 <h2 style="text-align:left">学生</h2>
                 <div style="display: flex">
-                  <!-- va-card高度: 76px -->
-                  <!-- va-card高度: 36px -->
+                 
                   <div style="line-height: 36px; width: 10%; font-size: 18px">{{student.id}}</div>
                   
                   <div style="line-height: 36px; width: 80%; font-size: 18px">{{student.name}}</div>
                   <div>
-                    <!-- </div>
-                  <div> -->
+                   
                   <div style="height: 2px" /> 
                   <va-button @click="DropCourse(student.id)" color="#e0e5df" style="color: rgb(40,40,40)">点击退课</va-button>
                   </div>
@@ -100,14 +105,12 @@
               <va-card-content style="rgb(60, 60, 60); font-weight: bold">
                 <h2 style="text-align:left">教师</h2>
                 <div style="display: flex">
-                  <!-- va-card高度: 76px -->
-                  <!-- va-card高度: 36px -->
+                 
                   <div style="line-height: 36px; width: 10%; font-size: 18px">{{teacher.id}}</div>
                   
                   <div style="line-height: 36px; width: 77%; font-size: 18px">{{teacher.name}}</div>
                   <div>
-                    <!-- </div>
-                  <div> -->
+                    
                   <div style="height: 2px" /> 
                   <va-button @click="DropmanageCourse(teacher.id)" color="#e0e5df" style="color: rgb(40,40,40)">点击取消授课</va-button>
                   </div>
@@ -118,16 +121,70 @@
 
               </va-card-content>
               
-            </va-card>
-            
+            </va-card> -->
+            <el-table v-if="this.status==1"
+    :data="
+      student.filter(
+        (data) =>
+          !search || data.name.toLowerCase().includes(search.toLowerCase())
+      )
+    "
+    style="width: 100%"
+  >
+    <el-table-column label="Id" prop="id" />
+    <el-table-column label="Name" prop="name" />
+    <el-table-column align="right">
+      <template #header>
+        <el-input v-model="search" size="mini" placeholder="Type to search" />
+      </template>
+      <template #default="scope">
+        
+        <el-button
+          size="mini"
+          type="danger"
+          @click="DropCourse(scope.row)"
+          >点击退课</el-button
+        >
+        </template>
+    </el-table-column>
+  </el-table>
+
+   <el-table v-show="this.status==2"
+    :data="
+      teacher.filter(
+        (data) =>
+          !search || data.name.toLowerCase().includes(search.toLowerCase())
+      )
+    "
+    style="width: 100%"
+  >
+    <el-table-column label="Id" prop="id" />
+    <el-table-column label="Name" prop="name" />
+    <el-table-column align="right">
+      <template #header>
+        <el-input v-model="search" size="mini" placeholder="Type to search" />
+      </template>
+      <template #default="scope">
+        
+        <el-button
+          size="mini"
+          type="danger"
+          @click="DropmanageCourse(scope.row)"
+          >点击取消授课</el-button
+        >
+        </template>
+    </el-table-column>
+  </el-table>
+
+
       </va-card-content>
   </va-card>
   <div style="height: 10px" />
   <div>
     <div>
    
-   <va-button  @click="handleClick" color="#e0e5df" style="color: rgb(40,40,40); ">点击添加教师</va-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;               
-   <va-button  @click="handleClick1" color="#e0e5df" style="color: rgb(40,40,40); ">点击添加学生</va-button>
+   <va-button v-if="this.on==0" @click="handleClick" color="#e0e5df" style="color: rgb(40,40,40); ">点击添加教师</va-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;               
+   <va-button v-if="this.on==0" @click="handleClick1" color="#e0e5df" style="color: rgb(40,40,40); ">点击添加学生</va-button>
   <a-modal v-model:visible="visible1" @ok="handleOk1" @cancel="handleCancel1" unmountOnClose @before-ok="handleBeforeOk1">
     <template #title>
       请输入学生id
@@ -155,7 +212,7 @@
   </div>
   
   <!-- <va-button @click="handleClick" @click="deleteCourse()" color="#FF0000" style="background-color: rgb(0,0,0) text-align:center">点击删除课程</va-button>  -->
-<va-button @click="handleClick4"  color="#FF0000" style="background-color: rgb(0,0,0) text-align:center">点击删除课程</va-button> 
+<va-button v-if="this.on==0" @click="handleClick4"  color="#FF0000" style="background-color: rgb(0,0,0) text-align:center">点击删除课程</va-button> 
   <a-modal v-model:visible="visible4" @ok="handleOk4" @cancel="handleCancel4" unmountOnClose @before-ok="handleBeforeOk4">
     <template #title>
       删除课程
@@ -170,6 +227,9 @@
 export default {
     data () {
         return {
+          on:'',
+           status: 1,
+           search:'',
           visible: false,
           visible1: false,
           visible3: false,
@@ -189,6 +249,8 @@ export default {
         }
     }, 
     mounted () {
+        this.on = this.$route.params.on
+        console.log(this.on)
         this.id = localStorage.getItem("userId")
         this.courseId = localStorage.getItem("courseId")
         console.log("从上个页面传来的params.courseId: " + this.$route.params.courseId)
@@ -315,13 +377,15 @@ export default {
             console.log(submitForm)
             fetch(this.$URL + "/takes/add", {
                 method: "POST",
-                headers: { "Content-Type": "application/json"},
+                headers: {
+                    "Content-Type": "application/json",
+                    "satoken": localStorage.getItem("token")
+                },
                 body: JSON.stringify(submitForm)
             }).then(response => {
                 // console.log(response)
                 let result = response.json()
                 result.then(res => {
-                    // console.log(res)
                     if (res.code == 200) {
                         this.$notification.success('添加成功！')
                          
@@ -479,10 +543,10 @@ handleClick4() {
             })
 
     },
-    DropCourse(studentid)
+    DropCourse(student)
     {
-      console.log(this.courseId+" "+studentid)
-         fetch(this.$URL + "/takes/remove?courseId=" + this.courseId+"&studentId="+studentid, {
+      console.log(this.courseId+" "+student.id)
+         fetch(this.$URL + "/takes/remove?courseId=" + this.courseId+"&studentId="+student.id, {
       method: "DELETE",
       headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {
@@ -499,7 +563,7 @@ handleClick4() {
     
     },
 
-    DropmanageCourse(teacherid)
+    DropmanageCourse(teacher)
     {
       console.log(this.course_manage+" "+ localStorage.getItem("userId"))
       if( localStorage.getItem("userId")!=this.course_manage)
@@ -508,14 +572,14 @@ handleClick4() {
 
       }
       else{
-      if(teacherid==this.id)
+      if(teacher.id==this.id)
       {
                         this.$notification.success('无法取消责任教师')
                         //this.$router.go(-1)
                     }
                     else{
-      console.log(this.courseId,teacherid)
- fetch(this.$URL + "/manages/delete?courseId=" + this.courseId+"&teacherId="+teacherid, {
+      console.log(this.courseId,teacher.id)
+ fetch(this.$URL + "/manages/delete?courseId=" + this.courseId+"&teacherId="+teacher.id, {
       method: "DELETE",
       headers: { "satoken": localStorage.getItem("token") }
     }).then(response => {

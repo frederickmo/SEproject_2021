@@ -23,7 +23,7 @@
                   <!-- va-card高度: 36px -->
                   <div style="line-height: 36px; width: 90%; font-size: 18px">{{course.name}}</div>
                   <div>
-                    <va-button  @click="modifyCourse(course.id,index)" color="#e0e5df" style="color: rgb(40,40,40); ">点击进入</va-button>
+                    <va-button  @click="modifyCourse(course.id,index,0)" color="#e0e5df" style="color: rgb(40,40,40); ">点击进入</va-button>
                     <!-- </div>
                   <div> -->
                   <!-- <div style="height: 2px" />
@@ -52,7 +52,7 @@
                   <!-- va-card高度: 36px -->
                   <div style="line-height: 36px; width: 90%; font-size: 18px">{{teach.name}}</div>
                   <div>
-                    <va-button  @click="modifyCourse(teach.id,index)" color="#e0e5df" style="color: rgb(40,40,40); ">点击修改</va-button>
+                    <va-button  @click="modifyCourse(teach.id,index,1)" color="#e0e5df" style="color: rgb(40,40,40); ">点击进入</va-button>
                     <!-- </div>
                   <div> -->
                   <div style="height: 2px" />
@@ -150,7 +150,7 @@ export default {
       })
     })
     },
-    modifyCourse (courseId,index)
+    modifyCourse (courseId,index,o)
     {
         localStorage.setItem("courseId", courseId)
         console.log("设置courseID了吗？courseId=" + localStorage.getItem("courseId"))
@@ -161,7 +161,8 @@ export default {
           name: this.courses[index].name,
           description: this.courses[index].description,
           year: this.courses[index].year,
-          semester: this.courses[index].semester
+          semester: this.courses[index].semester,
+          on:o
         }
       })    
     },

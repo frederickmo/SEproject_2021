@@ -80,7 +80,7 @@ export default {
                 result.then(res => {
                     // console.log(res)
                     if (res.code == 200) {
-                        this.$notification.success('上传成功')
+                        this.$notification.success('添加成功')
                         this.$router.go(-1)
                         fetch(this.$URL + "/manages/add?courseId=" + this.courseId + "&teacherId=" + this.id, {
                             method: "POST",
