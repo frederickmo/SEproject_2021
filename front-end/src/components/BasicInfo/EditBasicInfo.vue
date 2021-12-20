@@ -135,7 +135,7 @@ export default {
             }).then(response => response.json())
             .then(res => {
                 console.log(res)
-                if (res.status == 200) {
+                if (res.code == 200) {
                     this.$notification.success("修改成功");
                     localStorage.setItem("gender", this.gender)
                     localStorage.setItem("username", this.name)

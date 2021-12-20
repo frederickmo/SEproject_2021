@@ -1,9 +1,11 @@
 <template>
   <div>
+      <!-- 修改信息的Modal -->
       <a-modal
       v-model:visible="modifyInfoModalVisible"
       hide-cancel
       ok-text="取消"
+      v-on:close="handleCloseModifyModal"
       >
         <template #title>
             修改信息
@@ -52,6 +54,19 @@
             <a-button @click="confirmModifyInfo()">提交更改</a-button>
         </div>
       </a-modal>
+      <!-- 移除用户的提醒Modal -->
+      <a-modal
+      v-model:visible="removeModalVisible"
+      v-on:ok="confirmRemove"
+      simple
+      >
+      <template #title>
+          移除用户
+      </template>
+      <div style="text-align: center">
+          确认移除？
+      </div>
+      </a-modal>
       <va-card>
         <va-card-title style="font-size: 20px">{{this.handleChangeTitle()}}</va-card-title>
           <va-card-content>
@@ -79,7 +94,8 @@
                         <el-input v-model="search" size="mini" placeholder="输入姓名关键词查找" />
                     </template>
                     <template #default="scope">
-                        <a-button @click="handleModifyStudentInfo(scope.$index)">修改信息</a-button>
+                        <a-button @click="handleModifyStudentInfo(scope.$index)">修改</a-button>
+                        <a-button status="danger" style="margin-left: 10px" @click="handleRemove(scope.row)">移除</a-button>
                     </template>
                 </el-table-column>
 
@@ -104,7 +120,8 @@
                         <el-input v-model="search" size="mini" placeholder="输入姓名关键词查找" />
                     </template>
                     <template #default="scope">
-                        <a-button @click="handleModifyTeacherInfo(scope.$index)">修改信息</a-button>
+                        <a-button @click="handleModifyTeacherInfo(scope.$index)">修改</a-button>
+                        <a-button status="danger" style="margin-left: 10px" @click="handleRemove(scope.row)">移除</a-button>
                     </template>
                 </el-table-column>
 
@@ -129,7 +146,8 @@
                         <el-input v-model="search" size="mini" placeholder="输入姓名关键词查找" />
                     </template>
                     <template #default="scope">
-                        <a-button @click="handleModifyInfo(scope.$index)">修改信息</a-button>
+                        <a-button @click="handleModifyInfo(scope.$index)">修改</a-button>
+                        <a-button status="danger" style="margin-left: 10px" @click="handleRemove(scope.row)">移除</a-button>
                     </template>
                 </el-table-column>
 
@@ -147,6 +165,9 @@ export default {
             status: 1,
 
             modifyInfoModalVisible: false,
+            removeModalVisible: false,
+
+            removeId: '',
 
             students: [],
             teachers: [],
@@ -159,6 +180,8 @@ export default {
                 name: '',
                 gender: '',
                 email: '',
+                identity: '',
+                activated: ''
             },
 
             modifyForm: {
@@ -170,6 +193,8 @@ export default {
     mounted() {
         this.administratorId = localStorage.getItem("userId")
         console.log(this.administratorId)
+
+        this.status = localStorage.getItem("pageStatus") ? localStorage.getItem("pageStatus") : 1
 
         fetch(this.$URL + "/user/get/student", {
             method: "GET",
@@ -224,13 +249,17 @@ export default {
         handleChangeTitle() {
             return this.status == 1 ? "学生管理" : (this.status == 2 ? "教师管理" : "所有用户管理")
         },
+        handleCloseModifyModal() {
+            this.modifyForm.identity = ''
+            this.modifyForm.activated = ''
+        },
         handleModifyStudentInfo(index) {
             this.modifyInfo.id = this.students[index].id
             this.modifyInfo.name = this.students[index].name
             this.modifyInfo.gender = this.students[index].gender
             this.modifyInfo.email = this.students[index].email
-            // this.modifyInfo.identity = this.students[index].identity
-            // this.modifyInfo.activated = this.students[index].activated
+            this.modifyInfo.identity = this.students[index].identity
+            this.modifyInfo.activated = this.students[index].activated
 
             this.modifyInfoModalVisible = !this.modifyInfoModalVisible
         },
@@ -239,22 +268,40 @@ export default {
             this.modifyInfo.name = this.teachers[index].name
             this.modifyInfo.gender = this.teachers[index].gender
             this.modifyInfo.email = this.teachers[index].email
-            // this.modifyInfo.identity = this.teachers[index].identity
-            // this.modifyInfo.activated = this.teachers[index].activated
+            this.modifyInfo.identity = this.teachers[index].identity
+            this.modifyInfo.activated = this.teachers[index].activated
 
             this.modifyInfoModalVisible = !this.modifyInfoModalVisible
         },
         handleModifyInfo(index) {
-            this.modifyInfo.id = this.allUsers[index].id
-            this.modifyInfo.name = this.allUsers[index].name
-            this.modifyInfo.gender = this.allUsers[index].gender
-            this.modifyInfo.email = this.allUsers[index].email
-            // this.modifyInfo.identity = this.allUsers[index].identity
-            // this.modifyInfo.activated = this.allUsers[index].activated
+            if (this.allUsers[index].identity=='管理员') {
+                this.$message.error("不能修改管理员")
+            } else {
+                this.modifyInfo.id = this.allUsers[index].id
+                this.modifyInfo.name = this.allUsers[index].name
+                this.modifyInfo.gender = this.allUsers[index].gender
+                this.modifyInfo.email = this.allUsers[index].email
+                this.modifyInfo.identity = this.allUsers[index].identity
+                this.modifyInfo.activated = this.allUsers[index].activated
 
-            this.modifyInfoModalVisible = !this.modifyInfoModalVisible
+                this.modifyInfoModalVisible = !this.modifyInfoModalVisible
+            }
         },
         confirmModifyInfo() {
+            console.log(this.modifyInfo)
+            console.log(this.modifyForm)
+            if (this.modifyForm.identity == 4) {
+                this.$message.error("不能修改用户身份为管理员")
+                return
+            }
+            else if (this.modifyInfo.identity == 1 && (this.modifyForm.identity == 2 || this.modifyForm.identity == 3)) {
+                this.$message.error("不能将学生修改为助教或教师")
+                return
+            }
+            else if ((this.modifyInfo.identity == '助教' || this.modifyInfo.identity == '教师') && this.modifyForm.identity == 1) {
+                this.$message.error("不能将教师或助教修改为学生")
+                return
+            }
             let req = {
                 id: this.modifyInfo.id,
                 identity: this.modifyForm.identity,
@@ -274,9 +321,39 @@ export default {
                 console.log(res)
                 if (res.code == 200) {
                     this.$message.success("修改成功")
+                    localStorage.setItem("pageStatus", this.status)
                     this.$router.replace({path: '/refresh'})
                 } else {
                     this.$message.error("修改失败")
+                }
+            })
+        },
+        handleRemove(row) {
+            console.log(row)
+            if (row.id == this.administratorId) {
+                this.$message.error("不能移除自己")
+            } else if (row.identity == '管理员') {
+                this.$message.error("不能移除管理员")
+            } else {
+                this.removeId = row.id
+                this.removeModalVisible = !this.removeModalVisible
+            }
+        },
+        confirmRemove() {
+            console.log("被移除的id：", this.removeId)
+            fetch(this.$URL + "/user/remove?id=" + this.removeId, {
+                method: "DELETE",
+                headers: { "satoken": localStorage.getItem("token") }
+            })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                if (res.code == 200) {
+                    this.$message.success("移除用户成功")
+                    localStorage.setItem("pageStatus", this.status)
+                    this.$router.replace({path: '/refresh'})
+                } else {
+                    this.$message.error("移除用户失败")
                 }
             })
         }

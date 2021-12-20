@@ -263,7 +263,7 @@ export default {
       let result = response.json()
       result.then(res => {
         console.log(res)
-        if(res.status==200)
+        if(res.code==200)
           {
             this.$notification.success("添加教师成功")
             console.log(this.teacher)
@@ -322,7 +322,7 @@ export default {
                 let result = response.json()
                 result.then(res => {
                     // console.log(res)
-                    if (res.status == 200) {
+                    if (res.code == 200) {
                         this.$notification.success('添加成功！')
                          
                         //this.$router.go(0)
@@ -389,7 +389,7 @@ export default {
                 let result = response.json()
                 result.then(res => {
                     // console.log(res)
-                    if (res.status == 200) {
+                    if (res.code == 200) {
                         this.$notification.success('修改成功')
                         this.$router.go(-1)
                     }
@@ -422,7 +422,7 @@ handleClick4() {
       console.log(response)
       let result = response.json()
       result.then(res => {
-        if (res.status == 200) {
+        if (res.code == 200) {
                         this.$notification.success('删除成功')
                         this.$router.go(-1)
                        }
@@ -471,7 +471,7 @@ handleClick4() {
                 let result = response.json()
                 result.then(res => {
                     // console.log(res)
-                    if (res.status == 200) {
+                    if (res.code == 200) {
                         this.$notification.success('修改成功')
                         this.$router.go(-1)
                     }
@@ -489,7 +489,7 @@ handleClick4() {
       console.log(response)
       let result = response.json()
       result.then(res => {
-       if (res.status == 200) {
+       if (res.code == 200) {
                         this.$notification.success('退课成功')
                         this.$router.go(-1)
                     }
@@ -522,7 +522,7 @@ handleClick4() {
       console.log(response)
       let result = response.json()
       result.then(res => {
-       if (res.status == 200) {
+       if (res.code == 200) {
                         this.$notification.success('取消教师授课成功')
                         this.$router.go(-1)
                     }

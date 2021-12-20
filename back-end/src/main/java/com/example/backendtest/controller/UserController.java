@@ -92,7 +92,7 @@ public class UserController {
     }
 
     @SaCheckLogin
-    @ApiOperation("移除用户/用户注销")
+    @ApiOperation("移除用户")
     @DeleteMapping("remove")
     public JSONObject remove(Integer id) {
         return userService.remove(id);
@@ -111,7 +111,7 @@ public class UserController {
     }
 
     @SaCheckLogin
-    @ApiOperation("用户注销")
+    @ApiOperation("用户注销（退出登录）")
     @GetMapping("logout")
     public SaResult logout(Integer id) {
         return userService.logout(id);

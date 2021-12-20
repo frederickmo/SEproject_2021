@@ -32,11 +32,25 @@ public class NoticeController {
     }
 
     @SaCheckLogin
-    @ApiOperation("按发布时间顺序展示所有的公告(发布时间越近越靠前)")
-    @GetMapping("/get/time/desc")
+    @ApiOperation("按发布时间顺序展示所有的公告(发布时间越近越靠前) - 管理员接口")
+    @GetMapping("/get")
     public List<NoticeEntity> showNoticeByTimeDesc()
     {
         return noticeService.showNoticeByTimeDesc();
+    }
+
+    @SaCheckLogin
+    @ApiOperation("学生获取公告接口")
+    @GetMapping("/get/student")
+    public List<NoticeEntity> getAllForStudent() {
+        return noticeService.getAllForStudent();
+    }
+
+    @SaCheckLogin
+    @ApiOperation("教师或助教获取公告接口")
+    @GetMapping("/get/teacher")
+    public List<NoticeEntity> getAllForTeacher() {
+        return noticeService.getAllForTeachers();
     }
 
     @SaCheckLogin

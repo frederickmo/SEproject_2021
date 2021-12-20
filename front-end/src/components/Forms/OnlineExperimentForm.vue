@@ -266,7 +266,7 @@ export default {
                 let result = response.json()
                 result.then(res => {
                     // console.log(res)
-                    if (res.status == 200) {
+                    if (res.code == 200) {
                         this.$notification.success('提交成功！')
                         this.$router.go(-1)
                     }
