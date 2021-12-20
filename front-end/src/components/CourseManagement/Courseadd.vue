@@ -79,8 +79,8 @@ export default {
                 let result = response.json()
                 result.then(res => {
                     // console.log(res)
-                    if (res.status == 200) {
-                        this.$notification.success('上传成功')
+                    if (res.code == 200) {
+                        this.$notification.success('添加成功')
                         this.$router.go(-1)
                         fetch(this.$URL + "/manages/add?courseId=" + this.courseId + "&teacherId=" + this.id, {
                             method: "POST",
