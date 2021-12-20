@@ -9,9 +9,9 @@
     <va-card>
       <va-card-title style="font-size: 20px">我的成绩</va-card-title>
         <va-card-content>
-           <!-- <va-data-table :items="scorelist" /> -->
+           
            <div v-for="(item,index) in scorelist" :key="index">
-             <h1>{{name[index+1]}}</h1>
+             <h1>{{name[index]}}</h1>
              <br>
             <el-table :data="scorelist[index]" style="width: 100%">
               <el-table-column prop="2" label="项目ID"  />
@@ -20,7 +20,7 @@
               <!-- <el-table-row> -->
             </el-table>
 
-            <h2 v-if="score[index]!=0">本项目的平均分为：{{score[index]}}分</h2>
+            <h2 v-if="score[index]!=0">{{score[index]}}</h2>
             <h2 v-else>本项目未参加测试</h2>
             <br>
            </div>
@@ -61,7 +61,7 @@ export default {
     }).then((res) => {
       var result = res.json()
       result.then((res) => {
-        
+        //console.log(res)
         this.scorelist=res
         //console.log(this.scorelist[0][0][1])
         for(var i in this.scorelist)
@@ -69,27 +69,40 @@ export default {
           //console.log(this.scorelist[i].length)
           if(this.scorelist[i].length!=0)
           {
-            this.name[i]=this.scorelist[i][0][1]
+            //this.name[i]=this.scorelist[i][0][1]
             this.num++
             //console.log(this.name)
             for(var x in this.scorelist[i])
             {
               if(this.scorelist[i][x][4]==null)
-                 this.count++
-              //console.log(this.scorelist[i][x][4])
-              if(x==0)
+                 {
+                   this.count++
+                   this.scorelist[i][x][4]="未批改"
+                   //continue
+                 }
+                 else
+                 {
+              console.log(this.score[i]+" "+this.scorelist[i][x][4])
+              if((x==0)&&(this.scorelist[i][x][4]!="未批改"))
                 this.score[i]=this.scorelist[i][x][4]
               else
                 this.score[i]=this.score[i]+this.scorelist[i][x][4]
-              console.log(this.score[i])
+              console.log("woshi"+this.score[i])
             }
+            }
+            console.log(!this.score[i])
+            if(!this.score[i])
+              this.score[i]="全部项目未批改"
+            else
+              this.score[i]="本项目的平均分为："+this.score[i]/(this.scorelist[i].length- this.count)+"分"
             
-            this.score[i]=this.score[i]/(this.scorelist[i].length- this.count)
+            // if(!this.score[i])
+            //   this.score[i]="全部项目未批改"
             this.count=0
-          }
+        }
           else{
             this.score[i]=0
-            this.name[i]=[]
+            //this.name[i]=[]
           }
          
         }
@@ -100,7 +113,7 @@ export default {
         // this.identity = res.identity
         // this.activated = res.activated
         
-        //console.log(this.scorelist)
+        console.log(this.score)
       })
     }),
 
@@ -110,21 +123,25 @@ export default {
     }).then((res) =>{
       var result = res.json()
       result.then((res) => {
-      console.log(res)
-      for(var i in res)
-      {
-        console.log(res[i].name)
-        if(this.name.indexOf(res[i].name)>-1)
-        {
-           console.log(res[i].name)
-        }
-        else
-        {
-          this.name[this.num]=res[i].name
-          this.num++
-        }
+      //  console.log(res)
+      // for(var i in res)
+      // {
+      //   console.log(res[i].name)
+      //   if(this.name.indexOf(res[i].name)>-1)
+      //   {
+      //      console.log(res[i].name)
+      //   }
+      //   else
+      //   {
+      //     this.name[this.num]=res[i].name
+      //     this.num++
+      //   }
 
         
+      // }
+      for(var i in res)
+      {
+        this.name.push(res[i].name)
       }
       
       })

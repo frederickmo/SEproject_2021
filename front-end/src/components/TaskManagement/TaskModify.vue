@@ -144,7 +144,7 @@ export default {
                 let result = response.json()
                 result.then(res => {
                     // console.log(res)
-                    if (res.status == 200) {
+                    if (res.code == 200) {
                         this.$notification.success('修改成功')
                         this.$router.go(-1)
                     }
@@ -176,7 +176,7 @@ export default {
       console.log(response)
       let result = response.json()
       result.then(res => {
-        if (res.status == 200) {
+        if (res.code == 200) {
                         this.$notification.success('删除成功')
                         this.$router.go(-1)
                        }
@@ -224,7 +224,7 @@ export default {
                 let result = response.json()
                 result.then(res => {
                     // console.log(res)
-                    if (res.status == 200) {
+                    if (res.code == 200) {
                         this.$notification.success('修改成功')
                         this.$router.go(-1)
                     }
