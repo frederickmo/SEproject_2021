@@ -13,6 +13,20 @@ spring:
 
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+#    redis的配置
+  redis:
+    host: 101.132.138.14
+    port: 6379
+    timeout: 20000
+    password: DRT1951725
+    database: 0
+    lettuce:
+      pool:
+        max-active: 1024
+        max-wait: 10000
+        max-idle: 200
+        min-idle: 5
+
   jpa:
     show-sql: true
     hibernate:
@@ -67,7 +81,7 @@ mail:
 
 file:
 
-# upload-dir: /Users/dengruotao/Desktop/SEproject_2021/back-end/src/main/resources/static
+#  upload-dir: /Users/dengruotao/Desktop/SEproject_2021/back-end/src/main/resources/static
   upload-dir: /Users/frederickmo/documents/Github/SEproject_2021/back-end/src/main/resources/static
 #  upload-dir:/Users/86133/Documents/GitHub/SEproject_2021/back-end/src/main/resources/static
 #  upload-dir: /home/admin/backend

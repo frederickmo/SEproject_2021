@@ -119,6 +119,15 @@ public class UserService {
         }
     }
 
+    public SaResult logout(Integer id) {
+        if (StpUtil.getLoginIdAsInt() == id) {
+            StpUtil.logout(id);
+            return SaResult.ok("成功注销");
+        } else {
+            return SaResult.error("注销失败");
+        }
+    }
+
     public UserEntity getUserById(Integer id) {
 //        if (!StpUtil.isLogin()) {
 //            throw new NotLoginException();
@@ -188,6 +197,34 @@ public class UserService {
                 userOptional.get().setName(user.getName());
                 log.info("用户修改姓名为 " + user.getName());
             }
+            if (user.getPassword().equals("")) {
+                log.info("用户提交新的密码：" + user.getPassword());
+                log.info("用户未更新密码");
+            } else {
+                userOptional.get().setPassword(user.getPassword());
+                log.info("用户修改密码为 " + user.getPassword());
+            }
+            if (user.getEmail().equals((""))) {
+                log.info("用户提交新的邮箱：" + user.getEmail());
+                log.info("用户未更新邮箱");
+            } else {
+                userOptional.get().setEmail(user.getEmail());
+                log.info("用户修改邮箱为 " + user.getEmail());
+            }
+            if (user.getIdentity() == null) {
+                log.info("用户提交新的身份信息：" + user.getIdentity());
+                log.info("用户未更新身份");
+            } else {
+                userOptional.get().setIdentity(user.getIdentity());
+                log.info("用户修改身份为 " + user.getIdentity());
+            }
+            if (user.getActivated() == null) {
+                log.info("用户更新激活状态：" + user.getActivated());
+                log.info("用户未更新激活状态");
+            } else {
+                userOptional.get().setActivated(user.getActivated());
+                log.info("用户修改激活状态为 " + user.getActivated());
+            }
             userRepository.save(userOptional.get());
             JSONObject json = new JSONObject();
             json.put("code", 200);
@@ -195,4 +232,31 @@ public class UserService {
             return json;
         }
     }
+
+    public JSONObject administratorUpdateUserInfo(UserEntity user) {
+        Optional<UserEntity> userOptional = userRepository.findById(user.getId());
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException("用户不存在");
+        } else {
+            if (user.getIdentity() != null) {
+                userOptional.get().setIdentity(user.getIdentity());
+                log.info("管理员修改用户 " + user.getId() + " 身份为 " + user.getIdentity());
+            } else {
+                log.info("管理员未提交身份变更申请");
+            }
+            if (user.getActivated() != null) {
+                userOptional.get().setActivated(user.getActivated());
+                log.info("管理员修改用户 " + user.getId() + " 激活状态为 " + user.getActivated());
+            } else {
+                log.info("管理员未提交激活状态变更申请");
+            }
+            userRepository.save(userOptional.get());
+            JSONObject json = new JSONObject();
+            json.put("code", 200);
+            json.put("msg", "更新成功");
+            return json;
+        }
+    }
 }
+
+
