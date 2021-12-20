@@ -110,6 +110,13 @@ public class UserController {
         return userService.login(id, password);
     }
 
+    @SaCheckLogin
+    @ApiOperation("用户注销")
+    @GetMapping("logout")
+    public SaResult logout(Integer id) {
+        return userService.logout(id);
+    }
+
     @ApiOperation("获取当前登录状态")
     @GetMapping("isLogin")
     public int isLogin() {
@@ -128,6 +135,13 @@ public class UserController {
     @PutMapping("update")
     public JSONObject updateUserInfo(@RequestBody UserEntity user) {
         return userService.updateUserInfo(user);
+    }
+
+    @SaCheckLogin
+    @ApiOperation("管理员更新用户信息")
+    @PutMapping("update/administrator")
+    public JSONObject administratorUpdateUserInfo(@RequestBody UserEntity user) {
+        return userService.administratorUpdateUserInfo(user);
     }
 
     @PostMapping ("/mail")
