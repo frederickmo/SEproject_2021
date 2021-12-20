@@ -152,8 +152,15 @@ public class UserController {
 
     @GetMapping("/verify")
     @ApiOperation("检验验证码")
-    public JSONObject verify(String inputCode, HttpServletRequest request){
-        return verifyEmailUtil.checkCode(inputCode,request);
+    public JSONObject verify(String inputCode, HttpServletRequest request,int userId){
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject = verifyEmailUtil.checkCode(inputCode,request);
+        if(jsonObject.getInteger("status")==200)
+        {
+            
+        }
+        return jsonObject;
     }
 
 }
