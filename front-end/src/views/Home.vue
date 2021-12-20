@@ -398,7 +398,7 @@ export default {
         }
 
         this.$router.push({
-          name: 'BasicInfo'
+          name: 'Announcement'
         })
 
       })

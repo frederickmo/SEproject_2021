@@ -19,6 +19,12 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity,Integer> {
     @Query(value = "select s from NoticeEntity s order by s.updatedTime desc")
     List<NoticeEntity> showNoticeByTime();
 
+    @Query(value = "select n from NoticeEntity n where n.type = 0 or n.type = 1 order by n.updatedTime desc")
+    List<NoticeEntity> findAllForStudent();
+
+    @Query(value = "select n from NoticeEntity n where n.type = 0 or n.type = 2 order by n.updatedTime desc")
+    List<NoticeEntity> findAllForTeachers();
+
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update  NoticeEntity s set s.postedId = ?2,s.topic = ?3,s.content = ?4,s.type=?5,s.updatedTime =?6  " +

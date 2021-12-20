@@ -6,6 +6,7 @@
             <va-breadcrumbs-item label="公告列表" to="/home/announcement" />
         </va-breadcrumbs>
       </div>
+      <!-- 以下是新增公告的Modal -->
       <a-modal
       v-model:visible="modalVisible"
       footer="false"
@@ -37,29 +38,67 @@
               </a-form-item>
           </a-form>
       </a-modal>
+      <!-- 以下是查看/修改公告的Modal -->
       <a-modal
       v-model:visible="displayAnnouncementModalVisible"
       hide-cancel
       ok-text="关闭"
+      :close="this.modifyAnnouncementStatus=false"
       >
           <template #title>
-              {{displayAnnouncement.topic}}
+              {{modifyAnnouncementStatus ? "修改公告" : displayAnnouncement.topic}}
           </template>
-          <a-textarea v-show="!modifyAnnouncementStatus" v-model="this.displayAnnouncement.content" 
+          <a-textarea
+          style="margin-bottom: 10px"
+          v-show="!modifyAnnouncementStatus"
+          v-model="this.displayAnnouncement.content" 
           auto-size
           readonly />
-          <a-textarea v-show="modifyAnnouncementStatus" v-model="this.displayAnnouncement.content" 
-          auto-size />
-          <a-button v-show="!modifyAnnouncementStatus"
+          <div v-show="modifyAnnouncementStatus">
+              <div style="font-weight: bold; margin-bottom: 5px">标题</div>
+              <div style="margin-bottom: 5px">
+                <a-input v-model="this.displayAnnouncement.topic" />
+              </div>
+              <div style="font-weight: bold; margin-bottom: 5px">内容</div>
+              <div style="margin-bottom: 5px">
+                <a-textarea v-model="this.displayAnnouncement.content" auto-size />
+              </div>
+              <div style="font-weight: bold; margin-bottom: 5px">类型</div>
+              <div style="margin-bottom: 10px">
+                  <a-radio-group v-model="this.displayAnnouncement.type">
+                      <a-radio value="0">所有人可见</a-radio>
+                      <a-radio value="1">仅学生可见</a-radio>
+                      <a-radio value="2">仅教师可见</a-radio>
+                      <a-radio value="3">仅管理员可见</a-radio>
+                  </a-radio-group>
+              </div>
+          </div>
+          <a-button style="margin-top: 10px" v-show="(!modifyAnnouncementStatus)&this.userIdentity==4"
           @click="this.modifyAnnouncementStatus=!this.modifyAnnouncementStatus">
           点击修改
           </a-button>
           <a-button v-show="modifyAnnouncementStatus" @click="confirmModifyAnnouncement">确认提交</a-button>
       </a-modal>
+      <!-- 以下是确认移除公告的Modal -->
+      <a-modal
+      v-model:visible="removeModalVisible"
+      simple
+      v-on:ok="handleConfirmRemove"
+      >
+        <template #title>
+            移除公告
+        </template>
+        <div style="text-align: center">
+            <div>
+                确认移除？
+            </div>
+            <!-- <a-button @click="handleConfirmRemove">确认</a-button> -->
+        </div>
+      </a-modal>
   <va-card>
       <va-card-title style="font-size: 20px">公告列表</va-card-title>
       <va-card-content>
-          <div style="text-align: left">
+          <div v-show="this.userIdentity==4" style="text-align: left">
               <a-button @click="this.modalVisible=!this.modalVisible">新增公告</a-button>
               </div>
           <el-table
@@ -72,13 +111,14 @@
           >
             <el-table-column label="标题" prop="topic" />
             <!-- <el-table-column label="预览" prop="content" /> -->
-            <el-table-column label="发布时间" prop="updatedTime" />
+            <el-table-column label="更新时间" prop="updatedTime" />
             <el-table-column align="right">
                 <template #header>
                     <el-input v-model="search" size="mini" placeholder="输入关键词查找" />
                 </template>
                 <template #default="scope">
-                    <a-button @click="handleShowNotificationDetail(scope.$index)">查看</a-button>
+                    <a-button style="margin-right: 10px" @click="handleShowAnnouncementDetail(scope.$index)">查看</a-button>
+                    <a-button v-show="this.userIdentity==4" status="danger" @click="handleRemoveAnnouncement(scope.$index)">移除</a-button>
                 </template>
             </el-table-column>
 
@@ -122,9 +162,15 @@ export default {
             },
 
             displayAnnouncement: {
+                id: '',
                 topic: '',
-                content: ''
-            }
+                content: '',
+                type: ''
+            },
+
+            removeIndex: 0,
+            removeId: 0,
+            removeModalVisible: false
         }
     },
     mounted () {
@@ -134,15 +180,37 @@ export default {
         this.userId = localStorage.getItem("userId")
         this.userIdentity = localStorage.getItem("userIdentity")
         console.log("userId: ", this.userId)
-
-        fetch(this.$URL + "/notice/get/time/desc", {
-            method: "GET",
-            headers: { "satoken": localStorage.getItem("token") }
-        }).then(response => response.json())
-        .then(res => {
-            console.log(res)
-            this.notifications = res
-        })
+        
+        if (this.userIdentity == 1) {
+            fetch(this.$URL + "/notice/get/student", {
+                method: "GET",
+                headers: { "satoken": localStorage.getItem("token") }
+            })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                this.notifications = res
+            })
+        } else if (this.userIdentity == 2 || this.userIdentity == 3) {
+            fetch(this.$URL + "/notice/get/teacher", {
+                method: "GET",
+                headers: { "satoken": localStorage.getItem("token") }
+            })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                this.notifications = res
+            })
+        } else if (this.userIdentity == 4) {
+            fetch(this.$URL + "/notice/get", {
+                method: "GET",
+                headers: { "satoken": localStorage.getItem("token") }
+            }).then(response => response.json())
+            .then(res => {
+                console.log(res)
+                this.notifications = res
+            })
+        }
     },
     methods: {
         showStudentVersion () {
@@ -152,15 +220,40 @@ export default {
                 return true
             }
         },
-        handleShowNotificationDetail(index) {
+        handleShowAnnouncementDetail(index) {
             // this.$modal.info({
             //     title: this.notifications[index].topic,
             //     content: this.notifications[index].content
             // })
+            this.displayAnnouncement.id = this.notifications[index].id
             this.displayAnnouncement.topic = this.notifications[index].topic
             this.displayAnnouncement.content = this.notifications[index].content
+            this.displayAnnouncement.type = this.notifications[index].type
             this.displayAnnouncementModalVisible = !this.displayAnnouncementModalVisible
 
+        },
+        handleRemoveAnnouncement(index) {
+            this.removeIndex = index
+            this.removeId = this.notifications[index].id
+            this.removeModalVisible = !this.removeModalVisible
+        },
+        handleConfirmRemove() {
+            console.log("被移除的公告：", this.notifications[this.removeIndex])
+
+            fetch(this.$URL + "/notice/remove?id=" + this.removeId, {
+                method: "DELETE",
+                headers: { "satoken": localStorage.getItem("token") }
+            })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                if (res.code == 200) {
+                    this.$message.success("成功移除")
+                    this.$router.replace({path: '/refresh'})
+                } else {
+                    this.$message.error("移除失败")
+                }
+            })
         },
         submitForm() {
             this.form.postedId = this.userId
@@ -190,13 +283,28 @@ export default {
             })
         },
         confirmModifyAnnouncement() {
-            /**
-             * TODO: 这里还没写呢，明天白天在写
-             */
+            // console.log(this.displayAnnouncement)
 
-            this.$message.success("修改成功")
-            this.$router.replace({path: '/refresh'})
-        }
+            fetch(this.$URL + "/notice/update", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "satoken": localStorage.getItem("token")
+                },
+                body: JSON.stringify(this.displayAnnouncement)
+            })
+            .then(res => res.json())
+            .then(res => {
+                // console.log(res)
+                if (res.code == 200) {
+                    this.$message.success("修改成功")
+                    this.$router.replace({path: '/refresh'})
+                } else {
+                    this.$message.error("修改失败")
+                }
+            })
+
+        },
     }
 }
 </script>
