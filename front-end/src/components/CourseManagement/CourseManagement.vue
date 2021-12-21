@@ -9,6 +9,8 @@
     <va-card>
       <va-card-title style="font-size: 20px">课程管理</va-card-title>
         <va-card-content>
+          <div style="text-align:left"><a-button @click="add()" color="#e0e5df" style="color: rgb(40,40,40)">新增课程</a-button></div>
+          <div style="height: 20px" />
           <h2 style="text-align:left">我管理的课程</h2>
             <va-card 
             v-for="(course, index) in courses"
@@ -21,8 +23,8 @@
                 <div style="display: flex">
                   <!-- va-card高度: 76px -->
                   <!-- va-card高度: 36px -->
-                  <div style="line-height: 36px; width: 90%; font-size: 18px">{{course.name}}</div>
-                  <div>
+                  <div style="line-height: 36px; width: 89%; font-size: 18px">{{course.name}}</div>
+                  <div> 
                     <va-button  @click="modifyCourse(course.id,index,0)" color="#e0e5df" style="color: rgb(40,40,40); ">点击进入</va-button>
                     <!-- </div>
                   <div> -->
@@ -67,7 +69,7 @@
               
             </va-card>
         </va-card-content>
-        <va-button @click="add()" color="#e0e5df" style="color: rgb(40,40,40)">新增课程</va-button>
+        
     </va-card>
   </div>
   
@@ -129,7 +131,7 @@ export default {
       console.log(response)
       let result = response.json()
       result.then(res => {
-        if (res.code == 200) {
+        if (res.status == 200) {
           this.$notification.success('删除成功')
         }
         
