@@ -3,7 +3,7 @@ package com.example.backendtest.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "file", schema = "backend_demo", catalog = "")
+@Table(name = "file", schema = "backend", catalog = "")
 public class FileEntity {
     private int id;
     private String name;

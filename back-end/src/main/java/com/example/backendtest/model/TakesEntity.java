@@ -3,7 +3,7 @@ package com.example.backendtest.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "takes", schema = "backend_demo", catalog = "")
+@Table(name = "takes", schema = "backend", catalog = "")
 @IdClass(TakesEntityPK.class)
 public class TakesEntity {
     private int studentId;
