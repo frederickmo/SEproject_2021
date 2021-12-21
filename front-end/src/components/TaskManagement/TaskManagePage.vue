@@ -1,47 +1,162 @@
 <template>
   <va-card gradient color="#e0e5df">
       <va-card-content style="text-align: left">
-          <div class="course-title">{{this.courseName}}</div>
+        <a-modal
+                v-model:visible="displayAnnouncementModalVisible"
+                hide-cancel
+                ok-text="关闭"
+                :close="this.modifyAnnouncementStatus=false"
+                >
+                    <template #title>
+                        {{modifyAnnouncementStatus ? "修改信息" : displayAnnouncement.name}}
+                    </template>
+                    <a-textarea
+                    style="margin-bottom: 10px"
+                    v-show="!modifyAnnouncementStatus"
+                    v-model="this.displayAnnouncement.Description" 
+                    auto-size
+                    readonly />
+                     <a-textarea
+                    style="margin-bottom: 10px"
+                    v-show="!modifyAnnouncementStatus"
+                    v-model="this.displayAnnouncement.deadline" 
+                    auto-size
+                    readonly />
+                    
+                    
+                    <div v-show="modifyAnnouncementStatus">
+                        <div style="font-weight: bold; margin-bottom: 5px">名称</div>
+                        <div style="margin-bottom: 5px">
+                          <a-input v-model="this.displayAnnouncement.name" />
+                        </div>
+                        <div style="font-weight: bold; margin-bottom: 5px">项目说明</div>
+                        <div style="margin-bottom: 5px">
+                          <a-input v-model="this.displayAnnouncement.Description" />
+                        </div>
+                        <div style="font-weight: bold; margin-bottom: 5px">截止日期</div>
+                        <div style="margin-bottom: 5px">
+                          <a-textarea v-model="this.displayAnnouncement.deadline" auto-size />
+                        </div>
+                        <div style="font-weight: bold; margin-bottom: 5px">类型</div>
+                        <div style="margin-bottom: 10px">
+                            <a-radio-group v-model="this.displayAnnouncement.type">
+                                <a-radio value="0">小型</a-radio>
+                                <a-radio value="1">大型</a-radio>
+                        <div style="font-weight: bold; margin-bottom: 5px">项目文档</div>
+                        <div style="margin-bottom: 5px">
+                          <el-upload
+                            ref="upload"
+                            :action="getUploadUrl()"
+                            :auto-upload="false"
+                            style="text-align: center"
+                          >
+                            <template #trigger>
+                              <va-button gradient :rounded="false">选择文件</va-button>
+                            </template>
+                            <va-button style="margin-left: 20px" flat :rounded="false" @click="submitUpload">上传</va-button>
+                            <!-- <template #tip>
+                              <div class="el-upload__tip">
+                                jpg/png files with a size less than 500kb
+                              </div>
+                            </template> -->
+                          </el-upload> 
+                        </div>        
+                            </a-radio-group>
+                        </div>
+                    </div>
+                    <a-button style="margin-top: 10px" v-show="(!modifyAnnouncementStatus)"
+                    @click="this.modifyAnnouncementStatus=!this.modifyAnnouncementStatus">
+                    点击修改
+                    </a-button>
+                    <a-button v-show="modifyAnnouncementStatus" @click="handleOk3">确认提交</a-button>
+                </a-modal>
+
+          <h1>{{this.courseName}}</h1>
           <div class="course-description">{{this.courseDescription}}</div>
-            <va-card 
+            <!-- <va-card 
             v-for="(task, index) in simpleTasks"
             :key="index"
             color="#b5c4b1" 
             gradient
             style="margin-bottom: 10px"
-            >
+            > -->
+            <va-card>
               <va-card-content style="rgb(60, 60, 60); font-weight: bold">
-                <div style="display: flex">
-                  <!-- va-card高度: 76px -->
-                  <!-- va-card高度: 36px -->
+                <el-table v-if="this.status==1"
+                :data="
+                simpleTasks.filter(
+                (data) =>
+                !search || data.name.toLowerCase().includes(search.toLowerCase())
+                )
+                "
+                style="width: 100%"
+              >
+              <el-table-column label="名称" prop="name" />
+              <el-table-column label="截止日期" prop="deadline" />
+              <el-table-column label="逾期" prop="over" />
+              <el-table-column align="right">
+            <template #header>
+              <el-input v-model="search" size="mini" placeholder="Type to search" />
+            </template>
+            <template #default="scope">
+               
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleShowtaskDetail(scope.row)"
+              >查看</el-button>
+            </template>
+    </el-table-column>
+  </el-table>
+                <!-- <div style="display: flex">
                   <div style="line-height: 36px; width: 35%; font-size: 18px">{{task.name}}</div>
                   <div style="line-height: 36px; width: 37%">截止日期：{{task.deadline ? task.deadline : "暂无"}}</div>
                   <div v-show="isOverdue(task.deadline)" style="line-height: 36px; width: 18%; color: #e00"><va-icon color="#e00" name="error_outline" />已逾期</div>
                   <div v-show="!isOverdue(task.deadline)" style="line-height: 36px; width: 18%"/>
                   <div><va-button @click="switchToTaskSimple(index)" color="#e0e5df" style="color: rgb(40,40,40)">点击修改</va-button></div>
-                </div>
+                </div> -->
               </va-card-content>
             </va-card>
-            <div style="height: 20px" />
-            <va-card 
-            v-for="(task, index) in complexTasks"
-            :key="index"
-            color="#ac9b91" 
-            gradient
-            style="margin-bottom: 10px"
-            >
+            <va-card>
               <va-card-content style="rgb(60, 60, 60); font-weight: bold">
-                <div style="display: flex">
-                  <!-- va-card高度: 76px -->
-                  <!-- va-card高度: 36px -->
+                <el-table v-if="this.status==1"
+                :data="
+                complexTasks.filter(
+                (data) =>
+                !search1 || data.name.toLowerCase().includes(search1.toLowerCase())
+                )
+                "
+                style="width: 100%"
+              >
+              <el-table-column label="名称" prop="name" />
+              <el-table-column label="截止日期" prop="deadline" />
+              <el-table-column label="逾期" prop="over" />
+              <el-table-column align="right">
+            <template #header>
+              <el-input v-model="search1" size="mini" placeholder="Type to search" />
+            </template>
+            <template #default="scope">
+               
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleShowtaskDetail(scope.row)"
+              >查看</el-button>
+            </template>
+    </el-table-column>
+  </el-table>
+                <!-- <div style="display: flex">
                   <div style="line-height: 36px; width: 35%; font-size: 18px">{{task.name}}</div>
                   <div style="line-height: 36px; width: 37%">截止日期：{{task.deadline ? task.deadline : "暂无"}}</div>
                   <div v-show="isOverdue(task.deadline)" style="line-height: 36px; width: 18%; color: #e00"><va-icon color="#e00" name="error_outline" />已逾期</div>
                   <div v-show="!isOverdue(task.deadline)" style="line-height: 36px; width: 18%"/>
-                  <div><va-button @click="switchToTaskComplex(index)" color="#e0e5df" style="color: rgb(40,40,40)">点击修改</va-button></div>
-                </div>
+                  <div><va-button @click="switchToTaskSimple(index)" color="#e0e5df" style="color: rgb(40,40,40)">点击修改</va-button></div>
+                </div> -->
               </va-card-content>
             </va-card>
+            
+            <div style="height: 20px" />
+            
       </va-card-content>
   </va-card>
 </template>
@@ -50,6 +165,9 @@
 export default {
     data () {
         return {
+            search:'',
+            search1:'',
+            status:1,
             id: '',
             courseId: '',
             courseName: '',
@@ -64,7 +182,19 @@ export default {
             tasks: [],
 
             simpleTasks: [],
-            complexTasks: []
+            complexTasks: [],
+            modalVisible: false,
+            displayAnnouncementModalVisible: false,
+            modifyAnnouncementStatus: false,
+            displayAnnouncement: {
+                id:'',
+                courseId:'',
+                name: '',
+                Description: '',
+                url: '',
+                deadline: '',
+                type: ''
+            },
         }
     }, 
     mounted () {
@@ -105,6 +235,28 @@ export default {
             result.then(res => {
                 // console.log(res)
                 this.simpleTasks = res
+                for(var i in this.simpleTasks)
+                {
+                  let now = new Date(new Date().toLocaleDateString())
+                  let deadline = new Date(this.simpleTasks[i].deadline)
+                  if (this.simpleTasks[i].deadline == null || this.simpleTasks[i].deadline == '' || this.simpleTasks[i].deadline == undefined) {
+                    this.simpleTasks[i].over=""
+                  } else if (now <= deadline) {
+                    this.simpleTasks[i].over=""
+                  } else {
+                    this.simpleTasks[i].over="逾期"
+                  }
+                  // if(isOverdue(task.deadline))
+                  //   this.simpleTasks[i].over="逾期"
+                  // else
+                  //   this.simpleTasks[i].over=""
+                  if(!this.simpleTasks[i].deadline)
+                  {
+                    this.simpleTasks[i].deadline="暂无"
+
+                  }
+                }
+                
             })
         })
         fetch(this.$URL + "/task/get/complex?courseId=" + this.courseId, {
@@ -114,25 +266,119 @@ export default {
           let result = response.json()
           result.then(res => {
             this.complexTasks = res
+            for(var i in this.complexTasks)
+                {
+                  let now = new Date(new Date().toLocaleDateString())
+                  let deadline = new Date(this.complexTasks[i].deadline)
+                  if (this.complexTasks[i].deadline == null || this.complexTasks[i].deadline == '' || this.complexTasks[i].deadline == undefined) {
+                    this.complexTasks[i].over=""
+                  } else if (now <= deadline) {
+                    this.complexTasks[i].over=""
+                  } else {
+                    this.complexTasks[i].over="逾期"
+                  }
+                  // if(isOverdue(task.deadline))
+                  //   this.simpleTasks[i].over="逾期"
+                  // else
+                  //   this.simpleTasks[i].over=""
+                  if(!this.complexTasks[i].deadline)
+                  {
+                    this.complexTasks[i].deadline="暂无"
+
+                  }
+                }
           })
         })
+        
     },
   methods: {
-    switchToTaskSimple (index) {
+    generateUrl(fileName) {
+        return this.$URL + "/file/download/courseResource/" + fileName;
+    },
+
+    getUploadUrl() {
+        return this.$URL + "/file/upload/redirect"
+    },
+    additionalData() {
+        return {
+            location: "/courseResource"
+        }
+    },
+    submitUpload() {
+        this.$refs.upload.submit()
+    },
+    handleOk3() {
+      let submitForm = {
+             courseId:this.displayAnnouncement.courseId,  
+             id: this.displayAnnouncement.id,
+             name:this.displayAnnouncement.name,
+             type:this.displayAnnouncement.type,
+             url:this.displayAnnouncement.url,
+             description:this.displayAnnouncement.Description,
+             deadline:this.displayAnnouncement.deadline
+            }
+            if(submitForm.url==null)
+              submitForm.url=''
+            if(submitForm.taskDescription==null)
+              submitForm.taskDescription=''
+            console.log(submitForm)
+            fetch(this.$URL + "/task/update", {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  "satoken": localStorage.getItem("token")
+                },
+                body: JSON.stringify(submitForm)
+            }).then(response => {
+                // console.log(response)
+                let result = response.json()
+                result.then(res => {
+                    // console.log(res)
+                    if (res.code == 200) {
+                        this.$notification.success('修改成功')
+                        this.$router.go(-1)
+                    }
+                })
+            })
+    },
+    handleShowtaskDetail(index) {
+            // this.$modal.info({
+            //     title: this.notifications[index].topic,
+            //     content: this.notifications[index].content
+            // })
+            console.log(index)
+            this.displayAnnouncement.id = index.id
+            console.log("66")
+            this.displayAnnouncement.courseId = index.courseId
+            this.displayAnnouncement.name = index.name
+            this.displayAnnouncement.Description = index.description
+            this.displayAnnouncement.url = index.url
+            this.displayAnnouncement.type = index.type
+            this.displayAnnouncement.deadline=index.deadline
+            this.displayAnnouncementModalVisible = !this.displayAnnouncementModalVisible
+            console.log("66")
+        },
+        handleRemoveAnnouncement(index) {
+            this.removeIndex = index
+            this.removeId = this.notifications[index].id
+            this.removeModalVisible = !this.removeModalVisible
+        },
+    switchToTaskSimple (simpleTasks) {
       // console.log("调用switchToCourse时，courseId传过去了吗？ courseId的值是：" + id)
       // console.log("调用switchToCourse时，index的值是：" + index)
       // console.log(this.tasks[index])
-      console.log("taskName：" + this.simpleTasks[index].name)
+      console.log(simpleTasks)
+      //console.log("taskName：" + this.simpleTasks[index].name)
       this.$router.push({
         name: 'TaskModify',
         params: {
-            taskId: this.simpleTasks[index].id,
-            taskName: this.simpleTasks[index].name,
-            courseId: this.simpleTasks[index].courseId,
-            description: this.simpleTasks[index].description,
-            type: this.simpleTasks[index].type,
-            url: this.simpleTasks[index].url,
-            deadline: this.simpleTasks[index].deadline
+            taskId: simpleTasks.id,
+            taskName: simpleTasks.name,
+            courseId: simpleTasks.courseId,
+            description: simpleTasks.description,
+            type: simpleTasks.type,
+            url:simpleTasks.url,
+            deadline: simpleTasks.deadline
         }
       })
     },
