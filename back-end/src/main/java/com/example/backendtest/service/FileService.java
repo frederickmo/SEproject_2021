@@ -1,10 +1,14 @@
 package com.example.backendtest.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.exception.AlreadyExistException;
+import com.example.backendtest.exception.TaskNotFoundException;
 import com.example.backendtest.model.FileEntity;
 import com.example.backendtest.model.TakesEntity;
+import com.example.backendtest.model.TaskEntity;
 import com.example.backendtest.model.TestContext;
 import com.example.backendtest.repository.FileRepository;
+import com.example.backendtest.repository.TaskRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -15,6 +19,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.tomcat.jni.File;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -27,6 +32,8 @@ import java.util.Optional;
 public class FileService {
 
     private final FileRepository fileRepository;
+    private final TaskRepository taskRepository;
+    private final FileStorageService fileStorageService;
 
     public String addFile(FileEntity file) {
         Optional<FileEntity> fileTemp = fileRepository.findById(file.getUrl());
@@ -37,6 +44,23 @@ public class FileService {
             fileRepository.save(file);
             return "文件加入成功";
         }
+    }
+
+    public JSONObject teacherUploadTaskGuide(MultipartFile file, int courseId, int taskId) {
+        Optional<TaskEntity> taskOptional = taskRepository.findById(taskId);
+        if (taskOptional.isEmpty()) {
+            throw new TaskNotFoundException("该实验项目不存在");
+        }
+        String location = "/taskGuide/" + courseId + "/" + taskId;
+        String fileName = fileStorageService.storeToSpecifiedDirectory(file, location);
+        log.info("存储的文件名：" + fileName);
+        taskOptional.get().setUrl(fileName);
+        taskRepository.save(taskOptional.get());
+        JSONObject json = new JSONObject();
+        json.put("code", 200);
+        json.put("msg", "文件上传成功");
+        return json;
+
     }
 
     public boolean checkExist(Integer id)

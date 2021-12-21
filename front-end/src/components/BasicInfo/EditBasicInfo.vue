@@ -108,13 +108,17 @@ export default {
              * 修改了当提交信息为空时候的逻辑，现在在后端进行检查了，若提交空信息给后端则不修改。
              */
             console.log(this.name, this.gender)
+            console.log(this.genderInput)
             if (this.genderInput == '男') {
                 this.genderSubmit = 1
+                // console.log("?")
             }
-            if (this.genderInput == '女') {
+            else if (this.genderInput == '女') {
                 this.genderSubmit = 2
+                // console.log("??")
             } else {
                 this.genderSubmit = 0
+                // console.log("???")
             }
         
             let req = {
@@ -123,7 +127,7 @@ export default {
                 gender: this.genderSubmit
             }
 
-            console.log("现在提交的是哪个name？", req.name)
+            // console.log(req)
 
             fetch(this.$URL + "/user/update", {
                 method: "PUT",
@@ -134,7 +138,7 @@ export default {
                 body: JSON.stringify(req)
             }).then(response => response.json())
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 if (res.code == 200) {
                     this.$notification.success("修改成功");
                     localStorage.setItem("gender", this.gender)
@@ -145,7 +149,8 @@ export default {
                      * 经实践，填path比填name更快。
                      */
                     // this.$router.replace({name: 'Refresh'})
-                    this.$router.replace({path: '/refresh'})
+                    // this.$router.replace({path: '/refresh'})
+                    this.$router.push({name: 'BasicInfo'})
                 } else {
                     this.$notification.error("修改失败")
                 }
