@@ -31,12 +31,31 @@
       placeholder="请输入修改后的内容"
       outline
     /></div>
-    <div class="course-semester">项目url：{{this.url}}<va-input
-      class="mb-4"
-      v-model="this.url"
-      placeholder="请输入修改后的内容"
-      outline
-    /></div>
+    <div class="course-semester">项目文档： </div><div><va-button color="#aaa" style="color: #777" flat @click="uploadModalVisible=!uploadModalVisible">上传</va-button></div>
+<a-modal
+  v-model:visible="uploadModalVisible"
+  >
+  <template #title>
+      上传文件
+  </template>
+  <el-upload
+    ref="upload"
+    :action="getUploadUrl()"
+    :headers="headers()"
+    :auto-upload="false"
+    style="text-align: center"
+  >
+    <template #trigger>
+      <va-button gradient :rounded="false">选择文件</va-button>
+    </template>
+    <va-button style="margin-left: 20px" flat :rounded="false" @click="submitUpload">上传</va-button>
+    <!-- <template #tip>
+      <div class="el-upload__tip">
+        jpg/png files with a size less than 500kb
+      </div>
+    </template> -->
+  </el-upload> 
+</a-modal>
             <div style="height: 20px" />
 
             <va-button @click="handleClick3" color="#e0e5df" style="color: rgb(40,40,40)">确认修改</va-button>
@@ -67,6 +86,7 @@ export default {
         return {
           visible3:false,
           visible4:false,
+          uploadModalVisible: false,
             id: '',
             taskId:'',
             type: '',
@@ -113,6 +133,17 @@ export default {
 
     },
   methods: {
+    headers(){
+            return {
+                "satoken": localStorage.getItem("token")
+            }
+        },
+     getUploadUrl() {
+            return this.$URL + "/file/upload/redirect"
+        },
+    submitUpload() {
+            this.$refs.upload.submit()
+        },
      handleClick3() {
       this.visible3 = true;
     },

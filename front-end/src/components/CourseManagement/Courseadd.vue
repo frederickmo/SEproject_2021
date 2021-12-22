@@ -1,7 +1,7 @@
 <template>
   <va-card gradient color="#e0e5df">
-      <va-card-content style="text-align: left">
-          <div class="course-title">课程名字：<va-input
+    <va-card-content style="text-align: left">
+         <!-- <div class="course-title">课程名字：<va-input
       class="mb-4"
       v-model="this.courseName"
       placeholder="请输入课程名字"
@@ -30,10 +30,36 @@
       placeholder="请输入学年"
       outline
     /></div>
-            <div style="height: 20px" />
-
-            <va-button @click="addcourse()" color="#e0e5df" style="color: rgb(40,40,40)">确认添加</va-button>
-           
+            <div style="height: 20px" /> -->
+        <div  style="display: flex; line-height: 200%; margin-top: 10px">
+            <div style=" width: 18%;  font-weight: bold; text-align: center">课程名称：</div>
+            <div style="width: 20%">
+                <a-input v-model="this.courseName" />
+            </div>
+            <div style="width: 18%; font-weight: bold; text-align: center">课程Id：</div>
+            <div style="width: 30%">
+                <a-input v-model="this.courseId"  />
+            </div>
+        </div>
+        <div  style="display: flex; line-height: 200%; margin-top: 10px">
+            <div style="width: 18%; font-weight: bold; text-align: center">开设年份：</div>
+            <div style="width: 20%">
+                <a-year-picker v-model="this.year" style="width: 200px;" />
+            </div>
+            <div style="width: 18%; font-weight: bold; text-align: center">学年：</div>
+            <div style="width: 30%">
+                <a-input v-model="this.semester"  />
+            </div>
+        </div>
+        <div  style="display: flex; line-height: 200%; margin-top: 10px">
+            <div style="width: 18%; font-weight: bold; text-align: center">课程描述：</div>
+            <div style="width: 30%">
+                <a-input v-model="this.courseDescription"  />
+            </div>
+        </div>
+        <div style="text-align:center">
+            <a-button type="outline" @click="addcourse()" color="#e0e5df" style="color: rgb(40,40,40)">确认添加</a-button>
+        </div>
       </va-card-content>
   </va-card>
 </template>
@@ -67,6 +93,7 @@ export default {
                 description:this.courseDescription,
                 manager:localStorage.getItem("userId")
             }
+            console.log(submitForm)
             fetch(this.$URL + "/course/add", {
                 method: "POST",
                 headers: {
@@ -75,7 +102,7 @@ export default {
                 },
                 body: JSON.stringify(submitForm)
             }).then(response => {
-                // console.log(response)
+                 console.log(response)
                 let result = response.json()
                 result.then(res => {
                     // console.log(res)
