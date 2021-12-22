@@ -3,7 +3,7 @@ package com.example.backendtest.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user", schema = "backend_demo", catalog = "")
+@Table(name = "user", schema = "backend", catalog = "")
 public class UserEntity {
     private int id;
     private Integer activated;
