@@ -96,6 +96,13 @@ public class FileController {
                 .collect(Collectors.toList());
     }
 
+    @SaCheckLogin
+    @ApiOperation("教师接口 - 上传实验说明文档")
+    @PostMapping("/upload/taskGuide")
+    public JSONObject teacherUploadTaskGuide(@RequestParam("file")MultipartFile file, int courseId, int taskId) {
+        return fileService.teacherUploadTaskGuide(file, courseId, taskId);
+    }
+
     /**
      * 以下是获取根目录文件的API
      */

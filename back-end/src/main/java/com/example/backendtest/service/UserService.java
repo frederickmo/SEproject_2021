@@ -207,34 +207,6 @@ public class UserService {
                 userOptional.get().setName(user.getName());
                 log.info("用户修改姓名为 " + user.getName());
             }
-            if (user.getPassword().equals("")) {
-                log.info("用户提交新的密码：" + user.getPassword());
-                log.info("用户未更新密码");
-            } else {
-                userOptional.get().setPassword(user.getPassword());
-                log.info("用户修改密码为 " + user.getPassword());
-            }
-            if (user.getEmail().equals((""))) {
-                log.info("用户提交新的邮箱：" + user.getEmail());
-                log.info("用户未更新邮箱");
-            } else {
-                userOptional.get().setEmail(user.getEmail());
-                log.info("用户修改邮箱为 " + user.getEmail());
-            }
-            if (user.getIdentity() == null) {
-                log.info("用户提交新的身份信息：" + user.getIdentity());
-                log.info("用户未更新身份");
-            } else {
-                userOptional.get().setIdentity(user.getIdentity());
-                log.info("用户修改身份为 " + user.getIdentity());
-            }
-            if (user.getActivated() == null) {
-                log.info("用户更新激活状态：" + user.getActivated());
-                log.info("用户未更新激活状态");
-            } else {
-                userOptional.get().setActivated(user.getActivated());
-                log.info("用户修改激活状态为 " + user.getActivated());
-            }
             userRepository.save(userOptional.get());
             JSONObject json = new JSONObject();
             json.put("code", 200);
