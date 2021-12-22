@@ -111,7 +111,7 @@ export default {
                 taskId: '',
                 taskName: '',
                 deadline: '',
-
+                url:'',
                 form_studentid: '',
                 form_name: '',
                 form_cooperator: '',
@@ -165,6 +165,7 @@ export default {
             result.then(res => {
                 this.taskName = res.name
                 this.deadline = res.deadline
+                this.url=res.url
                 // console.log("deadline: " , this.deadline)
             })
         })
@@ -213,7 +214,7 @@ export default {
         }
         },
         getTaskGuide() {
-            window.open(this.$URL + "/file/download/taskGuide/" + this.courseId + "/" + this.taskId + ".pdf");
+            window.open(this.$URL + "/file/download/taskGuide/" + this.courseId + "/" + this.taskId + "/"+this.url);
         },
         handleSubmitButton() {
             if (this.isOverdue()) {
@@ -266,7 +267,7 @@ export default {
                 let result = response.json()
                 result.then(res => {
                     // console.log(res)
-                    if (res.code == 200) {
+                    if (res.status == 200) {
                         this.$notification.success('提交成功！')
                         this.$router.go(-1)
                     }

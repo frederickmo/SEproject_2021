@@ -29,6 +29,7 @@
             :action="getFileUploadUrl()"
             :auto-upload="false"
             :data="additionalData()"
+            :headers="headers()"
             style="text-align: center"
             :on-success="handleOnSuccess"
             :on-error="handleOnError"
@@ -56,7 +57,7 @@ export default {
 
             studentId: '',
             courseId: '',
-
+            url:'',
             isSubmitted: false,
         }
     },
@@ -81,6 +82,7 @@ export default {
             result.then(res => {
                 this.taskName = res.name
                 this.deadline = res.deadline
+                this.url=res.url
             })
         })
 
@@ -111,6 +113,11 @@ export default {
         })
     },
     methods: {
+        headers(){
+            return {
+                "satoken": localStorage.getItem("token")
+            }
+        },
         isOverdue () {
         /**
          * now的写法用当前时间转日期再转时间来进行比较的原因是
@@ -127,7 +134,7 @@ export default {
         }
         },
         getTaskGuide() {
-            window.open(this.$URL + "/file/download/taskGuide/" + this.courseId + "/" + this.taskId + ".pdf");
+            window.open(this.$URL + "/file/download/taskGuide/" + this.courseId + "/" + this.taskId + "/"+this.url);
         },
         getFileUploadUrl() {
             return this.$URL + "/finishes/upload/complex"
