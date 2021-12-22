@@ -2,75 +2,86 @@
   <va-card gradient color="#e0e5df">
       <va-card-content style="text-align: left">
         <a-modal
-                v-model:visible="displayAnnouncementModalVisible"
-                hide-cancel
-                ok-text="关闭"
-                :close="this.modifyAnnouncementStatus=false"
-                >
-                    <template #title>
-                        {{modifyAnnouncementStatus ? "修改信息" : displayAnnouncement.name}}
+          v-model:visible="displayAnnouncementModalVisible"
+          hide-cancel
+          ok-text="关闭"
+          :close="this.modifyAnnouncementStatus=false"
+          >
+              <template #title>
+                  {{modifyAnnouncementStatus ? "修改信息" : displayAnnouncement.name}}
+              </template>
+              <a-textarea
+              style="margin-bottom: 10px"
+              v-show="!modifyAnnouncementStatus"
+              v-model="this.displayAnnouncement.Description" 
+              auto-size
+              readonly />
+                <a-textarea
+              style="margin-bottom: 10px"
+              v-show="!modifyAnnouncementStatus"
+              v-model="this.displayAnnouncement.deadline" 
+              auto-size
+              readonly />
+              
+              
+              <div v-show="modifyAnnouncementStatus">
+                  <div style="font-weight: bold; margin-bottom: 5px">名称</div>
+                  <div style="margin-bottom: 5px">
+                    <a-input v-model="this.displayAnnouncement.name" />
+                  </div>
+                  <div style="font-weight: bold; margin-bottom: 5px">项目说明</div>
+                  <div style="margin-bottom: 5px">
+                    <a-input v-model="this.displayAnnouncement.Description" />
+                  </div>
+                  <div style="font-weight: bold; margin-bottom: 5px">截止日期</div>
+                  <div style="margin-bottom: 5px">
+                    <a-textarea v-model="this.displayAnnouncement.deadline" auto-size />
+                  </div>
+                  <div style="font-weight: bold; margin-bottom: 5px">类型</div>
+                  
+              </div>
+              <a-button style="margin-top: 10px" v-show="(!modifyAnnouncementStatus)"
+              @click="this.modifyAnnouncementStatus=!this.modifyAnnouncementStatus">
+              点击修改
+              </a-button>
+              <a-button v-show="modifyAnnouncementStatus" @click="handleOk3">确认提交</a-button>
+        </a-modal>
+        <a-modal
+          v-model:visible="displayAnnouncementModalVisible1"
+          hide-cancel
+          ok-text="关闭"
+          :close="this.modifyAnnouncementStatus1=false"
+          >
+              <template #title>
+                  上传实验说明文档
+              </template>
+              <div>  
+                <div style="font-weight: bold; margin-bottom: 5px">项目文档</div>
+                <div style="margin-bottom: 5px">
+                 <el-upload
+                    ref="upload"
+                    :action="getUploadUrl()"
+                    :headers="headers()"
+                    :auto-upload="false"
+                    :data="additionalData()"
+                    style="text-align: center"
+                    :on-success="handleOnSuccess"
+                    :on-error="handleOnError"
+                  >
+                    <template #trigger>
+                      <va-button @click="handleUploadFileButton" gradient :rounded="false">选择文件</va-button>
                     </template>
-                    <a-textarea
-                    style="margin-bottom: 10px"
-                    v-show="!modifyAnnouncementStatus"
-                    v-model="this.displayAnnouncement.Description" 
-                    auto-size
-                    readonly />
-                     <a-textarea
-                    style="margin-bottom: 10px"
-                    v-show="!modifyAnnouncementStatus"
-                    v-model="this.displayAnnouncement.deadline" 
-                    auto-size
-                    readonly />
-                    
-                    
-                    <div v-show="modifyAnnouncementStatus">
-                        <div style="font-weight: bold; margin-bottom: 5px">名称</div>
-                        <div style="margin-bottom: 5px">
-                          <a-input v-model="this.displayAnnouncement.name" />
-                        </div>
-                        <div style="font-weight: bold; margin-bottom: 5px">项目说明</div>
-                        <div style="margin-bottom: 5px">
-                          <a-input v-model="this.displayAnnouncement.Description" />
-                        </div>
-                        <div style="font-weight: bold; margin-bottom: 5px">截止日期</div>
-                        <div style="margin-bottom: 5px">
-                          <a-textarea v-model="this.displayAnnouncement.deadline" auto-size />
-                        </div>
-                        <div style="font-weight: bold; margin-bottom: 5px">类型</div>
-                        <div style="margin-bottom: 10px">
-                            <a-radio-group v-model="this.displayAnnouncement.type">
-                                <a-radio value="0">小型</a-radio>
-                                <a-radio value="1">大型</a-radio>
-                        <div style="font-weight: bold; margin-bottom: 5px">项目文档</div>
-                        <div style="margin-bottom: 5px">
-                          <el-upload
-                            ref="upload"
-                            :action="getUploadUrl()"
-                            :auto-upload="false"
-                            style="text-align: center"
-                          >
-                            <template #trigger>
-                              <va-button gradient :rounded="false">选择文件</va-button>
-                            </template>
-                            <va-button style="margin-left: 20px" flat :rounded="false" @click="submitUpload">上传</va-button>
-                            <!-- <template #tip>
-                              <div class="el-upload__tip">
-                                jpg/png files with a size less than 500kb
-                              </div>
-                            </template> -->
-                          </el-upload> 
-                        </div>        
-                            </a-radio-group>
-                        </div>
-                    </div>
-                    <a-button style="margin-top: 10px" v-show="(!modifyAnnouncementStatus)"
-                    @click="this.modifyAnnouncementStatus=!this.modifyAnnouncementStatus">
-                    点击修改
-                    </a-button>
-                    <a-button v-show="modifyAnnouncementStatus" @click="handleOk3">确认提交</a-button>
-                </a-modal>
-
+                    <va-button style="margin-left: 20px" flat :rounded="false" @click="submitUpload">上传</va-button>
+                    <!-- <template #tip>
+                      <div class="el-upload__tip">
+                        jpg/png files with a size less than 500kb
+                      </div>
+                    </template> -->
+                  </el-upload> 
+                </div>        
+              </div>      
+              
+        </a-modal>
           <h1>{{this.courseName}}</h1>
           <div class="course-description">{{this.courseDescription}}</div>
             <!-- <va-card 
@@ -105,6 +116,11 @@
               type="danger"
               @click="handleShowtaskDetail(scope.row)"
               >查看</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleShowtaskDetail1(scope.row)"
+              >上传实验说明文档</el-button>  
             </template>
     </el-table-column>
   </el-table>
@@ -165,6 +181,7 @@
 export default {
     data () {
         return {
+          isSubmitted: false,
             search:'',
             search1:'',
             status:1,
@@ -174,7 +191,7 @@ export default {
             courseDescription: '',
             year: '',
             semester: '',
-
+            taskId:'',
             courseInfo: [],
 
             courseDeadlines: [],
@@ -186,6 +203,8 @@ export default {
             modalVisible: false,
             displayAnnouncementModalVisible: false,
             modifyAnnouncementStatus: false,
+            displayAnnouncementModalVisible1: false,
+            modifyAnnouncementStatus1: false,
             displayAnnouncement: {
                 id:'',
                 courseId:'',
@@ -292,16 +311,31 @@ export default {
         
     },
   methods: {
-    generateUrl(fileName) {
-        return this.$URL + "/file/download/courseResource/" + fileName;
+    headers(){
+            return {
+                "satoken": localStorage.getItem("token")
+            }
+        },
+    // getFileUploadUrl() {
+    //     return this.$URL + "/finishes/upload/complex"
+    // },
+    handleOnSuccess() {
+      this.$notification.success("上传成功")
+        },
+    handleOnError() {
+      this.$notification.error("上传失败")
     },
-
+    
     getUploadUrl() {
-        return this.$URL + "/file/upload/redirect"
+        return this.$URL + "/file/upload/taskGuide"
     },
     additionalData() {
+      console.log(this.courseId + "/" + this.taskId + ".pdf")
         return {
-            location: "/courseResource"
+            // "newFileName": this.courseId + "/" + this.taskId + ".pdf",
+            // "location": "/taskGuide/" + this.courseId + "/" + this.taskId,
+            "courseId": this.courseId,
+            "taskId": this.taskId
         }
     },
     submitUpload() {
@@ -342,27 +376,37 @@ export default {
             })
     },
     handleShowtaskDetail(index) {
-            // this.$modal.info({
-            //     title: this.notifications[index].topic,
-            //     content: this.notifications[index].content
-            // })
-            console.log(index)
-            this.displayAnnouncement.id = index.id
-            console.log("66")
-            this.displayAnnouncement.courseId = index.courseId
-            this.displayAnnouncement.name = index.name
-            this.displayAnnouncement.Description = index.description
-            this.displayAnnouncement.url = index.url
-            this.displayAnnouncement.type = index.type
-            this.displayAnnouncement.deadline=index.deadline
-            this.displayAnnouncementModalVisible = !this.displayAnnouncementModalVisible
-            console.log("66")
-        },
-        handleRemoveAnnouncement(index) {
-            this.removeIndex = index
-            this.removeId = this.notifications[index].id
-            this.removeModalVisible = !this.removeModalVisible
-        },
+      // this.$modal.info({
+      //     title: this.notifications[index].topic,
+      //     content: this.notifications[index].content
+      // })
+      console.log(index)
+      this.displayAnnouncement.id = index.id
+      console.log("66")
+      this.displayAnnouncement.courseId = index.courseId
+      this.displayAnnouncement.name = index.name
+      this.displayAnnouncement.Description = index.description
+      this.displayAnnouncement.url = index.url
+      this.displayAnnouncement.type = index.type
+      this.displayAnnouncement.deadline=index.deadline
+      this.displayAnnouncementModalVisible = !this.displayAnnouncementModalVisible
+      console.log("66")
+    },
+    handleShowtaskDetail1(index) {
+      // this.$modal.info({
+      //     title: this.notifications[index].topic,
+      //     content: this.notifications[index].content
+      // })
+      console.log(index)
+      this.taskId=index.id
+      this.displayAnnouncementModalVisible1 = !this.displayAnnouncementModalVisible1
+      console.log("66")
+    },
+    handleRemoveAnnouncement(index) {
+        this.removeIndex = index
+        this.removeId = this.notifications[index].id
+        this.removeModalVisible = !this.removeModalVisible
+    },
     switchToTaskSimple (simpleTasks) {
       // console.log("调用switchToCourse时，courseId传过去了吗？ courseId的值是：" + id)
       // console.log("调用switchToCourse时，index的值是：" + index)

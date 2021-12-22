@@ -41,6 +41,7 @@
   <el-upload
     ref="upload"
     :action="getUploadUrl()"
+    :headers="headers()"
     :auto-upload="false"
     style="text-align: center"
   >
@@ -132,6 +133,11 @@ export default {
 
     },
   methods: {
+    headers(){
+            return {
+                "satoken": localStorage.getItem("token")
+            }
+        },
      getUploadUrl() {
             return this.$URL + "/file/upload/redirect"
         },
