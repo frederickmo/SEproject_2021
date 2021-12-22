@@ -81,64 +81,65 @@
         </div>
 
         <div v-if="this.modifystatus==1">
-        <div style="height: 12px" />
-        <div style="text-align:left">课程信息查看</div>
-        <div v-if="this.modifystatus==1" style="display: flex; line-height: 200%; margin-top: 10px">
-            <div style=" width: 18%;  font-weight: bold; text-align: center">课程名称：</div>
-            <div style="width: 20%">
-                <a-input v-model="this.courseName" readonly/>
+          <div style="height: 12px" />
+            <div style="text-align:left">课程信息查看</div>
+            <div v-if="this.modifystatus==1" style="display: flex; line-height: 200%; margin-top: 10px">
+                <div style=" width: 18%;  font-weight: bold; text-align: center">课程名称：</div>
+                <div style="width: 20%">
+                    <a-input v-model="this.courseName" readonly/>
+                </div>
+                <div style="width: 18%; font-weight: bold; text-align: center">课程描述：</div>
+                <div style="width: 30%">
+                    <a-input v-model="this.courseDescription"  readonly/>
+                </div>
             </div>
-            <div style="width: 18%; font-weight: bold; text-align: center">课程描述：</div>
-            <div style="width: 30%">
-                <a-input v-model="this.courseDescription"  readonly/>
+            <div v-if="this.modifystatus==1" style="display: flex; line-height: 200%; margin-top: 10px">
+                <div style="width: 18%; font-weight: bold; text-align: center">开设年份：</div>
+                <div style="width: 20%">
+                    <a-input v-model="this.year" readonly/>
+                </div>
+                <div style="width: 18%; font-weight: bold; text-align: center">学年：</div>
+                <div style="width: 30%">
+                    <a-input v-model="this.semester"  readonly/>
+                </div>
             </div>
-        </div>
-        <div v-if="this.modifystatus==1" style="display: flex; line-height: 200%; margin-top: 10px">
-            <div style="width: 18%; font-weight: bold; text-align: center">开设年份：</div>
-            <div style="width: 20%">
-                <a-input v-model="this.year" readonly/>
-            </div>
-            <div style="width: 18%; font-weight: bold; text-align: center">学年：</div>
-            <div style="width: 30%">
-                <a-input v-model="this.semester"  readonly/>
-            </div>
-        </div>
-        <div style="height: 12px" />
-        <div style="text-align:center">
-            <!-- <a-button @click="handleOk3()" color="#FF0000" style="background-color: rgb(0,0,0) text-align:center">提交更改</a-button> -->
-            <a-button  @click="this.modifystatus=3" color="#e0e5df" style="color: rgb(40,40,40); ">点击修改</a-button>
-        </div>
+            <div style="height: 12px" />
+            <div style="text-align:center">
+              <!-- <a-button @click="handleOk3()" color="#FF0000" style="background-color: rgb(0,0,0) text-align:center">提交更改</a-button> -->
+              <a-button  @click="this.modifystatus=3" color="#e0e5df" style="color: rgb(40,40,40); ">点击修改</a-button>
+          </div>
         </div>
 
         <div v-if="this.modifystatus==3">
-        <div style="height: 12px" />
-        <div style="text-align:left">课程信息修改</div>
-        <div  style="display: flex; line-height: 200%; margin-top: 10px">
-            <div style=" width: 18%;  font-weight: bold; text-align: center">课程名称：</div>
-            <div style="width: 20%">
-                <a-input v-model="this.courseName" />
-            </div>
-            <div style="width: 18%; font-weight: bold; text-align: center">课程描述：</div>
-            <div style="width: 30%">
-                <a-input v-model="this.courseDescription"  />
-            </div>
-        </div>
-        <div  style="display: flex; line-height: 200%; margin-top: 10px">
-            <div style="width: 18%; font-weight: bold; text-align: center">开设年份：</div>
-            <div style="width: 20%">
-                <a-input v-model="this.year" />
-            </div>
-            <div style="width: 18%; font-weight: bold; text-align: center">学年：</div>
-            <div style="width: 30%">
-                <a-input v-model="this.semester"  />
-            </div>
-        </div>
-        <div style="height: 12px" />
-        <div style="text-align:center">
-            <!-- <a-button @click="handleOk3()" color="#FF0000" style="background-color: rgb(0,0,0) text-align:center">提交更改</a-button> -->
-            <a-button  @click="handleOk3()" color="#e0e5df" style="color: rgb(40,40,40); ">确认修改</a-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a-button v-if="this.on==0" @click="handleClick4"  status="danger" style="background-color: rgb(0,0,0) text-align:center">点击删除课程</a-button> 
-        </div>
+          <div style="height: 12px" />
+          <div style="text-align:left">课程信息修改</div>
+          <div  style="display: flex; line-height: 200%; margin-top: 10px">
+              <div style=" width: 18%;  font-weight: bold; text-align: center">课程名称：</div>
+              <div style="width: 20%">
+                  <a-input v-model="this.courseName" />
+              </div>
+              <div style="width: 18%; font-weight: bold; text-align: center">课程描述：</div>
+              <div style="width: 30%">
+                  <a-input v-model="this.courseDescription"  />
+              </div>
+          </div>
+          <div  style="display: flex; line-height: 200%; margin-top: 10px">
+              <div style="width: 18%; font-weight: bold; text-align: center">开设年份：</div>
+              <div style="width: 20%">
+                  <a-input v-model="this.year" />
+              </div>
+              <div style="width: 18%; font-weight: bold; text-align: center">学年：</div>
+              <div style="width: 30%">
+                  <a-input v-model="this.semester"  />
+              </div>
+          </div>
+          <div style="height: 12px" />
+          <div style="text-align:center">
+              <!-- <a-button @click="handleOk3()" color="#FF0000" style="background-color: rgb(0,0,0) text-align:center">提交更改</a-button> -->
+              <a-button  @click="handleOk3()" color="#e0e5df" style="color: rgb(40,40,40); ">确认修改</a-button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <a-button v-if="this.on==0" @click="handleClick4"  status="danger" style="background-color: rgb(0,0,0) text-align:center">点击删除课程</a-button> 
+          </div>
         </div>
       <!-- </va-card-content>
         </va-card> -->
@@ -153,9 +154,9 @@
       <div v-if="this.modifystatus==2">
         <div style="height: 12px" />
         <div style="display: flex">
-                  <a-button size="mini" style="margin-right: 10px" @click="this.status=1">学生管理</a-button>
-                  <a-button size="mini" @click="this.status=2">教师管理</a-button>
-              </div>
+          <a-button size="mini" style="margin-right: 10px" @click="this.status=1">学生管理</a-button>
+          <a-button size="mini" @click="this.status=2">教师管理</a-button>
+          </div>
            <!-- <va-card 
             v-for="(student, index) in student"
             :key="index"
@@ -211,70 +212,69 @@
               </va-card-content>
               
             </va-card> -->
-    <el-table v-if="this.status==1"
-    :data="
-      student.filter(
-        (data) =>
-          !search || data.name.toLowerCase().includes(search.toLowerCase())
-      )
-    "
-    style="width: 100%"
-  >
-    <el-table-column label="Id" prop="id" />
-    <el-table-column label="Name" prop="name" />
-    <el-table-column align="right">
-      <template #header>
-        <el-input v-model="search" size="mini" placeholder="Type to search" />
-      </template>
-      <template #default="scope">
-        
-        <el-button
-          size="mini"
-          type="danger"
-          @click="DropCourse(scope.row)"
-          >点击退课</el-button
-        >
-        </template>
-    </el-table-column>
-  </el-table>
+          <el-table v-if="this.status==1"
+          :data="student.filter(
+              (data) =>
+                !search || data.name.toLowerCase().includes(search.toLowerCase())
+            )
+          "
+          style="width: 100%"
+          >
+            <el-table-column label="Id" prop="id" />
+            <el-table-column label="Name" prop="name" />
+            <el-table-column align="right">
+            <template #header>
+              <el-input v-model="search" size="mini" placeholder="Type to search" />
+            </template>
+            <template #default="scope">
+              
+              <el-button
+                size="mini"
+                type="danger"
+                @click="DropCourse(scope.row)"
+                >点击退课</el-button
+              >
+              </template>
+              </el-table-column>
+          </el-table>
 
-   <el-table v-show="this.status==2"
-    :data="
-      teacher.filter(
-        (data) =>
-          !search || data.name.toLowerCase().includes(search.toLowerCase())
-      )
-    "
-    style="width: 100%"
-  >
-    <el-table-column label="Id" prop="id" />
-    <el-table-column label="Name" prop="name" />
-    <el-table-column align="right">
-      <template #header>
-        <el-input v-model="search" size="mini" placeholder="Type to search" />
-      </template>
-      <template #default="scope">
+          <el-table v-show="this.status==2"
+            :data="
+              teacher.filter(
+                (data) =>
+                  !search || data.name.toLowerCase().includes(search.toLowerCase())
+              )
+            "
+            style="width: 100%"
+          >
+            <el-table-column label="Id" prop="id" />
+            <el-table-column label="Name" prop="name" />
+            <el-table-column align="right">
+            <template #header>
+              <el-input v-model="search" size="mini" placeholder="Type to search" />
+            </template>
+            <template #default="scope">
         
-        <el-button
-          size="mini"
-          type="danger"
-          @click="DropmanageCourse(scope.row)"
-          >点击取消授课</el-button
-        >
-        </template>
-    </el-table-column>
-  </el-table>
-  <div style="height: 12px" />
-  <div style="text-align:center">
-  <a-button v-if="this.on==0" @click="handleClick" color="#e0e5df" style="color: rgb(40,40,40); ">点击添加教师</a-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+            <el-button
+              size="mini"
+              type="danger"
+              @click="DropmanageCourse(scope.row)"
+              >点击取消授课</el-button
+            >
+            </template>
+            </el-table-column>
+          </el-table>
+          <div style="height: 12px" />
+          <div style="text-align:center">
+          <a-button v-if="this.on==0" @click="handleClick" color="#e0e5df" style="color: rgb(40,40,40); ">点击添加教师</a-button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
          
-   <a-button v-if="this.on==0" @click="handleClick1" color="#e0e5df" style="color: rgb(40,40,40); ">点击添加学生</a-button>
-</div>
- <div style="height: 10px" />
+          <a-button v-if="this.on==0" @click="handleClick1" color="#e0e5df" style="color: rgb(40,40,40); ">点击添加学生</a-button>
+          </div>
+          <div style="height: 10px" />
 
       </div>
-      <!-- </va-card-content>
-  </va-card> -->
+     
 
 
 
