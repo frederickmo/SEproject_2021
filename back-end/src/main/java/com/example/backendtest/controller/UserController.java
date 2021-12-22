@@ -3,6 +3,7 @@ package com.example.backendtest.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.util.SaResult;
 import com.alibaba.fastjson.JSONObject;
+import com.example.backendtest.model.SignEntity;
 import com.example.backendtest.model.UserEntity;
 import com.example.backendtest.service.UserService;
 import com.example.backendtest.util.VerifyEmailUtil;
@@ -150,10 +151,45 @@ public class UserController {
         return verifyEmailUtil.sendMail(request,email);
     }
 
-    @GetMapping("/verify")
+    @PostMapping("/verify")
     @ApiOperation("检验验证码")
     public JSONObject verify(String inputCode, HttpServletRequest request){
-        return verifyEmailUtil.checkCode(inputCode,request);
+       return verifyEmailUtil.checkCode(inputCode,request);
     }
 
+    @PostMapping("/verifyAndActivate")
+    @ApiOperation("检验验证码并激活")
+    public JSONObject verify(String inputCode, HttpServletRequest request,@RequestBody UserEntity user){
+
+        JSONObject jsonObject = new JSONObject();
+        JSONObject json = new JSONObject();
+        jsonObject = verifyEmailUtil.checkCode(inputCode,request);
+        if(jsonObject.getInteger("status")==200)
+        {
+            //进行激活
+            userService.administratorUpdateUserInfo(user);
+            json.put("status", 200);
+            json.put("message", "验证成功并激活");
+        }
+        else
+        {
+            json.put("status", 500);
+            json.put("message", "验证错误");
+        }
+        return json;
+    }
+
+    @PutMapping("/sign")
+    @ApiOperation("学生签到")
+    public JSONObject sign(int userId)
+    {
+        return userService.sign(userId);
+    }
+
+    @GetMapping("/getSign")
+    @ApiOperation("获得学生的签到信息")
+    public SignEntity getSign(int userId)
+    {
+        return userService.getSign(userId);
+    }
 }

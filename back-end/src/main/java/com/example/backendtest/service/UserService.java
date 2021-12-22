@@ -5,13 +5,21 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.exception.*;
+import com.example.backendtest.model.SignEntity;
 import com.example.backendtest.model.UserEntity;
+import com.example.backendtest.repository.SignRepository;
 import com.example.backendtest.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.LoginException;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +29,8 @@ import java.util.Optional;
 public class UserService {
 
     private UserRepository userRepository;
+
+    private SignRepository signRepository;
 
     public JSONObject add(UserEntity user) {
         // TODO: 总感觉用户注册的检查选项少了什么东西，后续有待完善
@@ -197,34 +207,6 @@ public class UserService {
                 userOptional.get().setName(user.getName());
                 log.info("用户修改姓名为 " + user.getName());
             }
-            if (user.getPassword().equals("")) {
-                log.info("用户提交新的密码：" + user.getPassword());
-                log.info("用户未更新密码");
-            } else {
-                userOptional.get().setPassword(user.getPassword());
-                log.info("用户修改密码为 " + user.getPassword());
-            }
-            if (user.getEmail().equals((""))) {
-                log.info("用户提交新的邮箱：" + user.getEmail());
-                log.info("用户未更新邮箱");
-            } else {
-                userOptional.get().setEmail(user.getEmail());
-                log.info("用户修改邮箱为 " + user.getEmail());
-            }
-            if (user.getIdentity() == null) {
-                log.info("用户提交新的身份信息：" + user.getIdentity());
-                log.info("用户未更新身份");
-            } else {
-                userOptional.get().setIdentity(user.getIdentity());
-                log.info("用户修改身份为 " + user.getIdentity());
-            }
-            if (user.getActivated() == null) {
-                log.info("用户更新激活状态：" + user.getActivated());
-                log.info("用户未更新激活状态");
-            } else {
-                userOptional.get().setActivated(user.getActivated());
-                log.info("用户修改激活状态为 " + user.getActivated());
-            }
             userRepository.save(userOptional.get());
             JSONObject json = new JSONObject();
             json.put("code", 200);
@@ -257,6 +239,69 @@ public class UserService {
             return json;
         }
     }
-}
+
+    public JSONObject sign(int userId)
+    {
+        Optional<SignEntity> signEntity = signRepository.findById(userId);
+        if(signEntity.isEmpty())
+        {
+            Optional<SignEntity> sign = Optional.of(new SignEntity());
+            sign.get().setStudentId(userId);
+            sign.get().setCount(1);
+            sign.get().setUpdateTime(Date.valueOf(LocalDate.now()));
+            log.info("学生新增签到信息");
+            signEntity = sign;
+        }
+        else
+        {
+            if(dateCompare(signEntity.get().getUpdateTime(),Date.valueOf(LocalDate.now()))!=0)
+            {
+                signEntity.get().setCount(signEntity.get().getCount() + 1);
+                signEntity.get().setUpdateTime(Date.valueOf(LocalDate.now()));
+                log.info("学生签到信息更新");
+            }
+        }
+        signRepository.save(signEntity.get());
+        JSONObject json = new JSONObject();
+        json.put("code", 200);
+        json.put("msg", "签到成功");
+        return json;
+    }
+
+    public SignEntity getSign(int userId) {
+
+        Optional<SignEntity> signEntity = signRepository.findById(userId);
+        if(signEntity.isEmpty())
+        {
+            throw new UserNotFoundException("用户没有签到信息");
+        }
+        else
+        {
+            return signEntity.get();
+        }
+    }
+
+
+    /**
+     * 比较日期是否在同一天
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static int dateCompare(Date date1, Date date2) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        String dateFirst = dateFormat.format(date1);
+        String dateLast = dateFormat.format(date2);
+        int dateFirstIntVal = Integer.parseInt(dateFirst);
+        int dateLastIntVal = Integer.parseInt(dateLast);
+        if (dateFirstIntVal > dateLastIntVal) {
+            return 1;
+        } else if (dateFirstIntVal < dateLastIntVal) {
+            return -1;
+        }
+        return 0;
+    }
+
+    }
 
 
