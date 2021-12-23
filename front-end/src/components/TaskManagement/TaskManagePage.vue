@@ -38,8 +38,12 @@
                     <a-textarea v-model="this.displayAnnouncement.deadline" auto-size />
                   </div>
                   <div style="font-weight: bold; margin-bottom: 5px">类型</div>
-                  
+                  <a-radio-group v-model="this.displayAnnouncement.url" type="button">
+                    <a-radio value="0">小型项目</a-radio>
+                    <a-radio value="1">大型项目</a-radio>
+                  </a-radio-group>
               </div>
+              <div style="height: 20px" />
               <a-button style="margin-top: 10px" v-show="(!modifyAnnouncementStatus)"
               @click="this.modifyAnnouncementStatus=!this.modifyAnnouncementStatus">
               点击修改
