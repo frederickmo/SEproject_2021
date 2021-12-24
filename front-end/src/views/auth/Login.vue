@@ -32,6 +32,8 @@ export default {
             password: '',
             idErrors: [],
             passwordErrors: [],
+
+            activated: '',
         }
     },
     computed: {
@@ -51,12 +53,22 @@ export default {
         .then(res => {
             console.log(res)
             if (res == 1) {
-                this.$notification.success("当前用户已登录")
+                // this.$message.success("当前用户已登录")
                 this.$router.push({name: 'Home'})
             } else {
                 return
             }
         })
+
+        fetch(this.$URL + "/user/get?id=" + this.id, {
+            method: "GET",
+            headers: { "satoken": localStorage.getItem("token") }
+        })
+        .then(res => res.json())
+        .then((res) => {
+            this.activated = res.activated
+        })
+
         
 
         console.log('params from the last page:')
@@ -83,13 +95,15 @@ export default {
                 .then((res) => {
                         console.log(res)
                         if (res.code == 200) {
-                            this.$notification.success("登录成功")
+                            if (this.activated) {
+                                this.$message.success("登录成功")
+                            }
                             localStorage.setItem("userId", this.id)
                             localStorage.setItem("password", this.password)
                             localStorage.setItem("token", res.data.tokenValue)
                             this.$router.push({name: 'Home'})
                         } else {
-                            this.$notification.error("用户不存在或密码错误")
+                            this.$message.error("用户不存在或密码错误")
                         }
                     })
             }

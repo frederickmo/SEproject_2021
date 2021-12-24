@@ -242,6 +242,7 @@ minimizedWidth="0">
     <va-collapse
     key="2"
     header="课程资源"
+    v-show="this.activated"
     icon="attach_file">
       <va-sidebar-item>
         <va-sidebar-item-content
@@ -255,6 +256,7 @@ minimizedWidth="0">
     <va-collapse
     key="3"
     header="我的课程"
+    v-show="this.activated"
     icon="source">
       <va-sidebar-item>
         <va-sidebar-item-content
@@ -268,6 +270,7 @@ minimizedWidth="0">
     <va-collapse
     key="4"
     header="我的实验项目"
+    v-show="this.activated"
     icon="mode">
       <va-sidebar-item>
         <va-sidebar-item-content
@@ -281,6 +284,7 @@ minimizedWidth="0">
     <va-collapse
     key="5"
     header="我的成绩"
+    v-show="this.activated"
     icon="emoji_events">
       <va-sidebar-item>
         <va-sidebar-item-content
@@ -381,15 +385,23 @@ export default {
         console.log(result)
         this.id = result.id
         this.name = result.name
+        this.gender = result.gender
+        this.email = result.email
         this.password = result.password
         this.identity = result.identity
         this.activated = result.activated
+
+        if (!this.activated) {
+          this.$message.info("当前账号未激活，无法使用完整功能。请尽快激活账号。")
+        }
 
         // localStorage.setItem("userId", this.id)
         // localStorage.setItem("password", this.password)
         localStorage.setItem("username", this.name)
         localStorage.setItem("gender", this.gender)
         localStorage.setItem("userIdentity", this.identity)
+        localStorage.setItem("userEmail", this.email)
+        localStorage.setItem("userActivated", this.activated)
 
         if (this.identity == 2 || this.identity == 3 || this.identity == 4) {
           this.studentHome = false
@@ -456,7 +468,7 @@ export default {
     },
     onClickCourseManagement () {
       if (this.identity == 0 || this.identity == 1) {
-        this.$notification.warning('无操作权限')
+        this.$message.warning('无操作权限')
       } else {
         this.$router.push({
           name: 'CourseManagement',
@@ -491,7 +503,7 @@ export default {
     },
     onClickGradeManagement () {
       if (this.identity == 0 || this.identity == 1) {
-        this.$notification.warning('无操作权限')
+        this.$message.warning('无操作权限')
       } else {
         this.$router.push({
           name: 'GradeManagement',
@@ -511,10 +523,10 @@ export default {
       .then(res => {
         console.log(res)
         if (res.code == 200) {
-          this.$notification.success("成功注销")
+          this.$message.success("成功注销")
           this.$router.replace({name: 'Login'})
         } else {
-          this.$notification.error("注销失败")
+          this.$message.error("注销失败")
         }
       })
     }

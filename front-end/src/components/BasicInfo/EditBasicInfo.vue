@@ -31,6 +31,46 @@
             </el-upload> 
         </a-modal>
 
+
+      <!-- 激活账号的modal -->
+        <a-modal
+        v-model:visible="activateAccountModalVisible"
+        hide-cancel
+        ok-text="取消"
+        v-on:close="this.isSendingVerificationEmailButtonClicked=false"
+        >
+        <template #title>
+            激活账号
+        </template>
+        <div v-show="loading" style="text-align: center">
+            <a-spin tip="请稍等，邮件发送中……" />
+            请稍等，邮件发送中……
+        </div>
+        <div v-show="!loading">
+            <div v-show="!isSendingVerificationEmailButtonClicked">
+                <div style="margin-bottom: 10px">
+                    请点击下方按钮，系统将向您的邮箱中发送验证邮件，请查看邮件后正确填写验证码。账号将被激活。
+                </div>
+                <a-button type="primary" @click="handleSendVerificationEmail">发送验证码</a-button>
+            </div>
+            <div style="text-align: center" v-show="isSendingVerificationEmailButtonClicked">
+                <a-alert type="success">验证码已发送至：{{this.email}}<br>请在30分钟内进行填写，逾期验证码将失效。</a-alert>
+                <div style="display: flex; width: 70%; margin-top: 20px">
+                    <div style="width: 30%; margin-left: 35%; line-height: 200%; font-weight: bold">验证码</div>
+                    <a-input v-model="verificationCode" style="width: 45%" allow-clear />
+                    <a-button style="margin-left: 10px" @click="handleSubmitVerificationCode">提交</a-button>
+                </div>
+            </div>
+        </div>
+        </a-modal>
+
+    <a-alert v-show="this.activated==0||this.activated=='0'"  type="warning" show-icon="false">
+        当前账号未激活。是否现在进行激活？
+            <a-button type="primary" status="success" @click="handleActivateAccount">激活</a-button>
+    </a-alert>
+
+
+
         <va-card>
             <va-card-title style="font-size: 20px">修改基本信息</va-card-title>
             <va-card-content>
@@ -78,6 +118,9 @@ export default {
             name: '',
             gender: '',
 
+            email: '',
+            activated: '',
+
             genderInput: '',
             nameInput: '',
 
@@ -87,10 +130,21 @@ export default {
             avatarUrl: '',
 
             showModal: false,
+
+            activateAccountModalVisible: false,
+            isSendingVerificationEmailButtonClicked: false,
+
+            verificationCode: '',
+            loading: false,
+            
         }
     },
     mounted () {
         this.id = localStorage.getItem("userId")
+
+        this.email = localStorage.getItem("userEmail")
+        this.activated = localStorage.getItem("userActivated")
+
         fetch(this.$URL + "/user/get?id=" + this.id, {
         method: "GET",
         headers: { "satoken": localStorage.getItem("token") }
@@ -205,6 +259,57 @@ export default {
              */
             location.reload()
             
+        },
+
+
+        handleActivateAccount() {
+            this.activateAccountModalVisible = !this.activateAccountModalVisible;
+        },
+
+        handleSendVerificationEmail() {
+            this.loading = true
+            console.log(this.userEmail)
+
+            fetch(this.$URL + "/user/verify/send?email=" + this.email + "&userId=" + this.id, {
+                method: "POST",
+                headers: { "satoken": localStorage.getItem("token") }
+            })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                if (res.code == 200) {
+                    this.loading = false
+                    this.$message.success("验证码已发送")
+                    this.isSendingVerificationEmailButtonClicked = !this.isSendingVerificationEmailButtonClicked;
+                } else {
+                    this.$message.error("验证码发送失败，请稍后重试")
+                }
+            })
+
+        },
+        handleSubmitVerificationCode() {
+            console.log("验证码：", this.verificationCode)
+
+            fetch(this.$URL + "/user/verify/activate?code=" + this.verificationCode + "&userId=" + this.id, {
+                method: "POST",
+                headers: { "satoken": localStorage.getItem("token") }
+            })
+            .then(res => {
+                console.log(res)
+                return res.json()
+            })
+            .then(res => {
+                console.log(res)
+                if (res.code == 200) {
+                    this.$message.success("激活成功")
+                    // this.$router.replace({path: '/refresh'})
+                    location.reload()
+                } else {
+                    this.$message.error("激活失败，请稍后重试")
+                }
+            })
+
+            // this.isSendingVerificationEmailButtonClicked = !this.isSendingVerificationEmailButtonClicked;
         }
     }
 }

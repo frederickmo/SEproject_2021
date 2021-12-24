@@ -24,7 +24,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    VerifyEmailUtil verifyEmailUtil;
+    private final VerifyEmailUtil verifyEmailUtil;
 
     // 测试后端是否正常工作
     @ApiOperation("测试：返回简单字符串")
@@ -145,39 +145,47 @@ public class UserController {
         return userService.administratorUpdateUserInfo(user);
     }
 
-    @PostMapping ("/mail")
+    @SaCheckLogin
+    @PostMapping ("/verify/send")
     @ApiOperation("发送验证码到邮箱")
-    public JSONObject sendVerifyCode(HttpServletRequest request, String email) {
-        return verifyEmailUtil.sendMail(request,email);
+    public JSONObject sendVerifyCode(String email, Integer userId) {
+        return verifyEmailUtil.sendVerificationEmail(email, userId);
     }
 
-    @PostMapping("/verify")
-    @ApiOperation("检验验证码")
-    public JSONObject verify(String inputCode, HttpServletRequest request){
-       return verifyEmailUtil.checkCode(inputCode,request);
+//    @PostMapping("/verify")
+//    @ApiOperation("检验验证码")
+//    public JSONObject verify(String inputCode, HttpServletRequest request){
+//       return verifyEmailUtil.checkCode(inputCode,request);
+//    }
+
+    @SaCheckLogin
+    @ApiOperation("检验验证码并激活账号")
+    @PostMapping("/verify/activate")
+    public JSONObject verifyCodeAndActivateAccount(String code, Integer userId) {
+        return verifyEmailUtil.checkVerificationCode(code, userId);
     }
 
-    @PostMapping("/verifyAndActivate")
-    @ApiOperation("检验验证码并激活")
-    public JSONObject verify(String inputCode, HttpServletRequest request,@RequestBody UserEntity user){
-
-        JSONObject jsonObject = new JSONObject();
-        JSONObject json = new JSONObject();
-        jsonObject = verifyEmailUtil.checkCode(inputCode,request);
-        if(jsonObject.getInteger("status")==200)
-        {
-            //进行激活
-            userService.administratorUpdateUserInfo(user);
-            json.put("status", 200);
-            json.put("message", "验证成功并激活");
-        }
-        else
-        {
-            json.put("status", 500);
-            json.put("message", "验证错误");
-        }
-        return json;
-    }
+//    @PostMapping("/verifyAndActivate")
+//    @ApiOperation("检验验证码并激活")
+//    public JSONObject verify(String inputCode, HttpServletRequest request,@RequestBody UserEntity user){
+//
+//        JSONObject jsonObject = new JSONObject();
+//        JSONObject json = new JSONObject();
+//        jsonObject = verifyEmailUtil.checkCode(inputCode,request);
+//        if(jsonObject.getInteger("status")==200)
+//        {
+//            //进行激活
+//            userService.administratorUpdateUserInfo(user);
+//            json.put("status", 200);
+//            json.put("message", "验证成功并激活");
+//        }
+//        else
+//        {
+//            json.put("status", 500);
+//            json.put("message", "验证错误");
+//        }
+//        return json;
+//    }
 
     @PutMapping("/sign")
     @ApiOperation("学生签到")

@@ -1,6 +1,5 @@
 package com.example.backendtest.service;
 
-import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.alibaba.fastjson.JSONObject;
@@ -9,17 +8,15 @@ import com.example.backendtest.model.SignEntity;
 import com.example.backendtest.model.UserEntity;
 import com.example.backendtest.repository.SignRepository;
 import com.example.backendtest.repository.UserRepository;
+import com.example.backendtest.util.VerifyEmailUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +28,7 @@ public class UserService {
     private UserRepository userRepository;
 
     private SignRepository signRepository;
+    private VerifyEmailUtil verifyEmailUtil;
 
     public JSONObject add(UserEntity user) {
         // TODO: 总感觉用户注册的检查选项少了什么东西，后续有待完善
@@ -124,7 +122,7 @@ public class UserService {
                 log.info("用户 " + id + " 登录");
                 return SaResult.ok("登陆成功").setData(StpUtil.getTokenInfo());
             } else {
-                throw new PasswordNotCorrectException("密码错误");
+                throw new NotCorrectException("密码错误");
             }
         }
     }
@@ -136,6 +134,32 @@ public class UserService {
         } else {
             return SaResult.error("注销失败");
         }
+    }
+
+    /**
+     * 发送验证码到邮箱，并根据提供的ID进行激活
+     */
+    public JSONObject verifyCodeAndActivateAccount(Integer id, String code, HttpServletRequest request) {
+        Optional<UserEntity> userOptional = userRepository.findById(id);
+        JSONObject verificationResult = new JSONObject();
+
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException("用户不存在");
+        } else if (userOptional.get().getActivated() == 1) {
+            throw new AlreadyExistException("用户已激活");
+        }
+        boolean verified = verifyEmailUtil.checkVerificationCode(code, request);
+        log.info("用户 " + id + " 激活账号：" + (verified ? "激活成功" : "激活失败"));
+        if (verified) {
+            userOptional.get().setActivated(1);
+            userRepository.save(userOptional.get());
+            verificationResult.put("code", 200);
+            verificationResult.put("msg", "成功激活");
+        } else {
+            verificationResult.put("code", 500);
+            verificationResult.put("msg", "激活失败");
+        }
+        return verificationResult;
     }
 
     public UserEntity getUserById(Integer id) {

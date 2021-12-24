@@ -33,6 +33,7 @@ public class AjaxJson implements Serializable{
     public static final int CODE_PASSWORD_NOT_CORRECT = 414;     // 登录时密码错误
     // 跳过了415是因为415有个传参格式错误的错误信息，不冲突似乎会好一点
     public static final int CODE_ROLE_NOT_MATCH = 416;     // 角色不匹配(如把课程负责教师填成学生)
+    public static final int CODE_EXPIRED = 417; // 已过期
 
     public static final int CODE_INVALID_REQUEST = 400;	// 无效请求状态码
 
@@ -175,6 +176,7 @@ public class AjaxJson implements Serializable{
     public static AjaxJson getRoleNotMatch(String msg) {
         return new AjaxJson(CODE_ROLE_NOT_MATCH, msg, null, null);
     }
+    public static AjaxJson getExpired(String msg) { return new AjaxJson(CODE_EXPIRED, msg, null, null);}
 
     // 返回分页和数据的
     public static AjaxJson getPageData(Long dataCount, Object data){
