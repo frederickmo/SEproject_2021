@@ -9,7 +9,7 @@
     <va-card>
       <va-card-title style="font-size: 20px">课程管理</va-card-title>
         <va-card-content>
-          <div style="text-align:left"><a-button @click="add()" color="#e0e5df" style="color: rgb(40,40,40)">新增课程</a-button></div>
+          <div style="text-align:left"><a-button v-if="this.identity==3" @click="add()" color="#e0e5df" style="color: rgb(40,40,40)">新增课程</a-button></div>
           <div style="height: 20px" />
           <h2 style="text-align:left">我管理的课程</h2>
             <va-card 
@@ -94,7 +94,15 @@ export default {
 
     this.id = localStorage.getItem("userId")
     console.log("id: ", this.id)
-
+    fetch(this.$URL + "/user/get?id="+this.id
+    , {
+        method: "GET",
+        headers: { "satoken": localStorage.getItem("token") }
+    })
+    .then(res => res.json())
+    .then(res => {
+        this.identity=res.identity
+    })
     fetch(this.$URL + "/manages/get/course/managerId?managerId=" + this.id, {
       method: "GET",
       headers: { "satoken": localStorage.getItem("token") }
