@@ -12,24 +12,37 @@
             课程资源 
             <va-button color="#aaa" style="color: #777" flat @click="uploadModalVisible=!uploadModalVisible">上传</va-button>
         </va-card-title>
-        <va-card-content>
-            <va-list>
-                <va-list-label style="text-align: left; font-size: 16px">课程资料</va-list-label>
-                <va-list-item
-                v-for="(file,index) in resources"
+        <va-card-content style="text-align: left">
+            <a-dropdown 
+            position="tr"
+            trigger="hover" 
+            @select="handleSelectCourse">
+                <a-button>选择课程</a-button>
+                <template #content>
+                    <a-doption
+                    v-for="(course, index) in courses"
+                    :key="index"
+                    :value="index"
+                    >{{course.name}}</a-doption>
+                </template>
+            </a-dropdown>
+            <a-list
+            size="small"
+            :bordered="false"
+            style="text-align: left; margin-top: 20px"
+            >
+            <template #header>
+                <div style="font-size: 18px; font-weight: bold">
+                {{courses[curCourseIndex].name}}课程资源
+                </div>
+            </template>
+                <a-list-item
+                v-for="(file, index) in resources"
                 :key="index"
                 >
-                    <a :href="generateUrl(file.name)">{{file.name}}</a>
-                </va-list-item>
-            </va-list>
-            <!-- <va-list>
-                <va-list-label style="text-align: left; font-size: 16px">实验报告</va-list-label>
-                <va-list-item
-                v-for="(file, index) in reports"
-                :key="index">
-                    {{file.name}}
-                </va-list-item>
-            </va-list> -->
+                    <a :href="generateUrl(file.name)"><icon-file style="margin-right: 5px" />{{file.name}}</a>
+                </a-list-item>
+            </a-list>
         </va-card-content>
     </va-card>
   <a-modal v-model:visible="uploadModalVisible">
@@ -47,11 +60,6 @@
         <va-button gradient :rounded="false">选择文件</va-button>
         </template>
         <va-button style="margin-left: 20px" flat :rounded="false" @click="submitUpload">上传</va-button>
-        <!-- <template #tip>
-        <div class="el-upload__tip">
-            jpg/png files with a size less than 500kb
-        </div>
-        </template> -->
     </el-upload> 
 </a-modal>
 </div>
@@ -65,6 +73,13 @@ export default {
             r: 0,
             reports: [],
             test:"",
+
+
+            curCourseIndex: 0, // 当前选择的课程，这个要和select的结果绑定，因为要修改课程资源的a-list的标题。
+            courses: [ // 这个是写的临时列表，后面应该用相应接口查询学生的所有课程。
+                {name: '计算机网络'},
+                {name: '计算机组成原理'} 
+            ],
 
             currentIndex: 0,
 
@@ -105,6 +120,14 @@ export default {
         submitUpload() {
             this.$refs.upload.submit()
         },
+
+        handleSelectCourse(index) {
+            // 这个index已经绑定了每个选项在courses里的index，到时候替换下面的a-list里面的内容。
+            console.log(index)
+            this.curCourseIndex = index;
+
+            // 选择课程之后切换相应课程的课程资源 => 使用接口查询
+        }
     }
 }
 </script>

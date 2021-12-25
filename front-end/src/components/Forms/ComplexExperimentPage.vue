@@ -1,11 +1,14 @@
 <template>
+<div>
+        <va-breadcrumbs separator=">">
+            <va-breadcrumbs-item label="实验管理" disabled />
+            <va-breadcrumbs-item label="我的实验" to="/home/mytasks" />
+            <va-breadcrumbs-item label="大型实验项目" disabled/>
+        </va-breadcrumbs>
+    <a-alert type="warning" style="margin-bottom: 10px" v-show="isOverdue()">该实验报告已截止。您现在仅可查看，无法进行提交。</a-alert>
   <va-card>
       <va-card-content>
         <div style="height: 15px" />
-        <va-alert v-show="isOverdue()" style="width: 80%; font-size: 16px; font-weight: bold" icon="info" color="#f3d989" >
-            该实验报告已逾期。您现在仅可查看，无法进行提交。
-        </va-alert>
-        <div style="height: 20px" />
         <a-space style="margin-bottom: 20px">
             <div style="font-size: 30px; font-weight: bold">实验报告：{{taskName}}</div>
             <div v-show="isSubmitted"><va-icon color="#89d7bc" name="check_circle" />已提交</div>
@@ -25,6 +28,7 @@
           :data="additionalData()"
           /> -->
         <el-upload
+            v-show="!isOverdue()"
             ref="upload"
             :action="getFileUploadUrl()"
             :auto-upload="false"
@@ -45,6 +49,7 @@
           <div style="height: 30px" />
       </va-card-content>
   </va-card>
+</div>
 </template>
 
 <script>
@@ -62,7 +67,7 @@ export default {
         }
     },
     mounted () {
-        this.taskId = this.$route.params.taskId
+        this.taskId = this.$route.params.taskId ? this.$route.params.taskId : localStorage.getItem("curTaskId")
         // this.taskName = this.$route.params.taskName
         // this.deadline = this.$route.params.deadline
 

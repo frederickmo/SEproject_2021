@@ -1,9 +1,41 @@
 <template>
-  <va-card gradient color="#e0e5df">
+<div>
+      <div style="margin-bottom: 10px">
+        <va-breadcrumbs separator=">">
+            <va-breadcrumbs-item label="课程管理" disabled />
+            <va-breadcrumbs-item label="我的课程" to="/home/mycourses" />
+            <va-breadcrumbs-item label="所有实验项目" disabled />
+        </va-breadcrumbs>
+      </div>
+  <va-card>
       <va-card-content style="text-align: left">
           <div class="course-title">{{this.courseName}}</div>
           <div class="course-description">{{this.courseDescription}}</div>
-            <va-card 
+
+            <el-table
+            :data="
+            totalTasks.filter(
+              (data) =>
+                !search | data.name.toLowerCase().includes(search.toLowerCase())
+            )"
+            >
+              <el-table-column label="项目ID" prop="id" />
+              <el-table-column label="项目名" prop="name" />
+              <el-table-column label="类型" prop="type" />
+              <el-table-column label="截止日期" prop="deadline" />
+              <el-table-column align="right">
+                <template #header>
+                  <el-input v-model="searchSimple" size="mini" placeholder="请输入" />
+                </template>
+                <template #default="scope">
+                  <div>
+                    <a-button @click="switchToTask(scope.row)">前往</a-button>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+
+            <!-- <va-card 
             v-for="(task, index) in simpleTasks"
             :key="index"
             color="#b5c4b1" 
@@ -12,8 +44,6 @@
             >
               <va-card-content style="rgb(60, 60, 60); font-weight: bold">
                 <div style="display: flex">
-                  <!-- va-card高度: 76px -->
-                  <!-- va-card高度: 36px -->
                   <div style="line-height: 36px; width: 35%; font-size: 18px">{{task.name}}</div>
                   <div style="line-height: 36px; width: 37%">截止日期：{{task.deadline ? task.deadline : "暂无"}}</div>
                   <div v-show="isOverdue(task.deadline)" style="line-height: 36px; width: 18%; color: #e00"><va-icon color="#e00" name="error_outline" />已逾期</div>
@@ -32,8 +62,6 @@
             >
               <va-card-content style="rgb(60, 60, 60); font-weight: bold">
                 <div style="display: flex">
-                  <!-- va-card高度: 76px -->
-                  <!-- va-card高度: 36px -->
                   <div style="line-height: 36px; width: 35%; font-size: 18px">{{task.name}}</div>
                   <div style="line-height: 36px; width: 37%">截止日期：{{task.deadline ? task.deadline : "暂无"}}</div>
                   <div v-show="isOverdue(task.deadline)" style="line-height: 36px; width: 18%; color: #e00"><va-icon color="#e00" name="error_outline" />已逾期</div>
@@ -41,9 +69,10 @@
                   <div><va-button @click="switchToTaskComplex(index)" color="#e0e5df" style="color: rgb(40,40,40)">点击进入</va-button></div>
                 </div>
               </va-card-content>
-            </va-card>
+            </va-card> -->
       </va-card-content>
   </va-card>
+</div>
 </template>
 
 <script>
@@ -64,16 +93,21 @@ export default {
             tasks: [],
 
             simpleTasks: [],
-            complexTasks: []
+            complexTasks: [],
+
+            totalTasks: [],
+
+            search: '',
         }
     }, 
     mounted () {
         this.id = localStorage.getItem("userId")
         this.courseId = localStorage.getItem("courseId")
+        console.log("courseId", this.courseId)
         console.log("从上个页面传来的params.courseId: " + this.$route.params.courseId)
         if (this.$route.params.courseId == undefined) {
             console.log("从子路由跳到父路由，需要重新查询课程数据")
-            fetch(this.$URL + '/=' + this.courseId, {
+            fetch(this.$URL + '/course/get?id=' + this.courseId, {
                 method: "GET",
                 headers: { "satoken": localStorage.getItem("token") }
             }).then(response => {
@@ -103,17 +137,36 @@ export default {
             // console.log(response)
             let result = response.json()
             result.then(res => {
-                // console.log(res)
+                console.log(res)
                 this.simpleTasks = res
+                for(let i = 0; i < this.simpleTasks.length; ++i) {
+                  this.simpleTasks[i].type = this.simpleTasks[i].type=='0'?'小型':'大型'
+                  if (this.simpleTasks[i].deadline==undefined) {
+                    this.simpleTasks[i].deadline = '暂无'
+                  } else {
+                    this.simpleTasks[i].deadline += this.isOverdue(this.simpleTasks[i].deadline) ? '（已截止）' : ''
+                  }
+                }
+                this.totalTasks = this.totalTasks.concat(this.simpleTasks)
+                console.log(this.totalTasks)
             })
         })
-        fetch(this.$URL + "/task/get/complex?courseId=" + this.courseId, {
-          method: "GET",
-          headers: { "satoken": localStorage.getItem("token") }
-        }).then(response => {
-          let result = response.json()
-          result.then(res => {
-            this.complexTasks = res
+        .then(async () => {
+          fetch(this.$URL + "/task/get/complex?courseId=" + this.courseId, {
+            method: "GET",
+            headers: { "satoken": localStorage.getItem("token") }
+          }).then(response => {
+            let result = response.json()
+            result.then(res => {
+              console.log(res)
+              this.complexTasks = res
+                  for(let i = 0; i < this.complexTasks.length; ++i) {
+                    this.complexTasks[i].type = this.complexTasks[i].type=='0'?'小型':'大型'
+                    this.complexTasks[i].deadline += this.isOverdue(this.complexTasks[i].deadline) ? '（已截止）' : ''
+                  }
+                  this.totalTasks = this.totalTasks.concat(this.complexTasks)
+                  console.log(this.totalTasks)
+            })
           })
         })
     },
@@ -169,6 +222,15 @@ export default {
       } else {
         return true
       }
+    },
+    switchToTask(row) {
+      console.log(row)
+      this.$router.push({
+        name: row.type=='大型'?'ComplexTask':'OnlineTask',
+        params: {
+          taskId: row.id
+        }
+      })
     }
   }
 }

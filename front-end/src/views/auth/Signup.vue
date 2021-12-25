@@ -79,7 +79,7 @@ export default {
                     let result = res.text()
                     result.then((res) => {
                         if (res == '注册成功') {
-                            this.$notification.success('注册成功！')
+                            this.$message.success('注册成功！')
                             this.$router.push({
                                 name: 'SignupSuccess',
                                 params: {
@@ -88,7 +88,7 @@ export default {
                                 }
                             })
                         } else {
-                            this.$notification.error("注册失败！")
+                            this.$message.error("注册失败！")
                         }
                     })
                 })

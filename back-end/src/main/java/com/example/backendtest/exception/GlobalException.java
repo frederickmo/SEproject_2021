@@ -3,7 +3,6 @@ package com.example.backendtest.exception;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -97,13 +96,17 @@ public class GlobalException {
             MyFileNotFoundException ee = (MyFileNotFoundException) e;
             aj = AjaxJson.getMyFileNotFound(ee.getMessage());
         }
-        else if (e instanceof PasswordNotCorrectException) {	// 密码错误异常, 输出：414 + 异常信息
-            PasswordNotCorrectException ee = (PasswordNotCorrectException) e;
+        else if (e instanceof NotCorrectException) {	// 密码错误异常, 输出：414 + 异常信息
+            NotCorrectException ee = (NotCorrectException) e;
             aj = AjaxJson.getPasswordNotCorrect(ee.getMessage());
         }
         else if (e instanceof RoleNotMatchException) {	// 用户角色不匹配异常, 输出：416 + 异常信息
             RoleNotMatchException ee = (RoleNotMatchException) e;
             aj = AjaxJson.getRoleNotMatch(ee.getMessage());
+        }
+        else if (e instanceof ExpiredException) {
+            ExpiredException ee = (ExpiredException) e;
+            aj = AjaxJson.getExpired(ee.getMessage());
         }
         else {	// 普通异常, 输出：500 + 异常信息
             aj = AjaxJson.getError(e.getMessage());
