@@ -1,5 +1,6 @@
 <template>
-    <form @submit.prevent="onSubmit">
+<div>
+    <form @submit.prevent="onSubmit" style="margin-top: 30px">
         <va-input
         v-model="id"
         type="id"
@@ -21,6 +22,7 @@
         <va-button flat style="margin-left: 10px" @click="this.$router.push({name: 'RecoverPassword', params: {id: this.id}})">忘记密码？</va-button>
     </div>
     </form>
+</div>
 </template>
 
 <script>
@@ -43,8 +45,8 @@ export default {
     },
     mounted () {
 
-        this.id = 101
-        this.password = 12345
+        this.id = this.$route.params.id ? this.$route.params.id : 101
+        this.password = this.$route.params.password ? this.$route.params.password : 12345
 
         fetch(this.$URL + "/user/isLogin", {
             method: "GET",

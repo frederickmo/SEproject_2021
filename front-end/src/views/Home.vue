@@ -1,9 +1,9 @@
 <template>
 
   <va-navbar color="#3d708f" gradient style="height: 8%; min-height: 60px;">
-    <template v-slot:left>
+    <!-- <template v-slot:left>
       <va-checkbox v-model="minimized" label="Minimized(暂时还没实现)" />
-    </template>
+    </template> -->
     <template v-slot:center>
       <span style="font-weight: bold; font-size: 18px">实验教学管理系统</span>
     </template>
@@ -54,6 +54,14 @@ minimizedWidth="0">
         @click="onClickEditBasicInfo()">
           <va-sidebar-item-title>
             修改基本信息
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="this.$router.push({name: 'Security'})">
+          <va-sidebar-item-title>
+            账号安全
           </va-sidebar-item-title>
         </va-sidebar-item-content>
       </va-sidebar-item>
@@ -132,6 +140,14 @@ minimizedWidth="0">
         @click="onClickEditBasicInfo()">
           <va-sidebar-item-title>
             修改基本信息
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="this.$router.push({name: 'Security'})">
+          <va-sidebar-item-title>
+            账号安全
           </va-sidebar-item-title>
         </va-sidebar-item-content>
       </va-sidebar-item>
@@ -238,7 +254,16 @@ minimizedWidth="0">
           </va-sidebar-item-title>
         </va-sidebar-item-content>
       </va-sidebar-item>
+      <va-sidebar-item>
+        <va-sidebar-item-content
+        @click="this.$router.push({name: 'Security'})">
+          <va-sidebar-item-title>
+            账号安全
+          </va-sidebar-item-title>
+        </va-sidebar-item-content>
+      </va-sidebar-item>
     </va-collapse>
+    
     <va-collapse
     key="2"
     header="课程资源"

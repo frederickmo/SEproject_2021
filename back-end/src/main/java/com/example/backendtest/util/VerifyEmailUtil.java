@@ -193,6 +193,7 @@ public class VerifyEmailUtil {
         }
     }
 
+
     /**
      * 感觉如果是内部调用而不需要前后端交互的话，直接返回true或者false就行了。
      */

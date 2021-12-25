@@ -46,6 +46,12 @@ const routes = [{
                 component: () =>
                     import ('../components/BasicInfo/EditBasicInfo.vue')
             },
+            {
+                path: '/home/security',
+                name: 'Security',
+                component: () =>
+                    import ('../components/BasicInfo/Security.vue')
+            },
 
 
 

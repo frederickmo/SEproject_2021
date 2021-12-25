@@ -6,8 +6,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.exception.*;
 import com.example.backendtest.model.SignEntity;
 import com.example.backendtest.model.UserEntity;
+import com.example.backendtest.model.VerificationCode;
 import com.example.backendtest.repository.SignRepository;
 import com.example.backendtest.repository.UserRepository;
+import com.example.backendtest.repository.VerificationCodeRepository;
 import com.example.backendtest.util.VerifyEmailUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +17,10 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +30,7 @@ import java.util.Optional;
 public class UserService {
 
     private UserRepository userRepository;
+    private VerificationCodeRepository verificationCodeRepository;
 
     private SignRepository signRepository;
     private VerifyEmailUtil verifyEmailUtil;
@@ -45,8 +50,8 @@ public class UserService {
             user.setActivated(0);
             // 性别默认为未知
             user.setGender(0);
-            // 身份也默认为未知
-            user.setIdentity(0);
+            // 身份默认为学生
+            user.setIdentity(1);
             userRepository.save(user);
             log.info("新增用户: 用户ID " + user.getId());
             JSONObject json = new JSONObject();
@@ -70,6 +75,9 @@ public class UserService {
         }
     }
 
+    /**
+     * 查看当前登录状态
+     */
     public int isLogin() {
         if (StpUtil.isLogin()) {
             return 1;
@@ -78,6 +86,9 @@ public class UserService {
         }
     }
 
+    /**
+     * 查看某ID是否登录
+     */
     public int isLoginById(Integer id) {
         if (StpUtil.getLoginIdAsInt() == id) {
             return 1;
@@ -85,32 +96,6 @@ public class UserService {
             return 0;
         }
     }
-
-
-//    public JSONObject login(Integer id, String password) {
-//        Optional<UserEntity> userOptional = userRepository.findById(id);
-//        if (userOptional.isEmpty()) {
-//            throw new UserNotFoundException("该用户不存在");
-//        } else {
-//            if (userOptional.get().getPassword().equals(password)) {
-//                StpUtil.login(id);
-//
-//                log.info("登陆成功，生成token");
-//                String token = JwtUtil.createToken(id);
-//                JSONObject json = new JSONObject();
-//                try {
-//                    json.put("status", 200);
-//                    json.put("token", token);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                return json;
-//
-//            } else {
-//                throw new PasswordNotCorrectException("密码不正确");
-//            }
-//        }
-//    }
 
     public SaResult login(Integer id, String password) {
         Optional<UserEntity> userOptional = userRepository.findById(id);
@@ -136,36 +121,7 @@ public class UserService {
         }
     }
 
-    /**
-     * 发送验证码到邮箱，并根据提供的ID进行激活
-     */
-    public JSONObject verifyCodeAndActivateAccount(Integer id, String code, HttpServletRequest request) {
-        Optional<UserEntity> userOptional = userRepository.findById(id);
-        JSONObject verificationResult = new JSONObject();
-
-        if (userOptional.isEmpty()) {
-            throw new UserNotFoundException("用户不存在");
-        } else if (userOptional.get().getActivated() == 1) {
-            throw new AlreadyExistException("用户已激活");
-        }
-        boolean verified = verifyEmailUtil.checkVerificationCode(code, request);
-        log.info("用户 " + id + " 激活账号：" + (verified ? "激活成功" : "激活失败"));
-        if (verified) {
-            userOptional.get().setActivated(1);
-            userRepository.save(userOptional.get());
-            verificationResult.put("code", 200);
-            verificationResult.put("msg", "成功激活");
-        } else {
-            verificationResult.put("code", 500);
-            verificationResult.put("msg", "激活失败");
-        }
-        return verificationResult;
-    }
-
     public UserEntity getUserById(Integer id) {
-//        if (!StpUtil.isLogin()) {
-//            throw new NotLoginException();
-//        }
         Optional<UserEntity> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()) {
             throw new UserNotFoundException("ID为 " + id + " 的用户不存在");
@@ -340,6 +296,96 @@ public class UserService {
         return 0;
     }
 
+
+    /**
+     * 用户重置密码步骤1 - 发送验证邮件
+     */
+    public JSONObject verifyPasswordAndSendVerificationEmail(Integer userId) {
+        Optional<UserEntity> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException("用户不存在");
+        } else if (userOptional.get().getEmail() == null || userOptional.get().getEmail().equals("")) {
+            throw new MyNotFoundException("用户邮箱不存在，请提交一个邮箱再重置密码");
+        } else {
+            String email = userOptional.get().getEmail();
+            String verifyCode = verifyEmailUtil.getPhoneCode();
+            verifyEmailUtil.sendCode2Email(email, "【实验教学管理系统】重置密码", verifyCode);
+            log.info("用户 " + userId + " 请求重置密码：邮件已发送。");
+            if (verificationCodeRepository.existsById(userId)) {
+                verificationCodeRepository.deleteById(userId);
+            }
+            VerificationCode record = new VerificationCode();
+            record.setUserId(userId);
+            record.setCode(verifyCode);
+            Timestamp expiresTime = Timestamp.valueOf(LocalDateTime.now().plusMinutes(30));
+            log.info("失效时间：" + expiresTime);
+            record.setExpiresAt(expiresTime);
+            verificationCodeRepository.save(record);
+            JSONObject result = new JSONObject();
+            result.put("code", 200);
+            result.put("msg", "密码验证成功，邮件已发送");
+            return result;
+        }
     }
+
+    /**
+     * 用户重置密码步骤2 - 验证邮件验证码
+     */
+    public JSONObject checkVerificationCode(Integer userId, String code) {
+        Optional<VerificationCode> recordOptional = verificationCodeRepository.findById(userId);
+        if (recordOptional.isEmpty()) {
+            throw new MyNotFoundException("没有验证码发送记录");
+        } else if (Timestamp.valueOf(LocalDateTime.now()).after(recordOptional.get().getExpiresAt())) {
+            throw new ExpiredException("验证码已过期");
+        } else if (!recordOptional.get().getCode().equals(code)) {
+            throw new NotCorrectException("验证码错误");
+        } else {
+            log.info("用户 " + userId + " 正在重置密码：验证码验证成功。");
+            // 验证成功，删除该验证码记录
+            verificationCodeRepository.deleteById(userId);
+            JSONObject result = new JSONObject();
+            result.put("code", 200);
+            result.put("msg", "验证码正确，请提交新的密码");
+            return result;
+        }
+    }
+
+    /**
+     * 用户重置密码步骤3 - 更新密码
+     */
+    public JSONObject updatePassword(Integer userId, String newPassword) {
+        Optional<UserEntity> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException("用户不存在");
+        } else {
+            String oldPassword = userOptional.get().getPassword();
+            if (newPassword.equals(oldPassword)) {
+                throw new AlreadyExistException("新密码与旧密码相同");
+            }
+            userOptional.get().setPassword(newPassword);
+            // 修改完记得存
+            userRepository.save(userOptional.get());
+            log.info("用户 " + userId + " 已成功重置密码。");
+            JSONObject result = new JSONObject();
+            result.put("code", 200);
+            result.put("msg", "密码已重置");
+            return result;
+        }
+    }
+
+    /**
+     * 找回密码：根据用户ID找回密码
+     */
+    public String recoverPassword(Integer userId) {
+        Optional<UserEntity> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException("用户不存在");
+        } else {
+            return userOptional.get().getPassword();
+        }
+    }
+
+
+}
 
 

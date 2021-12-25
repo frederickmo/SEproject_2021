@@ -14,6 +14,7 @@
         label="email"
         :error="!!emailErrors.length"
         :error-messages="emailErrors"
+        style="margin-top: 10px"
         />
 
         <va-input
@@ -69,16 +70,15 @@ export default {
                     id: this.id,
                     password: this.password,
                     email: this.email,
-                    activated: 0
                 }
-                fetch(this.$URL + "/user/add", {
+                fetch(this.$URL + "/user/register", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(request)
-                }).then((res) => {
-                    let result = res.text()
-                    result.then((res) => {
-                        if (res == '注册成功') {
+                }).then(res => res.json())
+                .then((res) => {
+                    console.log(res)
+                        if (res.code == 200) {
                             this.$message.success('注册成功！')
                             this.$router.push({
                                 name: 'SignupSuccess',
@@ -87,11 +87,14 @@ export default {
                                     password: this.password
                                 }
                             })
+                        } else if (res.code == 403) {
+                            this.$message.error("用户已存在！")
+                        } else if (res.code == 409) {
+                            this.$message.error('该邮箱已被注册！')
                         } else {
                             this.$message.error("注册失败！")
                         }
                     })
-                })
             }
         },
     }
