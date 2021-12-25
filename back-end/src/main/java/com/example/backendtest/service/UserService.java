@@ -231,6 +231,18 @@ public class UserService {
                 userOptional.get().setName(user.getName());
                 log.info("用户修改姓名为 " + user.getName());
             }
+            if (user.getEmail().equals("")) {
+                log.info("用户提交的新的email信息：" + user.getEmail());
+                log.info("用户未更新email信息");
+            } else {
+                Optional<UserEntity> allByEmail = userRepository.findAllByEmail(user.getEmail());
+                if (allByEmail.isPresent()) {
+                    throw new EmailAlreadyRegisteredException("该邮箱已被注册");
+                } else {
+                    userOptional.get().setEmail(user.getEmail());
+                    log.info("用户修改email为 " + user.getEmail());
+                }
+            }
             userRepository.save(userOptional.get());
             JSONObject json = new JSONObject();
             json.put("code", 200);
@@ -283,6 +295,8 @@ public class UserService {
                 signEntity.get().setCount(signEntity.get().getCount() + 1);
                 signEntity.get().setUpdateTime(Date.valueOf(LocalDate.now()));
                 log.info("学生签到信息更新");
+            } else {
+                throw new AlreadyExistException("今日已签到");
             }
         }
         signRepository.save(signEntity.get());
@@ -297,7 +311,7 @@ public class UserService {
         Optional<SignEntity> signEntity = signRepository.findById(userId);
         if(signEntity.isEmpty())
         {
-            throw new UserNotFoundException("用户没有签到信息");
+            throw new MyNotFoundException("用户没有签到信息");
         }
         else
         {

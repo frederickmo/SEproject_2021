@@ -4,7 +4,7 @@
             <va-breadcrumbs separator=">">
                 <va-breadcrumbs-item label="实验管理" disabled />
                 <va-breadcrumbs-item label="我的实验" to="/home/mytasks" />
-                <va-breadcrumbs-item label="实验项目" to="/home/task/onlinetask" />
+                <va-breadcrumbs-item label="在线实验项目" disabled />
             </va-breadcrumbs>
       </div>
       <a-modal v-model:visible="showModal" @ok="handleModalOk">
@@ -15,12 +15,9 @@
             您已经提交，此次提交将会覆盖之前的提交。是否重新提交？
           </div>
       </a-modal>
-
+        <a-alert type="warning" style="margin-bottom: 10px" v-show="isOverdue()">该实验报告已截止。您现在仅可查看，无法进行提交。</a-alert>
         <va-card>
             <div style="height: 15px" />
-            <va-alert v-show="isOverdue()" style="width: 80%; font-size: 16px; font-weight: bold" icon="info" color="#f3d989" >
-                该实验报告已逾期。您现在仅可查看，无法进行提交。
-            </va-alert>
             <div style="height: 20px" />
             <a-space style="margin-bottom: 20px">
             <div style="font-size: 30px; font-weight: bold">实验报告：{{this.taskName}}</div>
@@ -142,7 +139,7 @@ export default {
     mounted () {
         // console.log("params:", this.$route.params)
         // console.log(this.$route.params.taskId, this.$route.params.taskName)
-        this.taskId = this.$route.params.taskId
+        this.taskId = this.$route.params.taskId ? this.$route.params.taskId : localStorage.getItem("curTaskId")
         // this.taskName = this.$route.params.taskName
         // this.deadline = this.$route.params.deadline
 

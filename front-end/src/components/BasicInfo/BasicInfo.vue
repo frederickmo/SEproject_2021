@@ -48,7 +48,7 @@
         </div>
         </a-modal>
 
-    <a-alert v-show="this.activated==0||this.activated=='0'"  type="warning" show-icon="false">
+    <a-alert v-show="showAlert"  type="warning" show-icon="false">
         当前账号未激活。是否现在进行激活？
             <a-button type="primary" status="success" @click="handleActivateAccount">激活</a-button>
     </a-alert>
@@ -83,7 +83,7 @@
                   <td>{{this.name}}</td>
                 </tr>
                 <tr>
-                  <td class="head">E-mail</td>
+                  <td class="head">email</td>
                   <td>{{this.email}}</td>
                 </tr>
                 <tr>
@@ -94,7 +94,7 @@
                   <td class="head">身份</td>
                   <td>{{myIdentity()}}</td>
                 </tr>
-                <tr>
+                <tr v-show="this.identity!=4">
                   <td class="head">账号激活状态</td>
                   <td>{{this.activated==1?'已激活':'未激活'}}</td>
                 </tr>
@@ -126,6 +126,8 @@ export default {
 
       verificationCode: '',
       loading: false,
+
+      showAlert: false,
     }
   },
   mounted () {
@@ -134,6 +136,9 @@ export default {
 
     this.email = localStorage.getItem("userEmail")
     this.activated = localStorage.getItem("userActivated")
+    if (this.activated == 0 || this.activated == '0') {
+      this.showAlert = true
+    }
 
 
 
@@ -178,7 +183,7 @@ export default {
       } else if (this.identity == 3) {
         return "教师"
       } else if (this.identity == 4) {
-        return "责任教师"
+        return "管理员"
       } else {
         return "未知"
       }

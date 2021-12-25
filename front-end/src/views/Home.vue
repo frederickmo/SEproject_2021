@@ -358,13 +358,13 @@ export default {
       mainIndex: 0,
 
 
-      id: 0,
+      id: '',
       name: '',
-      gender: 0,
+      gender: '',
       email: '',
       password: '',
-      activated: 0,
-      identity: 0,
+      activated: '',
+      identity: '',
 
       studentHome: true,
 
@@ -393,6 +393,24 @@ export default {
 
         if (!this.activated) {
           this.$message.info("当前账号未激活，无法使用完整功能。请尽快激活账号。")
+        }
+
+        if (this.identity == 1) {
+          fetch(this.$URL + '/user/sign?userId=' + this.id, {
+            method: "PUT",
+            headers: { "satoken": localStorage.getItem("token") }
+          })
+          .then(res => res.json())
+          .then(res => {
+            console.log(res)
+            if (res.code == 200) {
+              this.$message.success("签到记录+1")
+            } else if (res.code == 403) {
+              this.$message.info("今日已签到")
+            } else {
+              this.$message.error("签到失败")
+            }
+          })
         }
 
         // localStorage.setItem("userId", this.id)

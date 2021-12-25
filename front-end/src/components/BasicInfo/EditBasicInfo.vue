@@ -64,7 +64,7 @@
         </div>
         </a-modal>
 
-    <a-alert v-show="this.activated==0||this.activated=='0'"  type="warning" show-icon="false">
+    <a-alert v-show="showAlert"  type="warning" show-icon="false">
         当前账号未激活。是否现在进行激活？
             <a-button type="primary" status="success" @click="handleActivateAccount">激活</a-button>
     </a-alert>
@@ -93,11 +93,15 @@
                                         <div class="head" style="margin-right: 30px">姓名</div>
                                         <va-input v-model="nameInput" />
                                     </div>
-                                    <div style="display: flex; height: 36px">
+                                    <div style="display: flex; height: 36px; margin-bottom: 20px">
                                         <div class="head" style="margin-right: 30px">性别</div>
                                         <va-select
                                         v-model="genderInput"
                                         :options="['男','女']" />
+                                    </div>
+                                    <div style="display: flex; height: 36px">
+                                        <div class="head" style="margin-right: 30px">email</div>
+                                        <va-input v-model="emailInput" />
                                     </div>
                                         <va-button @click="onSubmit" style="margin-left: 60px; margin-top: 20px;">提交</va-button>
                                 </va-form>
@@ -123,6 +127,7 @@ export default {
 
             genderInput: '',
             nameInput: '',
+            emailInput: '',
 
             genderSubmit: '',
             nameSubmit: '',
@@ -136,6 +141,8 @@ export default {
 
             verificationCode: '',
             loading: false,
+
+            showAlert: false,
             
         }
     },
@@ -144,6 +151,9 @@ export default {
 
         this.email = localStorage.getItem("userEmail")
         this.activated = localStorage.getItem("userActivated")
+        if (this.activated == 0 || this.activated == '0') {
+            this.showAlert = true
+        }
 
         fetch(this.$URL + "/user/get?id=" + this.id, {
         method: "GET",
@@ -178,7 +188,8 @@ export default {
             let req = {
                 id: this.id,
                 name: this.nameInput,
-                gender: this.genderSubmit
+                gender: this.genderSubmit,
+                email: this.emailInput
             }
 
             // console.log(req)
@@ -194,9 +205,10 @@ export default {
             .then(res => {
                 // console.log(res)
                 if (res.code == 200) {
-                    this.$notification.success("修改成功");
-                    localStorage.setItem("gender", this.gender)
-                    localStorage.setItem("username", this.name)
+                    this.$message.success("修改成功");
+                    localStorage.setItem("gender", this.genderSubmit)
+                    localStorage.setItem("username", this.nameInput)
+                    localStorage.setItem("userEmail", this.emailInput)
                     /**
                      * 以下replace语句是用来跳转到一个空白页面{name: 'Refresh'}实现当前界面自动重新加载的效果
                      * 
@@ -205,8 +217,11 @@ export default {
                     // this.$router.replace({name: 'Refresh'})
                     // this.$router.replace({path: '/refresh'})
                     this.$router.push({name: 'BasicInfo'})
-                } else {
-                    this.$notification.error("修改失败")
+                } else if (res.code == 409) {
+                    this.$message.error("该邮箱已被注册")
+                }
+                else {
+                    this.$message.error("修改失败")
                 }
             })
             

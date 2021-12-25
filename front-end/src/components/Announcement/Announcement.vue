@@ -49,7 +49,7 @@
               {{modifyAnnouncementStatus ? "修改公告" : displayAnnouncement.topic}}
           </template>
           <a-textarea
-          style="margin-bottom: 10px"
+          style="margin-bottom: 10px; background: white"
           v-show="!modifyAnnouncementStatus"
           v-model="this.displayAnnouncement.content" 
           auto-size
@@ -126,7 +126,7 @@
             </div>
         </div>
         </a-modal>
-    <a-alert v-show="this.userActivated==0||this.userActivated=='0'"  type="warning" show-icon="false">
+    <a-alert v-show="showAlert"  type="warning" show-icon="false">
         当前账号未激活。是否现在进行激活？
             <a-button type="primary" status="success" @click="handleActivateAccount">激活</a-button>
     </a-alert>
@@ -214,6 +214,8 @@ export default {
 
             verificationCode: '',
             loading: false,
+
+            showAlert: false,
         }
     },
     mounted () {
@@ -224,6 +226,9 @@ export default {
         this.userIdentity = localStorage.getItem("userIdentity")
         this.userEmail = localStorage.getItem("userEmail")
         this.userActivated = localStorage.getItem("userActivated")
+        if (this.userActivated == 0 || this.userActivated == '0') {
+            this.showAlert = true
+        }
         console.log("userId: ", this.userId)
         
         if (this.userIdentity == 1) {
