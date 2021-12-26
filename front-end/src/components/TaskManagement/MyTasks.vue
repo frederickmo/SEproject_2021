@@ -23,7 +23,7 @@
             >
               <template v-slot:day-content="{day,attributes}">
                 <div style="min-height: 60px; font-size: 15px; font-weight: bold; text-align: center">
-                  <div>
+                  <div :style="day==new Date()?'color: blue; font-size: 200px':''">
                     {{day.day}}
                   </div>
                   <div
@@ -31,8 +31,8 @@
                   :key="task.key"
                   style="margin-top: 5px; line-height: 20px; width: 95%; border-radius: 8px"
                   >
-                  <a-popover>
-                    <a-button type="text" shape="round" style="font-weight: bold" :status="task.customData.buttonStatus">{{task.customData.status}}</a-button>
+                  <a-popover v-show="task.customData.showPopover">
+                    <a-button v-show="task.customData.showPopover" type="text" shape="round" style="font-weight: bold" :status="task.customData.buttonStatus">{{task.customData.status}}</a-button>
                     <template #content>
                       <div style="text-align: center">
                         <div>
@@ -44,6 +44,9 @@
                       </div>
                     </template>
                   </a-popover>
+                  <div v-show="!task.customData.showPopover">
+                    <a-button shape="round" style="font-weight:bold; color: white; background: #6667ab" type="text">今日</a-button>
+                  </div>
                   </div>
                 </div>
               </template>
@@ -51,7 +54,7 @@
           </div>
 
           <div v-show="!isCalendarView">
-          <div style="font-size: 20px; font-weight: bold; color: #777; height: 40px; line-height: 40px">未完成<va-icon color="#28609d" name="announcement" /></div>
+          <div style="font-size: 20px; font-weight: bold; color: #777; height: 40px; line-height: 40px">未完成&nbsp;<va-icon color="#28609d" name="announcement" /></div>
 
             <el-table
             :data="
@@ -100,7 +103,7 @@
 
             <div style="height: 20px" />
 
-            <div style="font-size: 20px; font-weight: bold; color: #777; height: 40px; line-height: 40px">已完成<va-icon color="#51b296" name="thumb_up" /></div>
+            <div style="font-size: 20px; font-weight: bold; color: #777; height: 40px; line-height: 40px">已完成&nbsp;<va-icon color="#51b296" name="thumb_up" /></div>
 
 
             <el-table
@@ -176,7 +179,21 @@ export default {
 
       events: [],
 
-      attributes: [],
+      attributes: [
+        {
+          key: 'today',
+          customData: {
+            title: '今日',
+            status: '',
+            class: '',
+            type: '',
+            taskId: '',
+            buttonStatus: '今日',
+            showPopover: false,
+          },
+          dates: new Date(),
+        },
+      ],
 
       searchFinished: '',
       searchUnfinished: '',
@@ -205,7 +222,8 @@ export default {
             class: 'finished',
             type: this.tasksFinished[i][6],
             taskId: this.tasksFinished[i][3],
-            buttonStatus: 'success'
+            buttonStatus: 'success',
+            showPopover: true
           },
           dates: new Date(this.tasksFinished[i][5])
         }
@@ -251,7 +269,8 @@ export default {
               class: new Date(this.tasksUnfinished[i][5]) > new Date() ? 'normal' : 'overdue',
               type: this.tasksUnfinished[i][6],
               taskId: this.tasksUnfinished[i][3],
-              buttonStatus: new Date(this.tasksUnfinished[i][5]) > new Date() ? 'normal' : 'danger'
+              buttonStatus: new Date(this.tasksUnfinished[i][5]) > new Date() ? 'normal' : 'danger',
+              showPopover: true,
             },
             dates: new Date(this.tasksUnfinished[i][5])
           }
