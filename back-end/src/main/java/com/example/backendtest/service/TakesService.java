@@ -116,13 +116,6 @@ public class TakesService {
         } else if (takesOptional.isPresent()) {
             throw new AlreadyExistException("该学生已经选修该实验课程！");
         }
-        /**
-         * TODO: 能不能把有关数据库查询的异常返回前端的错误码从500: Internal Server Error 改成别的？(已解决)
-         * ↓
-         * 已解决：定义一堆自定义异常然后在GlobalException里拦截即可。
-         */
-
-
         else {
                 takesRepository.save(takes);
                 log.info("新增选课信息： 课程ID: "
@@ -161,10 +154,28 @@ public class TakesService {
         }
         else {
             JSONObject json = new JSONObject();
-            json.put("code", 000);
+            json.put("code", 200);
             json.put("message", "学生选课关系已存在");
-            json.put("boolean",true);
             return json;
+        }
+    }
+
+    /**
+     * 由教师调用的更新成绩接口
+     */
+    public JSONObject updateScore(TakesEntity takes) {
+        Optional<TakesEntity> takesOptional = takesRepository.findById(takes.getStudentId(), takes.getCourseId());
+        if (takesOptional.isEmpty()) {
+            throw new MyNotFoundException("未查找到该学生在该课程的选课信息");
+        } else {
+            takesOptional.get().setScore(takes.getScore());
+            log.info("学生 " + takes.getStudentId() + " 在课程 "
+                            + takes.getCourseId() + " 的成绩更新为："
+                    + takes.getScore());
+            JSONObject result = new JSONObject();
+            result.put("code", 200);
+            result.put("msg", "成绩已更新");
+            return result;
         }
     }
 }

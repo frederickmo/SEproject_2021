@@ -63,4 +63,11 @@ public class TakesController {
     public JSONObject removeCourse(Integer studentId, Integer courseId) {
         return takesService.removeCourse(studentId, courseId);
     }
+
+    @SaCheckLogin
+    @ApiOperation("更新选课记录的成绩信息")
+    @PutMapping("/mark")
+    public JSONObject updateScore(@RequestBody TakesEntity takes) {
+        return takesService.updateScore(takes);
+    }
 }

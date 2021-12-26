@@ -11,6 +11,9 @@
   </div>
 </div>
 
+<div style="position: absolute; top: 9%; left: 30%; right: 30%">
+    <img src="./../../assets/onetake-logo-white-ver.png" style="width: 450px" />
+</div>
 <div class="slogan">
     <div style="font-size: 40px">
         实验教学管理系统
@@ -108,7 +111,7 @@ body {
 
 .slogan {
     position: absolute; 
-    top: 16%; 
+    top: 28%; 
     left: 30%; 
     right: 30%; 
     min-width: 400px; 
@@ -197,7 +200,7 @@ body {
     margin: auto;
     left: 0;
     right: 0;
-    top: 33%;
+    top: 39%;
 }
 
 </style>

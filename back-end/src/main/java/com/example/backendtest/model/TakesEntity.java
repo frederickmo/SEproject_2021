@@ -8,6 +8,7 @@ import javax.persistence.*;
 public class TakesEntity {
     private int studentId;
     private int courseId;
+    private Integer score;
 
     @Id
     @Column(name = "student_id")
@@ -47,5 +48,15 @@ public class TakesEntity {
         int result = studentId;
         result = 31 * result + courseId;
         return result;
+    }
+
+    @Basic
+    @Column(name = "score")
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 }

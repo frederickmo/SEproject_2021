@@ -27,7 +27,7 @@ public interface TakesRepository extends JpaRepository<TakesEntity, TakesEntityP
     public Optional<List<TakesEntity>> findAllByCourseId(Integer courseId);
 
     /**
-     * 这里为什么用原生SQL语句写呢，因为@Query格式的删除语句不会写(只会写查)
+     * 这里为什么用原生SQL语句写呢，因为HQL格式的删除语句不会写(只会写查)
      */
     @Transactional
     @Modifying
