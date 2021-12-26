@@ -169,6 +169,7 @@ public class TakesService {
             throw new MyNotFoundException("未查找到该学生在该课程的选课信息");
         } else {
             takesOptional.get().setScore(takes.getScore());
+            takesRepository.save(takesOptional.get());
             log.info("学生 " + takes.getStudentId() + " 在课程 "
                             + takes.getCourseId() + " 的成绩更新为："
                     + takes.getScore());

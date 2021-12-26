@@ -4,6 +4,9 @@
     <!-- <template v-slot:left>
       <va-checkbox v-model="minimized" label="Minimized(暂时还没实现)" />
     </template> -->
+    <template v-slot:left>
+      <img src="./../assets/onetake-logo-white-ver.png" style="width: 160px" />
+    </template>
     <template v-slot:center>
       <span style="font-weight: bold; font-size: 18px">实验教学管理系统</span>
     </template>
