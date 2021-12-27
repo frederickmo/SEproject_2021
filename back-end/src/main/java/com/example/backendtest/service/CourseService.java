@@ -5,7 +5,9 @@ import com.example.backendtest.exception.AlreadyExistException;
 import com.example.backendtest.exception.CourseNotFoundException;
 import com.example.backendtest.exception.MyNotFoundException;
 import com.example.backendtest.model.CourseEntity;
+import com.example.backendtest.model.ManagesEntity;
 import com.example.backendtest.repository.CourseRepository;
+import com.example.backendtest.repository.ManagesRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class CourseService {
 
     private final CourseRepository courseRepository;
+    private final ManagesRepository managesRepository;
 
     public CourseEntity getById(Integer id) {
         Optional<CourseEntity> courseOptional = courseRepository.findById(id);
@@ -62,7 +65,15 @@ public class CourseService {
             throw new AlreadyExistException("该课程已存在");
         } else {
             courseRepository.save(course);
+
             log.info("新增课程 => 课程ID: " + course.getId() + " 课程名: " + course.getName());
+
+            ManagesEntity manages = new ManagesEntity();
+            manages.setCourseId(course.getId());
+            manages.setTeacherId(course.getManager());
+            managesRepository.save(manages);
+            log.info("新增责任教师授课关系：教师 " + course.getManager() + " 课程 " + course.getId());
+
             JSONObject json = new JSONObject();
             json.put("code", 200);
             json.put("message", "课程添加成功");
