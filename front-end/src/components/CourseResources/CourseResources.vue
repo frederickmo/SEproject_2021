@@ -8,6 +8,12 @@
     </div>
     <!-- <iframe v-show="showIframe" :src="getFileUrl()" /> -->
     <va-card>
+        <a-button style="position: absolute; right: 30px; top: 15px" shape="round" @click="this.$router.replace({path: '/refresh'})">
+            <template #icon>
+                <icon-refresh />
+            </template>
+            刷新
+        </a-button>
         <va-card-title style="font-size: 20px">
             课程资源 
             <va-button v-if="this.identity==3||this.identity==2" color="#aaa" style="color: #777" flat @click="uploadModalVisible=!uploadModalVisible">上传</va-button>
@@ -30,6 +36,7 @@
             size="small"
             :bordered="false"
             style="text-align: left; margin-top: 20px"
+            v-if="this.resources.length"
             >
             <template #header>
                 <div style="font-size: 18px; font-weight: bold">
@@ -43,6 +50,10 @@
                     <a :href="generateUrl(file.name)"><icon-file style="margin-right: 5px" />{{file.name}}</a>
                 </a-list-item>
             </a-list>
+            <div style="margin-top: 32px; margin-left: 5px" v-else>
+                <div style="font-size: 18px; font-weight: bold">{{courses[curCourseIndex].name}}课程资源</div>
+                <div style="margin-top: 15px">暂无内容</div>
+            </div>
         </va-card-content>
     </va-card>
   <a-modal v-model:visible="uploadModalVisible">
@@ -131,19 +142,6 @@ export default {
                 })
             }
         })
-       
-        // console.log("65/courseResource/"+this.courses[this.curCourseIndex].id)
-        // fetch(this.$URL + "/file/getAll?path=/courseResource/"+this.courses[this.curCourseIndex].id, {
-        //     method: "GET",
-        //     headers: { "satoken": localStorage.getItem("token") }
-        // }).then((response) => {
-        //     let result = response.json()
-        //     result.then((res) => {
-        //         console.log(res)
-        //         this.resources=res
-        //         console.log(this.resources)
-        //     })
-        // })
     },
     methods: {
         headers(){

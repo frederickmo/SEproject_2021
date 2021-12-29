@@ -280,11 +280,7 @@ public class FileStorageService {
         File[] fileList = file.listFiles();
         List<JSONObject> fileNameList = new ArrayList<>();
 
-        if (fileList == null) {
-            JSONObject json = new JSONObject();
-            json.put("name", "empty directory");
-            fileNameList.add(json);
-        } else {
+        if (fileList != null) {
             for (File value : fileList) {
                 // 去掉文件名首尾为'.'是为了过滤掉.DS_store
                 if (value.isFile() && value.getName().charAt(0) != '.') {

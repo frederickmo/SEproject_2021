@@ -84,13 +84,13 @@ const routes = [{
                     import ('../components/CourseManagement/CoursePage.vue')
             },
             {
-                path: '/home/course',
+                path: '/home/course/modify',
                 name: 'CourseModify',
                 component: () =>
                     import ('../components/CourseManagement/CourseModify.vue')
             },
             {
-                path: '/home/course',
+                path: '/home/course/add',
                 name: 'Courseadd',
                 component: () =>
                     import ('../components/CourseManagement/Courseadd.vue')
@@ -115,13 +115,13 @@ const routes = [{
                     import ('../components/TaskManagement/TaskManagement.vue')
             },
             {
-                path: '/home/taskmanagement',
+                path: '/home/taskmanagement/manage',
                 name: 'TaskManagePage',
                 component: () =>
                     import ('../components/TaskManagement/TaskManagePage.vue')
             },
             {
-                path: '/home/taskmanagement',
+                path: '/home/taskmanagement/modify',
                 name: 'TaskModify',
                 component: () =>
                     import ('../components/TaskManagement/TaskModify.vue')
@@ -166,16 +166,28 @@ const routes = [{
             // Forms / 在线表格
             {
                 path: '/home/task/onlinetask',
-                name: 'OnlineTask',
+                name: 'OnlineTask_InTaskPage',
                 component: () =>
-                    import ('../components/Forms/OnlineExperimentForm.vue')
+                    import ('../components/Forms/OnlineExperimentForm_InTaskPage.vue')
             },
 
             {
                 path: '/home/task/complextask',
-                name: 'ComplexTask',
+                name: 'ComplexTask_InTaskPage',
                 component: () =>
-                    import ("../components/Forms/ComplexExperimentPage.vue")
+                    import ("../components/Forms/ComplexExperimentPage_InTaskPage.vue")
+            },
+            {
+                path: 'home/course/onlinetask',
+                name: 'OnlineTask_InCoursePage',
+                component: () => 
+                    import ("../components/Forms/OnlineExperimentForm_InCoursePage.vue")
+            },
+            {
+                path: 'home/course/complextask',
+                name: 'ComplexTask_InCoursePage',
+                component: () => 
+                    import ("../components/Forms/ComplexExperimentPage_InCoursePage.vue")
             },
             {
                 path: '/home/grademanagement/course/task/check',

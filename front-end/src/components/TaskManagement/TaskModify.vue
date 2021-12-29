@@ -1,5 +1,11 @@
 <template>
   <va-card gradient color="#e0e5df">
+      <a-button style="position: absolute; right: 30px; top: 15px" shape="round" @click="this.$router.replace({path: '/refresh'})">
+          <template #icon>
+              <icon-refresh />
+          </template>
+          刷新
+      </a-button>
       <va-card-content style="text-align: left">
         <h1>修改项目信息</h1>
           <div class="course-title">项目名字：{{this.taskName}}<va-input

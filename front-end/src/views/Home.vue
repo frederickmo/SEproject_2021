@@ -355,9 +355,9 @@ minimizedWidth="0">
 
       <!-- 这里改成了嵌套路由 -->
 
-      <transition name="fade">
+      <!-- <transition name="fade"> -->
       <router-view />
-      </transition>
+      <!-- </transition> -->
 
     </el-main>
   </el-container>

@@ -1,11 +1,12 @@
 <template>
     <div>
-        <div style="margin-bottom: 10px">
-            <va-breadcrumbs separator=">">
-                <va-breadcrumbs-item label="实验管理" disabled />
-                <va-breadcrumbs-item label="我的实验" to="/home/mytasks" />
-                <va-breadcrumbs-item label="在线实验项目" disabled />
-            </va-breadcrumbs>
+      <div style="margin-bottom: 10px">
+        <va-breadcrumbs separator=">">
+            <va-breadcrumbs-item label="课程管理" disabled />
+            <va-breadcrumbs-item label="我的课程" to="/home/mycourses" />
+            <va-breadcrumbs-item label="所有实验项目" to="/home/course" />
+            <va-breadcrumbs-item label="小型实验项目" disabled />
+        </va-breadcrumbs>
       </div>
       <a-modal v-model:visible="showModal" @ok="handleModalOk">
           <template #title>
@@ -17,6 +18,12 @@
       </a-modal>
         <a-alert type="warning" style="margin-bottom: 10px" v-show="isOverdue()">该实验报告已截止。您现在仅可查看，无法进行提交。</a-alert>
         <va-card>
+            <a-button style="position: absolute; right: 30px; top: 15px" shape="round" @click="this.$router.replace({path: '/refresh'})">
+                <template #icon>
+                    <icon-refresh />
+                </template>
+                刷新
+            </a-button>
             <div style="height: 15px" />
             <div style="height: 20px" />
             <a-space style="margin-bottom: 20px">

@@ -7,6 +7,12 @@
             </va-breadcrumbs>
         </div>
       <va-card>
+            <a-button style="position: absolute; right: 30px; top: 15px" shape="round" @click="this.$router.replace({path: '/refresh'})">
+                <template #icon>
+                    <icon-refresh />
+                </template>
+                刷新
+            </a-button>
           <va-card-title style="font-size: 20px; font-weight: bold">账号安全</va-card-title>
           <va-card-content>
               <div style="height: 20px" />

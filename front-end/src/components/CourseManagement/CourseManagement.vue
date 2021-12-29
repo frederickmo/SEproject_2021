@@ -7,6 +7,12 @@
         </va-breadcrumbs>
       </div>
     <va-card>
+      <a-button style="position: absolute; right: 30px; top: 15px" shape="round" @click="this.$router.replace({path: '/refresh'})">
+        <template #icon>
+          <icon-refresh />
+        </template>
+        刷新
+      </a-button>
       <va-card-title style="font-size: 20px">课程管理</va-card-title>
         <va-card-content>
           <div style="text-align:left"><a-button v-if="this.identity==3" @click="add()" color="#e0e5df" style="color: rgb(40,40,40)">新增课程</a-button></div>

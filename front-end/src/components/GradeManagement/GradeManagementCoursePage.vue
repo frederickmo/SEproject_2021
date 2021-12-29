@@ -4,11 +4,17 @@
         <va-breadcrumbs separator=">">
             <va-breadcrumbs-item label="成绩管理" disabled />
             <va-breadcrumbs-item label="所有课程" to="/home/grademanagement" />
-        <va-breadcrumbs-item label="课程成绩管理" to="/home/grademanagement/course" />
+          <va-breadcrumbs-item :label="this.Scorestatus==1?'所有实验项目':'课程成员成绩'" disabled />
         </va-breadcrumbs>
       </div>
     <va-card>
-      <va-card-title style="font-size: 20px">课程成绩管理</va-card-title>
+      <a-button style="position: absolute; right: 30px; top: 15px" shape="round" @click="this.$router.replace({path: '/refresh'})">
+          <template #icon>
+              <icon-refresh />
+          </template>
+          刷新
+      </a-button>
+      <va-card-title style="font-size: 20px">{{this.Scorestatus==1?'课程项目成绩':'课程成员成绩'}}</va-card-title>
         <va-card-content v-show="tasks.length">
           <div>
           <div style="display: flex">

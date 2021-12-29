@@ -53,6 +53,12 @@
             <a-button type="primary" status="success" @click="handleActivateAccount">激活</a-button>
     </a-alert>
     <va-card>
+      <a-button style="position: absolute; right: 30px; top: 20px" shape="round" @click="this.$router.replace({path: '/refresh'})">
+          <template #icon>
+              <icon-refresh />
+          </template>
+          刷新
+      </a-button>
       <va-card-title style="font-size: 20px">
         基本信息
         <va-button
@@ -114,11 +120,11 @@ export default {
 
       id: '',
       name: '',
-      gender: 0,
+      gender: '',
       email: '',
       password: '',
-      activated: 1,
-      identity: 0,
+      activated: 0,
+      identity: '',
 
 
       activateAccountModalVisible: false,

@@ -1,5 +1,11 @@
 <template>
   <div>
+      <div style="margin-bottom: 10px">
+        <va-breadcrumbs separator=">">
+            <va-breadcrumbs-item label="成员管理" disabled />
+            <va-breadcrumbs-item label="成员管理" to="/home/accountmanagement" />
+        </va-breadcrumbs>
+      </div>
       <!-- 修改信息的Modal -->
       <a-modal
       v-model:visible="modifyInfoModalVisible"
@@ -68,6 +74,12 @@
       </div>
       </a-modal>
       <va-card>
+      <a-button style="position: absolute; right: 30px; top: 15px" shape="round" @click="this.$router.replace({path: '/refresh'})">
+          <template #icon>
+              <icon-refresh />
+          </template>
+          刷新
+      </a-button>
         <va-card-title style="font-size: 20px">{{this.handleChangeTitle()}}</va-card-title>
           <va-card-content>
               <div style="display: flex">
@@ -205,10 +217,12 @@ export default {
             this.students = res
             console.log("students:", this.students)
             for (let i = 0; i < this.students.length; ++i) {
+                this.students[i].name = this.students[i].name == null ? '未知' : this.students[i].name
                 this.students[i].gender = this.students[i].gender==1? "男" : (this.students[i].gender==2 ? "女" : "未知")
                 this.students[i].email = this.students[i].email ? this.students[i].email : "暂无"
                 this.students[i].activated = this.students[i].activated ? "已激活" : "未激活"
             }
+            console.log("修改后的students:", this.students)
         })
         .then(async () => {
             fetch(this.$URL + "/user/get/teacher", {
@@ -220,11 +234,13 @@ export default {
                 this.teachers = res
                 console.log("teachers: ", this.teachers)
                 for (let i = 0; i < this.teachers.length; ++i) {
+                    this.teachers[i].name = this.teachers[i].name == null ? '未知' : this.teachers[i].name
                     this.teachers[i].gender = this.teachers[i].gender==1 ? "男" : (this.teachers[i].gender==2 ? "女" : "未知")
                     this.teachers[i].email = this.teachers[i].email ? this.teachers[i].email : "暂无"
                     this.teachers[i].identity = this.teachers[i].identity==2 ? "助教" : "教师"
                     this.teachers[i].activated = this.teachers[i].activated ? "已激活" : "未激活"
                 }
+                console.log("修改后的teachers:", this.teachers)
             })
         })
         .then(async () => {
@@ -237,11 +253,13 @@ export default {
                 this.allUsers = res
                 console.log("allUsers:", this.allUsers)
                 for (let i = 0; i < this.allUsers.length; ++i) {
+                    this.allUsers[i].name = this.allUsers[i].name == null ? '未知' : this.allUsers[i].name
                     this.allUsers[i].gender = this.allUsers[i].gender==1 ? "男" : (this.allUsers[i].gender==2 ? "女" : "未知")
                     this.allUsers[i].email = this.allUsers[i].email ? this.allUsers[i].email : "暂无"
                     this.allUsers[i].identity = this.allUsers[i].identity==1 ? "学生" : (this.allUsers[i].identity==2 ? "助教" : (this.allUsers[i].identity==3 ? "教师" : (this.allUsers[i].identity==4 ? "管理员" : "未知")))
                     this.allUsers[i].activated = this.allUsers[i].activated ? "已激活" : "未激活"
                 }
+                console.log("修改后的allusers:", this.allUsers)
             })
         })
     },

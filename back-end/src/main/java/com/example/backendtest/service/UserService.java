@@ -52,6 +52,9 @@ public class UserService {
             user.setGender(0);
             // 身份默认为学生
             user.setIdentity(1);
+            if (user.getName().equals("") || user.getName() == null) {
+                user.setName("未知");
+            }
             userRepository.save(user);
             log.info("新增用户: 用户ID " + user.getId());
             JSONObject json = new JSONObject();

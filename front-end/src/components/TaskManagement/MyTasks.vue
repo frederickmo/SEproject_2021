@@ -7,6 +7,12 @@
         </va-breadcrumbs>
       </div>
     <va-card>
+      <a-button style="position: absolute; right: 30px; top: 15px" shape="round" @click="this.$router.replace({path: '/refresh'})">
+          <template #icon>
+              <icon-refresh />
+          </template>
+          刷新
+      </a-button>
       <va-card-title style="font-size: 20px">我的实验项目</va-card-title>
         <va-card-content style="text-align: left">
           <div style="margin-bottom: 15px">
@@ -285,7 +291,7 @@ export default {
     switchToCourseUnfinished(index) {
       localStorage.setItem("curTaskId", this.tasksUnfinished[index][3])
       this.$router.push({
-        name: this.tasksUnfinished[index][6] ? 'ComplexTask' : 'OnlineTask',
+        name: this.tasksUnfinished[index][6] ? 'ComplexTask_InTaskPage' : 'OnlineTask_InTaskPage',
         params: {
             taskId: this.tasksUnfinished[index][3],
             deadline: this.tasksUnfinished[index][5]
@@ -295,7 +301,7 @@ export default {
     switchToCourseFinished(index) {
       localStorage.setItem("curTaskId", this.tasksFinished[index][3])
       this.$router.push({
-        name: this.tasksFinished[index][6] ? 'ComplexTask' : 'OnlineTask',
+        name: this.tasksFinished[index][6] ? 'ComplexTask_InTaskPage' : 'OnlineTask_InTaskPage',
         params: {
             taskId: this.tasksFinished[index][3],
             deadline: this.tasksFinished[index][5]
@@ -324,7 +330,7 @@ export default {
       localStorage.setItem("curTaskId", taskId)
       console.log(taskId, type)
       this.$router.push({
-        name: type ? 'ComplexTask' : 'OnlineTask',
+        name: type ? 'ComplexTask_InTaskPage' : 'OnlineTask_InTaskPage',
         params: {
           taskId: taskId
         }
@@ -334,7 +340,7 @@ export default {
       console.log(row)
       localStorage.setItem("curTaskId", row.id)
       this.$router.push({
-        name: row.type=='大型'?'ComplexTask':'OnlineTask',
+        name: row.type=='大型'?'ComplexTask_InTaskPage' : 'OnlineTask_InTaskPage',
         params: {
           taskId: row.id
         }

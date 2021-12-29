@@ -1,80 +1,22 @@
 <template>
-  <!-- <va-card gradient color="#e0e5df">
-
-
-      <va-card-content style="text-align: left">
-        <h1>修改课程信息</h1>
-          
-          <div class="course-title" style="float: left">课程名字：<va-input
-      class="mb-4"
-      v-model="this.courseName"
-      placeholder="请输入修改后的内容"
-      outline
-    />
-
-</div>
-          <div class="course-description" >
-            课程描述：
-            <va-input
-      class="mb-4"
-      v-model="this.courseDescription"
-      placeholder="请输入修改后的内容"
-      outline
-    />
-    
-    </div>
-
-
-         
-<div style="height: 15px" />
-    
-     
-    <div class="course-year" style="float: left ">开设年份：
-      <va-input
-      class="mb-4"
-      v-model="this.year"
-      placeholder="请输入修改后的内容"
-      outline
-    />
-   
-    
-    </div>
-            <div class="course-semester" >学年：<va-input
-      class="mb-4"
-      v-model="this.semester"
-      placeholder="请输入修改后的内容"
-      outline
-    /></div>
-            <div style="height: 20px" />
-
-            <va-button @click="handleClick3" color="#e0e5df" style="color: rgb(40,40,40)">确认修改</va-button>
-           
-
-           <a-modal v-model:visible="visible3" @ok="handleOk3" @cancel="handleCancel3" unmountOnClose @before-ok="handleBeforeOk3">
-    <template #title>
-      修改课程
-    </template>
-    <div>您确定要修改吗</div>
-  </a-modal>
-      </va-card-content>
-  </va-card> -->
-<!-- <a-modal
-      v-model:visible="modifyInfoModalVisible"
-      hide-cancel
-      ok-text="取消"
-      >
-        <template #title>
-            修改信息
-        </template> -->
-        <!-- <va-card gradient color="#e0e5df">
-
-
-      <va-card-content style="text-align: left"> -->
-        <div style="text-align:left">
-        <h1>课程管理</h1>
-        </div>
+<div>
+  <div style="margin-bottom: 10px">
+    <va-breadcrumbs separator=">">
+        <va-breadcrumbs-item label="课程管理" disabled />
+        <va-breadcrumbs-item label="课程管理" to="/home/coursemanagement" />
+        <va-breadcrumbs-item :label="this.modifystatus==1?'课程信息':'成员管理'" disabled />
+    </va-breadcrumbs>
+  </div>
+  <va-card>
+      <a-button style="position: absolute; right: 30px; top: 15px" shape="round" @click="this.$router.replace({path: '/refresh'})">
+        <template #icon>
+          <icon-refresh />
+        </template>
+        刷新
+      </a-button>
+        <va-card-title style="font-size: 20px">{{this.modifystatus==1?'课程信息':'成员管理'}}</va-card-title>
         <div>
-          <div style="display: flex">
+          <div style="display: flex; margin-left: 20px">
                   <a-button style="margin-right: 10px" @click="this.modifystatus=1">课程信息</a-button>
                   <a-button @click="this.modifystatus=2">成员管理</a-button>
               </div>
@@ -82,7 +24,7 @@
 
         <div v-if="this.modifystatus==1">
           <div style="height: 12px" />
-            <div style="text-align:left">课程信息查看</div>
+            <div style="text-align:left; margin-left: 20px">课程信息查看</div>
             <div v-if="this.modifystatus==1" style="display: flex; line-height: 200%; margin-top: 10px">
                 <div style=" width: 18%;  font-weight: bold; text-align: center">课程名称：</div>
                 <div style="width: 20%">
@@ -103,11 +45,12 @@
                     <a-input v-model="this.semester"  readonly/>
                 </div>
             </div>
-            <div style="height: 12px" />
+            <div style="height: 20px" />
             <div style="text-align:center">
               <!-- <a-button @click="handleOk3()" color="#FF0000" style="background-color: rgb(0,0,0) text-align:center">提交更改</a-button> -->
               <a-button  @click="this.modifystatus=3" color="#e0e5df" style="color: rgb(40,40,40); ">点击修改</a-button>
           </div>
+          <div style="height: 30px" />
         </div>
 
         <div v-if="this.modifystatus==3">
@@ -141,84 +84,20 @@
               <a-button v-if="this.on==0" @click="handleClick4"  status="danger" style="background-color: rgb(0,0,0) text-align:center">点击删除课程</a-button> 
           </div>
         </div>
-      <!-- </va-card-content>
-        </va-card> -->
-      <!-- </a-modal> -->
-      <!-- <a-button @click="this.modifyInfoModalVisible = !this.modifyInfoModalVisible">修改课程信息</a-button> -->
 <div style="height: 2px" />
 
-
-
-  <!-- <va-card v-if="this.on==0" gradient color="#e0e5df">
-      <va-card-content style="text-align: left"> -->
       <div v-if="this.modifystatus==2">
         <div style="height: 12px" />
-        <div style="display: flex">
+        <div style="display: flex; margin-left: 20px">
           <a-button size="mini" style="margin-right: 10px" @click="this.status=1">学生管理</a-button>
           <a-button size="mini" @click="this.status=2">教师管理</a-button>
           </div>
-           <!-- <va-card 
-            v-for="(student, index) in student"
-            :key="index"
-            color="#b5c4b1" 
-            gradient
-            style="margin-bottom: 10px"
-            >
-              <va-card-content style="rgb(60, 60, 60); font-weight: bold">
-                <h2 style="text-align:left">学生</h2>
-                <div style="display: flex">
-                 
-                  <div style="line-height: 36px; width: 10%; font-size: 18px">{{student.id}}</div>
-                  
-                  <div style="line-height: 36px; width: 80%; font-size: 18px">{{student.name}}</div>
-                  <div>
-                   
-                  <div style="height: 2px" /> 
-                  <va-button @click="DropCourse(student.id)" color="#e0e5df" style="color: rgb(40,40,40)">点击退课</va-button>
-                  </div>
-                  
-                  
-                </div>
-                
-
-              </va-card-content>
-              
-            </va-card>
-
-             <va-card 
-            v-for="(teacher, index) in teacher"
-            :key="index"
-            color="#b5c4b1" 
-            gradient
-            style="margin-bottom: 10px"
-            >
-              <va-card-content style="rgb(60, 60, 60); font-weight: bold">
-                <h2 style="text-align:left">教师</h2>
-                <div style="display: flex">
-                 
-                  <div style="line-height: 36px; width: 10%; font-size: 18px">{{teacher.id}}</div>
-                  
-                  <div style="line-height: 36px; width: 77%; font-size: 18px">{{teacher.name}}</div>
-                  <div>
-                    
-                  <div style="height: 2px" /> 
-                  <va-button @click="DropmanageCourse(teacher.id)" color="#e0e5df" style="color: rgb(40,40,40)">点击取消授课</va-button>
-                  </div>
-                  
-                  
-                </div>
-                
-
-              </va-card-content>
-              
-            </va-card> -->
           <el-table v-if="this.status==1"
           :data="student.filter(
               (data) =>
                 !search || data.name.toLowerCase().includes(search.toLowerCase())
             )
           "
-          style="width: 100%"
           >
             <el-table-column label="Id" prop="id" />
             <el-table-column label="Name" prop="name" />
@@ -264,16 +143,18 @@
             </template>
             </el-table-column>
           </el-table>
-          <div style="height: 12px" />
+          <div style="height: 20px" />
           <div style="text-align:center">
           <a-button v-if="this.on==0" @click="handleClick" color="#e0e5df" style="color: rgb(40,40,40); ">点击添加教师</a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
          
           <a-button v-if="this.on==0" @click="handleClick1" color="#e0e5df" style="color: rgb(40,40,40); ">点击添加学生</a-button>
           </div>
-          <div style="height: 10px" />
+          <div style="height: 30px" />
 
       </div>
+  </va-card>
+</div>
      
 
 
@@ -281,8 +162,6 @@
   <div style="height: 10px" />
   <div>
     <div>
-   
-   
   <a-modal v-model:visible="visible1" @ok="handleOk1" @cancel="handleCancel1" unmountOnClose @before-ok="handleBeforeOk1">
     <template #title>
       请输入学生id
@@ -655,7 +534,7 @@ handleClick4() {
       result.then(res => {
        if (res.code == 200) {
                         this.$notification.success('退课成功')
-                        this.$router.go(-1)
+                        this.$router.replace({path: '/refresh'})
                     }
       })
     })
@@ -688,7 +567,7 @@ handleClick4() {
       result.then(res => {
        if (res.code == 200) {
                         this.$notification.success('取消教师授课成功')
-                        this.$router.go(-1)
+                        this.$router.replace({path: '/refresh'})
                     }
       })
     })

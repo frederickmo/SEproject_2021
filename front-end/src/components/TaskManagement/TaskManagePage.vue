@@ -1,5 +1,18 @@
 <template>
-  <va-card gradient color="#e0e5df">
+      <div style="margin-bottom: 10px">
+        <va-breadcrumbs separator=">">
+            <va-breadcrumbs-item label="实验项目管理" disabled />
+            <va-breadcrumbs-item label="实验项目管理" to="/home/taskmanagement" />
+            <va-breadcrumbs-item label="实验项目信息" disabled />
+        </va-breadcrumbs>
+      </div>
+  <va-card>
+      <a-button style="position: absolute; right: 30px; top: 15px" shape="round" @click="this.$router.replace({path: '/refresh'})">
+          <template #icon>
+              <icon-refresh />
+          </template>
+          刷新
+      </a-button>
       <va-card-content style="text-align: left">
         <a-modal
           v-model:visible="displayAnnouncementModalVisible"
@@ -108,7 +121,7 @@
               >
               <el-table-column label="名称" prop="name" />
               <el-table-column label="截止日期" prop="deadline" />
-              <el-table-column label="逾期" prop="over" />
+              <el-table-column label="是否逾期" prop="over" />
               <el-table-column align="right">
             <template #header>
               <el-input v-model="search" size="mini" placeholder="Type to search" />
@@ -128,13 +141,6 @@
             </template>
     </el-table-column>
   </el-table>
-                <!-- <div style="display: flex">
-                  <div style="line-height: 36px; width: 35%; font-size: 18px">{{task.name}}</div>
-                  <div style="line-height: 36px; width: 37%">截止日期：{{task.deadline ? task.deadline : "暂无"}}</div>
-                  <div v-show="isOverdue(task.deadline)" style="line-height: 36px; width: 18%; color: #e00"><va-icon color="#e00" name="error_outline" />已逾期</div>
-                  <div v-show="!isOverdue(task.deadline)" style="line-height: 36px; width: 18%"/>
-                  <div><va-button @click="switchToTaskSimple(index)" color="#e0e5df" style="color: rgb(40,40,40)">点击修改</va-button></div>
-                </div> -->
               </va-card-content>
             </va-card>
             <va-card>
@@ -150,7 +156,7 @@
               >
               <el-table-column label="名称" prop="name" />
               <el-table-column label="截止日期" prop="deadline" />
-              <el-table-column label="逾期" prop="over" />
+              <el-table-column label="是否逾期" prop="over" />
               <el-table-column align="right">
             <template #header>
               <el-input v-model="search1" size="mini" placeholder="Type to search" />
@@ -165,13 +171,6 @@
             </template>
     </el-table-column>
   </el-table>
-                <!-- <div style="display: flex">
-                  <div style="line-height: 36px; width: 35%; font-size: 18px">{{task.name}}</div>
-                  <div style="line-height: 36px; width: 37%">截止日期：{{task.deadline ? task.deadline : "暂无"}}</div>
-                  <div v-show="isOverdue(task.deadline)" style="line-height: 36px; width: 18%; color: #e00"><va-icon color="#e00" name="error_outline" />已逾期</div>
-                  <div v-show="!isOverdue(task.deadline)" style="line-height: 36px; width: 18%"/>
-                  <div><va-button @click="switchToTaskSimple(index)" color="#e0e5df" style="color: rgb(40,40,40)">点击修改</va-button></div>
-                </div> -->
               </va-card-content>
             </va-card>
             
@@ -267,12 +266,8 @@ export default {
                   } else if (now <= deadline) {
                     this.simpleTasks[i].over=""
                   } else {
-                    this.simpleTasks[i].over="逾期"
+                    this.simpleTasks[i].over="已逾期"
                   }
-                  // if(isOverdue(task.deadline))
-                  //   this.simpleTasks[i].over="逾期"
-                  // else
-                  //   this.simpleTasks[i].over=""
                   if(!this.simpleTasks[i].deadline)
                   {
                     this.simpleTasks[i].deadline="暂无"
@@ -298,12 +293,8 @@ export default {
                   } else if (now <= deadline) {
                     this.complexTasks[i].over=""
                   } else {
-                    this.complexTasks[i].over="逾期"
+                    this.complexTasks[i].over="已逾期"
                   }
-                  // if(isOverdue(task.deadline))
-                  //   this.simpleTasks[i].over="逾期"
-                  // else
-                  //   this.simpleTasks[i].over=""
                   if(!this.complexTasks[i].deadline)
                   {
                     this.complexTasks[i].deadline="暂无"

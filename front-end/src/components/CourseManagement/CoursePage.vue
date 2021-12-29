@@ -8,6 +8,12 @@
         </va-breadcrumbs>
       </div>
   <va-card>
+      <a-button style="position: absolute; right: 30px; top: 15px" shape="round" @click="this.$router.replace({path: '/refresh'})">
+        <template #icon>
+          <icon-refresh />
+        </template>
+        刷新
+      </a-button>
       <va-card-content style="text-align: left">
           <div class="course-title">{{this.courseName}}</div>
           <div class="course-description">{{this.courseDescription}}</div>
@@ -35,41 +41,6 @@
               </el-table-column>
             </el-table>
 
-            <!-- <va-card 
-            v-for="(task, index) in simpleTasks"
-            :key="index"
-            color="#b5c4b1" 
-            gradient
-            style="margin-bottom: 10px"
-            >
-              <va-card-content style="rgb(60, 60, 60); font-weight: bold">
-                <div style="display: flex">
-                  <div style="line-height: 36px; width: 35%; font-size: 18px">{{task.name}}</div>
-                  <div style="line-height: 36px; width: 37%">截止日期：{{task.deadline ? task.deadline : "暂无"}}</div>
-                  <div v-show="isOverdue(task.deadline)" style="line-height: 36px; width: 18%; color: #e00"><va-icon color="#e00" name="error_outline" />已逾期</div>
-                  <div v-show="!isOverdue(task.deadline)" style="line-height: 36px; width: 18%"/>
-                  <div><va-button @click="switchToTaskSimple(index)" color="#e0e5df" style="color: rgb(40,40,40)">点击进入</va-button></div>
-                </div>
-              </va-card-content>
-            </va-card>
-            <div style="height: 20px" />
-            <va-card 
-            v-for="(task, index) in complexTasks"
-            :key="index"
-            color="#ac9b91" 
-            gradient
-            style="margin-bottom: 10px"
-            >
-              <va-card-content style="rgb(60, 60, 60); font-weight: bold">
-                <div style="display: flex">
-                  <div style="line-height: 36px; width: 35%; font-size: 18px">{{task.name}}</div>
-                  <div style="line-height: 36px; width: 37%">截止日期：{{task.deadline ? task.deadline : "暂无"}}</div>
-                  <div v-show="isOverdue(task.deadline)" style="line-height: 36px; width: 18%; color: #e00"><va-icon color="#e00" name="error_outline" />已逾期</div>
-                  <div v-show="!isOverdue(task.deadline)" style="line-height: 36px; width: 18%"/>
-                  <div><va-button @click="switchToTaskComplex(index)" color="#e0e5df" style="color: rgb(40,40,40)">点击进入</va-button></div>
-                </div>
-              </va-card-content>
-            </va-card> -->
       </va-card-content>
   </va-card>
 </div>
@@ -176,8 +147,9 @@ export default {
       // console.log("调用switchToCourse时，index的值是：" + index)
       // console.log(this.tasks[index])
       console.log("taskName：" + this.simpleTasks[index].name)
+      localStorage.setItem("curTaskId", this.simpleTasks[index].id)
       this.$router.push({
-        name: 'OnlineTask',
+        name: 'OnlineTask_InCoursePage',
         params: {
             taskId: this.simpleTasks[index].id,
             taskName: this.simpleTasks[index].name,
@@ -193,8 +165,9 @@ export default {
       // console.log("调用switchToCourse时，courseId传过去了吗？ courseId的值是：" + id)
       // console.log("调用switchToCourse时，index的值是：" + index)
       // console.log(this.tasks[index])
+      localStorage.setItem("curTaskId", this.complexTasks[index].id)
       this.$router.push({
-        name: 'ComplexTask',
+        name: 'ComplexTask_InCoursePage',
         params: {
             taskId: this.complexTasks[index].id,
             taskName: this.complexTasks[index].name,
@@ -225,8 +198,9 @@ export default {
     },
     switchToTask(row) {
       console.log(row)
+      localStorage.setItem("curTaskId", row.id)
       this.$router.push({
-        name: row.type=='大型'?'ComplexTask':'OnlineTask',
+        name: row.type=='大型'?'ComplexTask_InCoursePage':'OnlineTask_InCoursePage',
         params: {
           taskId: row.id
         }
