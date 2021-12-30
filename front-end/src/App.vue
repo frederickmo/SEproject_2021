@@ -6,15 +6,15 @@
 // import Home from './views/Home.vue'
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     // Home
   },
-  mounted () {
+  mounted() {
     // this.$router.push({name: 'Auth'})
-    this.$router.push({name: 'Login'})
+    this.$router.push({ name: "Login" });
   },
-}
+};
 </script>
 
 <style>
