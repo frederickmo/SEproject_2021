@@ -4,10 +4,12 @@
 
 <script>
 export default {
-  data() {
-    this.$router.replace({ path: "/home" });
-  },
-};
+    data () {
+        this.$router.replace({path: '/home'})
+    }
+}
 </script>
 
-<style></style>
+<style>
+
+</style>

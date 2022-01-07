@@ -80,6 +80,8 @@ mail:
     addr: drt_test@163.com
 
 file:
+
+
 #  upload-dir: /Users/dengruotao/Desktop/SEproject_2021/back-end/src/main/resources/static
   upload-dir: /Users/frederickmo/documents/Github/SEproject_2021/back-end/src/main/resources/static
 #  upload-dir:/Users/86133/Documents/GitHub/SEproject_2021/back-end/src/main/resources/static
