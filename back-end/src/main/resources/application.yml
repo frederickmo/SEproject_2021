@@ -81,9 +81,9 @@ mail:
 
 file:
 #  upload-dir: /Users/dengruotao/Desktop/SEproject_2021/back-end/src/main/resources/static
-#  upload-dir: /Users/frederickmo/documents/Github/SEproject_2021/back-end/src/main/resources/static
+  upload-dir: /Users/frederickmo/documents/Github/SEproject_2021/back-end/src/main/resources/static
 #  upload-dir:/Users/86133/Documents/GitHub/SEproject_2021/back-end/src/main/resources/static
-  upload-dir: /home/user/backend 
+#  upload-dir: /home/user/backend
 
 # Sa-Token Configuration
 sa-token:

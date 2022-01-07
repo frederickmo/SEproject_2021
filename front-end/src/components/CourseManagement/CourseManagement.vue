@@ -140,8 +140,12 @@ export default {
       // console.log(response);
       let result = response.json();
       result.then((res) => {
-        // console.log(res);
-        this.teach = res;
+        console.log(res);
+        if (res.code == 402) {
+          this.teach = [];
+        } else {
+          this.teach = res;
+        }
       });
     });
   },
@@ -177,7 +181,7 @@ export default {
       });
     },
     modifyCourse(courseId, index, o) {
-      localStorage.setItem("courseId", courseId)
+      localStorage.setItem("courseId", courseId);
       this.$router.push({
         name: "CourseModify",
         params: {
