@@ -2,6 +2,7 @@ package com.example.backendtest.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.util.SaResult;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.backendtest.model.SignEntity;
 import com.example.backendtest.model.UserEntity;
@@ -9,11 +10,9 @@ import com.example.backendtest.service.UserService;
 import com.example.backendtest.util.VerifyEmailUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Api(tags = "用户管理")
@@ -80,6 +79,13 @@ public class UserController {
     @ApiOperation("新增用户")
     @PostMapping("add")
     public JSONObject add(@RequestBody UserEntity user) {
+        return userService.register(user);
+    }
+
+    @SaCheckLogin
+    @ApiOperation("管理员导入用户")
+    @PostMapping("add/administrator")
+    public JSONObject administratorAdd(@RequestBody UserEntity user) {
         return userService.add(user);
     }
 
@@ -89,7 +95,7 @@ public class UserController {
     @ApiOperation("用户注册")
     @PostMapping("register")
     public JSONObject register(@RequestBody UserEntity user) {
-        return userService.add(user);
+        return userService.register(user);
     }
 
     @SaCheckLogin

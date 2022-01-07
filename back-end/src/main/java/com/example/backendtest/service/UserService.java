@@ -13,6 +13,7 @@ import com.example.backendtest.repository.VerificationCodeRepository;
 import com.example.backendtest.util.VerifyEmailUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,39 @@ public class UserService {
     private VerifyEmailUtil verifyEmailUtil;
 
     public JSONObject add(UserEntity user) {
+        Optional<UserEntity> userOptional = userRepository.findById(user.getId());
+        if (userOptional.isPresent()) {
+            throw new AlreadyExistException("用户 " + user.getId() + " 已存在");
+        } else if (userRepository.findAllByEmail(user.getEmail()).isPresent()) {
+            throw new EmailAlreadyRegisteredException("邮箱 " + user.getEmail() + " 已被注册");
+        } else {
+            if (user.getName() == null || user.getName().equals("")) {
+                user.setName("未知");
+            }
+            if (user.getPassword() == null || user.getPassword().equals("")) {
+                user.setPassword("12345");
+            }
+            if (user.getGender() == null) {
+                user.setGender(0);
+            }
+            if (user.getIdentity() == null) {
+                user.setIdentity(1);
+            }
+            if (user.getActivated() == null) {
+                user.setActivated(0);
+            }
+
+            userRepository.save(user);
+            log.info("管理员导入用户: 用户ID " + user.getId());
+            JSONObject json = new JSONObject();
+            json.put("code", 200);
+            json.put("message", "添加成功！");
+            return json;
+
+        }
+    }
+
+    public JSONObject register(UserEntity user) {
         // TODO: 总感觉用户注册的检查选项少了什么东西，后续有待完善
         Optional<UserEntity> userTemp = userRepository.findById(user.getId());
         if (userTemp.isPresent()) {

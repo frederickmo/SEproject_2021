@@ -140,7 +140,7 @@ export default {
       // console.log(response);
       let result = response.json();
       result.then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.code == 402) {
           this.teach = [];
         } else {

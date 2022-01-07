@@ -111,6 +111,14 @@
           <a-button style="margin-right: 10px" @click="this.status = 3"
             >所有用户管理</a-button
           >
+          <el-upload
+            :action="url"
+            :http-request="importExcel"
+            list-type="text"
+            :show-file-list="false"
+          >
+            <a-button type="primary">导入用户</a-button>
+          </el-upload>
         </div>
         <el-table
           v-show="this.status == 1"
@@ -226,6 +234,7 @@
 </template>
 
 <script>
+import XLSX from "xlsx";
 export default {
   data() {
     return {
@@ -256,6 +265,13 @@ export default {
         identity: "",
         activated: "",
       },
+
+      userId: "",
+      userName: "",
+      userGender: "",
+      userEmail: "",
+      userIndentity: "",
+      userActivated: "",
     };
   },
   mounted() {
@@ -481,6 +497,98 @@ export default {
             this.$message.error("移除用户失败");
           }
         });
+    },
+    importExcel(content) {
+      const file = content.file;
+      const types = file.name.split(".")[1];
+      const fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(
+        (item) => item === types
+      );
+      if (!fileType) {
+        this.$message("格式错误，请重新选择");
+        return;
+      }
+      this.file2Xce(file).then((tabJson) => {
+        if (tabJson && tabJson.length > 0) {
+          this.xlsxJson = tabJson;
+          this.fileList = this.xlsxJson[0].sheet;
+
+          this.fileList.forEach((item, index, arr) => {
+            console.log(item, index, arr);
+            // if (item[n] === this.name) {
+            //   console.log(item[n]+"90")
+            //   this.dataForm = item['XXXX'] // 需要的值的表头
+            // }
+            //let n = '学号'
+            this.userId = item["学号"];
+            this.userName = item["姓名"];
+            this.userGender = item["性别"];
+            this.userEmail = item["邮箱"];
+            this.userIndentity = item["身份"];
+            this.userActivated = item["激活状态"];
+            this.addUser();
+          });
+        }
+      });
+    },
+    addUser() {
+      let submitForm = {
+        id: this.userId,
+        name: this.userName,
+        gender: this.userGender == "男" ? 1 : this.userGender == "女" ? 2 : 0,
+        password: "12345",
+        email: this.userEmail,
+        identity:
+          this.userIndentity == "学生"
+            ? 1
+            : this.userIndentity == "助教"
+            ? 2
+            : this.userIndentity == "教师"
+            ? 3
+            : 0,
+        activated: this.userActivated == "已激活" ? 1 : 0,
+      };
+      fetch(this.$URL + "/user/add/administrator", {
+        method: "POST",
+        body: JSON.stringify(submitForm),
+        headers: {
+          "Content-Type": "application/json",
+          satoken: localStorage.getItem("token"),
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          if (res.code == 200) {
+            this.$message.success("导入成功");
+            this.$router.replace({ path: "/refresh" });
+          } else if (res.code == 403) {
+            this.$message.error(res.msg);
+          } else if (res.code == 409) {
+            this.$message.error(res.msg);
+          }
+        });
+    },
+    file2Xce(file) {
+      return new Promise(function (resolve, reject) {
+        console.log(reject);
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const data = e.target.result;
+          this.wb = XLSX.read(data, {
+            type: "binary",
+          });
+          const result = [];
+          this.wb.SheetNames.forEach((sheetName) => {
+            result.push({
+              sheetName: sheetName,
+              sheet: XLSX.utils.sheet_to_json(this.wb.Sheets[sheetName]),
+            });
+          });
+          resolve(result);
+        };
+        reader.readAsBinaryString(file);
+      });
     },
   },
 };
