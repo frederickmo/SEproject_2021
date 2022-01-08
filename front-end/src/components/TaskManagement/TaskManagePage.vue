@@ -77,6 +77,10 @@
         <a-button v-show="modifyAnnouncementStatus" @click="handleOk3"
           >确认提交</a-button
         >
+        <div style="height:20px"/>
+        <a-button v-show="modifyAnnouncementStatus" status="danger" @click="deletetask" style="background-color: rgb(0,0,0) text-align:center"
+          >删除项目</a-button
+        >
       </a-modal>
       <a-modal
         v-model:visible="displayAnnouncementModalVisible1"
@@ -124,7 +128,14 @@
       </a-modal>
       <h1>{{ this.courseName }}</h1>
       <div class="course-description">{{ this.courseDescription }}</div>
-      <a-button type="primary" style="margin-bottom: 20px; background: #496f8d">发布实验项目</a-button>
+      <!-- <a-button type="primary" style="margin-bottom: 20px; background: #496f8d">发布实验项目</a-button> -->
+      <a-button
+        v-if="this.identity == 3"
+        @click="addtask()"
+        type="primary"
+        style="margin-bottom: 20px; background: #496f8d"
+        >发布实验项目</a-button
+      >
       <!-- <va-card 
             v-for="(task, index) in simpleTasks"
             :key="index"
@@ -226,6 +237,7 @@
 export default {
   data() {
     return {
+      identity:'',
       isSubmitted: false,
       search: "",
       search1: "",
@@ -292,6 +304,14 @@ export default {
       console.log("从上个页面传来的courseName: ", this.courseName);
     }
 
+    fetch(this.$URL + "/user/get?id=" + this.id, {
+      method: "GET",
+      headers: { satoken: localStorage.getItem("token") },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        this.identity = res.identity;
+      });
     fetch(this.$URL + "/task/get/simple?courseId=" + this.courseId, {
       method: "GET",
       headers: { satoken: localStorage.getItem("token") },
@@ -299,7 +319,7 @@ export default {
       // console.log(response)
       let result = response.json();
       result.then((res) => {
-        // console.log(res)
+         console.log(res)
         this.simpleTasks = res;
         for (var i in this.simpleTasks) {
           let now = new Date(new Date().toLocaleDateString());
@@ -350,6 +370,28 @@ export default {
     });
   },
   methods: {
+    deletetask()
+    {
+       fetch(this.$URL + "/task/remove?taskId=" + this.displayAnnouncement.id, {
+        method: "DELETE",
+        headers: { satoken: localStorage.getItem("token") },
+        }).then((response) => {
+          // console.log(response)
+          let result = response.json();
+          result.then((res) => {
+            console.log(res);
+            this.$router.go(-1);
+            this.$notification.success("删除成功");
+            
+          });
+        });
+    },
+    addtask()
+    {
+        this.$router.push({
+        name: "TaskAdd",
+        });
+    },
     headers() {
       return {
         satoken: localStorage.getItem("token"),

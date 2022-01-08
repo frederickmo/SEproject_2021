@@ -115,6 +115,12 @@ const routes = [{
                     import ('../components/TaskManagement/TaskManagement.vue')
             },
             {
+                path: "/home/taskadd",
+                name: "TaskAdd",
+                component: () =>
+                    import ("../components/TaskManagement/TaskAdd.vue"),
+            },
+            {
                 path: '/home/taskmanagement/manage',
                 name: 'TaskManagePage',
                 component: () =>
@@ -180,13 +186,13 @@ const routes = [{
             {
                 path: 'home/course/onlinetask',
                 name: 'OnlineTask_InCoursePage',
-                component: () => 
+                component: () =>
                     import ("../components/Forms/OnlineExperimentForm_InCoursePage.vue")
             },
             {
                 path: 'home/course/complextask',
                 name: 'ComplexTask_InCoursePage',
-                component: () => 
+                component: () =>
                     import ("../components/Forms/ComplexExperimentPage_InCoursePage.vue")
             },
             {
