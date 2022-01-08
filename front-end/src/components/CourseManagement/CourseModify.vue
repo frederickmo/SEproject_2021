@@ -226,6 +226,15 @@
             style="color: rgb(40, 40, 40)"
             >点击添加学生</a-button
           >
+          <div style="height: 20px" />
+          <el-upload
+          :action="url"
+          :http-request="importExcel"
+          list-type="text"
+          :show-file-list="false"
+          >
+          <el-button size="small" type="primary">批量导入学生</el-button>
+          </el-upload>
         </div>
         <div style="height: 30px" />
       </div>
@@ -287,6 +296,7 @@
 </template>
 
 <script>
+import XLSX from "xlsx";
 export default {
   data() {
     return {
@@ -363,6 +373,57 @@ export default {
     });
   },
   methods: {
+    importExcel(content) {
+      const file = content.file;
+      // let file = file.files[0] // 使用传统的input方法需要加上这一步
+      const types = file.name.split(".")[1];
+      const fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(
+        (item) => item === types
+      );
+      if (!fileType) {
+        this.$message("格式错误！请重新选择");
+        return;
+      }
+      this.file2Xce(file).then((tabJson) => {
+        if (tabJson && tabJson.length > 0) {
+          this.xlsxJson = tabJson;
+          this.fileList = this.xlsxJson[0].sheet;
+
+          this.fileList.forEach((item, index, arr) => {
+            console.log(item, index, arr);
+            // if (item[n] === this.name) {
+            //   console.log(item[n]+"90")
+            //   this.dataForm = item['XXXX'] // 需要的值的表头
+            // }
+            //let n = '学号'
+            this.studentid = item["学号"];
+            this.handleOk1();
+          });
+        }
+      });
+    },
+    file2Xce(file) {
+      return new Promise(function (resolve, reject) {
+        console.log(reject);
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const data = e.target.result;
+          this.wb = XLSX.read(data, {
+            type: "binary",
+          });
+          const result = [];
+          this.wb.SheetNames.forEach((sheetName) => {
+            result.push({
+              sheetName: sheetName,
+              sheet: XLSX.utils.sheet_to_json(this.wb.Sheets[sheetName]),
+            });
+          });
+          resolve(result);
+        };
+        // reader.readAsBinaryString(file.raw)
+        reader.readAsBinaryString(file); // 传统input方法
+      });
+    },
     handleClick() {
       this.visible = true;
     },
@@ -436,7 +497,7 @@ export default {
         studentId: this.studentid,
         courseId: this.courseId,
       };
-      // console.log(submitForm);
+      console.log(submitForm);
       fetch(this.$URL + "/takes/add", {
         method: "POST",
         headers: {
@@ -448,7 +509,7 @@ export default {
         // console.log(response)
         let result = response.json();
         result.then((res) => {
-          // console.log(res);
+          console.log(res);
           if (res.code == 200) {
             this.$notification.success("添加成功！");
 
@@ -460,15 +521,17 @@ export default {
                 headers: { satoken: localStorage.getItem("token") },
               }
             ).then((response) => {
-              // console.log(response);
+              console.log(response);
               let result = response.json();
               result.then((res) => {
-                // console.log(res);
+                console.log(res);
                 this.student = res;
               });
             });
           } else {
-            this.$notification.error("输入学生id有误！");
+            //if(res.msg=="该学生已经选修该实验课程")
+            console.log(res.msg);
+            this.$notification.error(res.msg);
             //this.$router.go(-1)
           }
         });
