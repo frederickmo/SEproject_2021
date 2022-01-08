@@ -117,7 +117,9 @@
             list-type="text"
             :show-file-list="false"
           >
-            <a-button type="primary">导入用户</a-button>
+            <a-button type="primary" style="background: #496f8d"
+              >导入用户</a-button
+            >
           </el-upload>
         </div>
         <el-table
@@ -186,6 +188,7 @@
               >
               <a-button
                 status="danger"
+                type="primary"
                 style="margin-left: 10px"
                 @click="handleRemove(scope.row)"
                 >移除</a-button

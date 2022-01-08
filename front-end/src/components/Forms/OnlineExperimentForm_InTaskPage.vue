@@ -221,7 +221,7 @@ export default {
         },
         handleSubmitButton() {
             if (this.isOverdue()) {
-                this.$notification.error('该实验已逾期，无法提交。')
+                this.$message.error('该实验已逾期，无法提交。')
             }
             else if (this.isSubmitted) {
                 this.showModal = !this.showModal
@@ -270,8 +270,8 @@ export default {
                 let result = response.json()
                 result.then(res => {
                     // console.log(res)
-                    if (res.status == 200) {
-                        this.$notification.success('提交成功！')
+                    if (res.code == 200) {
+                        this.$message.success('提交成功！')
                         this.$router.go(-1)
                     }
                 })

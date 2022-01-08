@@ -449,7 +449,7 @@ export default {
         result.then((res) => {
           // console.log(res);
           if (res.code == 200) {
-            this.$notification.success("添加教师成功");
+            this.$message.success("添加教师成功");
             // console.log(this.teacher);
 
             fetch(
@@ -469,7 +469,7 @@ export default {
               });
             });
           } else {
-            this.$notification.error("教师id有误");
+            this.$message.error("教师id有误");
           }
           //this.manage=res.manager
         });
@@ -511,7 +511,7 @@ export default {
         result.then((res) => {
           console.log(res);
           if (res.code == 200) {
-            this.$notification.success("添加成功！");
+            this.$message.success("添加成功！");
 
             //this.$router.go(0)
             fetch(
@@ -531,7 +531,7 @@ export default {
           } else {
             //if(res.msg=="该学生已经选修该实验课程")
             console.log(res.msg);
-            this.$notification.error(res.msg);
+            this.$message.error(res.msg);
             //this.$router.go(-1)
           }
         });
@@ -577,7 +577,7 @@ export default {
         result.then((res) => {
           // console.log(res)
           if (res.code == 200) {
-            this.$notification.success("修改成功");
+            this.$message.success("修改成功");
             this.$router.go(-1);
           }
         });
@@ -607,7 +607,7 @@ export default {
         let result = response.json();
         result.then((res) => {
           if (res.code == 200) {
-            this.$notification.success("删除成功");
+            this.$message.success("删除成功");
             this.$router.go(-1);
           }
         });
@@ -646,8 +646,8 @@ export default {
         let result = response.json();
         result.then((res) => {
           // console.log(res)
-          if (res.status == 200) {
-            this.$notification.success("修改成功");
+          if (res.code == 200) {
+            this.$message.success("修改成功");
             this.$router.go(-1);
           }
         });
@@ -670,7 +670,7 @@ export default {
         let result = response.json();
         result.then((res) => {
           if (res.code == 200) {
-            this.$notification.success("退课成功");
+            this.$message.success("退课成功");
             this.$router.replace({ path: "/refresh" });
           }
         });
@@ -680,10 +680,10 @@ export default {
     DropmanageCourse(teacher) {
       // console.log(this.course_manage + " " + localStorage.getItem("userId"));
       if (localStorage.getItem("userId") != this.course_manage) {
-        this.$notification.success("您不是责任教师，无法执行该操作");
+        this.$message.success("您不是责任教师，无法执行该操作");
       } else {
         if (teacher.id == this.id) {
-          this.$notification.success("无法取消责任教师");
+          this.$message.success("无法取消责任教师");
           //this.$router.go(-1)
         } else {
           // console.log(this.courseId, teacher.id);
@@ -702,7 +702,7 @@ export default {
             let result = response.json();
             result.then((res) => {
               if (res.code == 200) {
-                this.$notification.success("取消教师授课成功");
+                this.$message.success("取消教师授课成功");
                 this.$router.replace({ path: "/refresh" });
               }
             });

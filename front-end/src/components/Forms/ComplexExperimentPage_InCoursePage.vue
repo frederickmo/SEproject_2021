@@ -165,10 +165,10 @@ export default {
             this.$refs.upload.submit()
         },
         handleOnSuccess() {
-            this.$notification.success("上传成功")
+            this.$message.success("上传成功")
         },
         handleOnError() {
-            this.$notification.error("上传失败")
+            this.$message.error("上传失败")
         },
         // handleBeforeUpload() {
         //     if (this.isOverdue()) {
@@ -178,7 +178,7 @@ export default {
         // }
         handleUploadFileButton() {
             if (this.isSubmitted) {
-                this.$notification.warning("该项目已提交，此次提交将会覆盖之前的内容")
+                this.$message.warning("该项目已提交，此次提交将会覆盖之前的内容")
             }
         }
     }

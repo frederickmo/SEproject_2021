@@ -177,10 +177,10 @@ export default {
             }
         },
         handleOnSuccess() {
-        this.$notification.success("上传成功")
+        this.$message.success("上传成功")
             },
         handleOnError() {
-        this.$notification.error("上传失败")
+        this.$message.error("上传失败")
         },
         submitUpload() {
             this.$refs.upload.submit()

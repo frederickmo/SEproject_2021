@@ -251,10 +251,10 @@ export default {
             const isLt2M = file.size / 1024 / 1024 < 2
 
             if (!isIMAGE) {
-                this.$notification.error('请上传jpg或png格式的图片')
+                this.$message.error('请上传jpg或png格式的图片')
             }
             if (!isLt2M) {
-                this.$$notification.error('图片大小请小于2M')
+                this.$$message.error('图片大小请小于2M')
             }
             return isIMAGE && isLt2M
         },

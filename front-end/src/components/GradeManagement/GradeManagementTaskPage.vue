@@ -241,7 +241,7 @@ export default {
         result.then(res => {
           console.log(res)
           if (res.code == 200) {
-            this.$notification.success("成绩上传/更新成功")
+            this.$message.success("成绩上传/更新成功")
             /**
              * 以下replace语句是用来跳转到一个空白页面{name: 'Refresh'}实现当前界面自动重新加载的效果
              * 
@@ -250,7 +250,7 @@ export default {
             // this.$router.replace({name: 'Refresh'})
             this.$router.replace({path: '/refresh'})
           } else {
-            this.$notification.error("成绩上传失败")
+            this.$message.error("成绩上传失败")
           }
         })
       })

@@ -149,8 +149,8 @@ export default {
       console.log(response)
       let result = response.json()
       result.then(res => {
-        if (res.status == 200) {
-          this.$notification.success('删除成功')
+        if (res.code == 200) {
+          this.$message.success('删除成功')
         }
         
         

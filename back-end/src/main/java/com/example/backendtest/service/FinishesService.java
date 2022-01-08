@@ -115,6 +115,10 @@ public class FinishesService {
         String location = fileStorageService.getFileStorageLocation()
                 + "/taskUpload/" + taskId + "/" + studentId;
 
+        log.info("location:" + location);
+        log.info("taskId: " + taskId);
+        log.info("studentid: " + studentId);
+
         String fileName = taskId + "_" + studentId + ".json";
 
         File file = new File(location + "/" + fileName);
