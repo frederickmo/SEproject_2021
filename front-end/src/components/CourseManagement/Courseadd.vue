@@ -46,7 +46,7 @@
             <div style="width: 20%">
                 <a-year-picker v-model="this.year" style="width: 200px;" />
             </div>
-            <div style="width: 18%; font-weight: bold; text-align: center">学年：</div>
+            <div style="width: 18%; font-weight: bold; text-align: center">学期：</div>
             <div style="width: 30%">
                 <a-input v-model="this.semester"  />
             </div>

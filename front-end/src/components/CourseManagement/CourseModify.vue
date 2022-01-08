@@ -64,7 +64,7 @@
             <a-input v-model="this.year" readonly />
           </div>
           <div style="width: 18%; font-weight: bold; text-align: center">
-            学年：
+            学期：
           </div>
           <div style="width: 30%">
             <a-input v-model="this.semester" readonly />
@@ -108,7 +108,7 @@
             <a-input v-model="this.year" />
           </div>
           <div style="width: 18%; font-weight: bold; text-align: center">
-            学年：
+            学期：
           </div>
           <div style="width: 30%">
             <a-input v-model="this.semester" />
