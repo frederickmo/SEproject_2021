@@ -23,7 +23,7 @@
       </div>
       <div style="display: flex; line-height: 200%; margin-top: 10px">
         <div style="width: 18%; font-weight: bold; text-align: center">
-          课程Id：
+          实验项目编号：
         </div>
         <div style="width: 20%">
           <a-input v-model="this.Id" />
@@ -34,7 +34,6 @@
         <div style="width: 20%">
           <a-date-picker v-model="this.deadline" style="width: 200px" />
         </div>
-        
       </div>
       <div style="display: flex; line-height: 200%; margin-top: 10px">
         <div style="width: 18%; font-weight: bold; text-align: center">
@@ -76,17 +75,17 @@ export default {
   },
   methods: {
     addtask() {
-        console.log("123")
+      console.log("123");
       let submitForm = {
         id: this.Id,
-        courseId:this.courseId,
+        courseId: this.courseId,
         name: this.Name,
         type: this.type,
         deadline: this.deadline,
         description: this.Description,
       };
-      console.log(submitForm)
-    //   console.log(submitForm);
+      console.log(submitForm);
+      //   console.log(submitForm);
       fetch(this.$URL + "/task/add", {
         method: "POST",
         headers: {
@@ -98,7 +97,7 @@ export default {
         // console.log(response);
         let result = response.json();
         result.then((res) => {
-           console.log(res)
+          console.log(res);
           if (res.code == 200) {
             this.$notification.success("添加成功");
             this.$router.go(-1);
@@ -120,14 +119,13 @@ export default {
             //     this.manage=res.manager
             //   });
             // });
-          }
-          else{
-             console.log(res)
-             // this.$message.error();
+          } else {
+            console.log(res);
+            // this.$message.error();
           }
         });
       });
-    //   console.log(this.courseId + " " + localStorage.getItem("userId"));
+      //   console.log(this.courseId + " " + localStorage.getItem("userId"));
     },
   },
 };

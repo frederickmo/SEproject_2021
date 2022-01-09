@@ -6,9 +6,7 @@
       <va-breadcrumbs-item label="实验项目信息" disabled />
     </va-breadcrumbs>
   </div>
-  <a-modal>
-    
-  </a-modal>
+  <a-modal> </a-modal>
   <va-card>
     <a-button
       style="position: absolute; right: 30px; top: 15px"
@@ -77,8 +75,12 @@
         <a-button v-show="modifyAnnouncementStatus" @click="handleOk3"
           >确认提交</a-button
         >
-        <div style="height:20px"/>
-        <a-button v-show="modifyAnnouncementStatus" status="danger" @click="deletetask" style="background-color: rgb(0,0,0) text-align:center"
+        <div style="height: 20px" />
+        <a-button
+          v-show="modifyAnnouncementStatus"
+          status="danger"
+          @click="deletetask"
+          style="background-color: rgb(0,0,0) text-align:center"
           >删除项目</a-button
         >
       </a-modal>
@@ -168,17 +170,11 @@
                 />
               </template>
               <template #default="scope">
-                <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleShowtaskDetail(scope.row)"
-                  >查看</el-button
+                <a-button @click="handleShowtaskDetail(scope.row)" size="small"
+                  >查看</a-button
                 >
-                <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleShowtaskDetail1(scope.row)"
-                  >上传实验说明文档</el-button
+                <a-button @click="handleShowtaskDetail1(scope.row)" size="small"
+                  >上传实验说明文档</a-button
                 >
               </template>
             </el-table-column>
@@ -210,17 +206,11 @@
                 />
               </template>
               <template #default="scope">
-                <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleShowtaskDetail(scope.row)"
-                  >查看</el-button
+                <a-button size="small" @click="handleShowtaskDetail(scope.row)"
+                  >查看</a-button
                 >
-                <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleShowtaskDetail1(scope.row)"
-                  >上传实验说明文档</el-button
+                <a-button size="small" @click="handleShowtaskDetail1(scope.row)"
+                  >上传实验说明文档</a-button
                 >
               </template>
             </el-table-column>
@@ -237,7 +227,7 @@
 export default {
   data() {
     return {
-      identity:'',
+      identity: "",
       isSubmitted: false,
       search: "",
       search1: "",
@@ -319,7 +309,7 @@ export default {
       // console.log(response)
       let result = response.json();
       result.then((res) => {
-         console.log(res)
+        console.log(res);
         this.simpleTasks = res;
         for (var i in this.simpleTasks) {
           let now = new Date(new Date().toLocaleDateString());
@@ -370,27 +360,24 @@ export default {
     });
   },
   methods: {
-    deletetask()
-    {
-       fetch(this.$URL + "/task/remove?taskId=" + this.displayAnnouncement.id, {
+    deletetask() {
+      fetch(this.$URL + "/task/remove?taskId=" + this.displayAnnouncement.id, {
         method: "DELETE",
         headers: { satoken: localStorage.getItem("token") },
-        }).then((response) => {
-          // console.log(response)
-          let result = response.json();
-          result.then((res) => {
-            console.log(res);
-            this.$router.go(-1);
-            this.$notification.success("删除成功");
-            
-          });
+      }).then((response) => {
+        // console.log(response)
+        let result = response.json();
+        result.then((res) => {
+          console.log(res);
+          this.$router.go(-1);
+          this.$notification.success("删除成功");
         });
+      });
     },
-    addtask()
-    {
-        this.$router.push({
+    addtask() {
+      this.$router.push({
         name: "TaskAdd",
-        });
+      });
     },
     headers() {
       return {
