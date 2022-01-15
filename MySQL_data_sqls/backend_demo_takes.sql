@@ -1,9 +1,0 @@
-INSERT INTO backend.takes (student_id, course_id) VALUES (1852461, 101);
-INSERT INTO backend.takes (student_id, course_id) VALUES (1951725, 101);
-INSERT INTO backend.takes (student_id, course_id) VALUES (1852461, 102);
-INSERT INTO backend.takes (student_id, course_id) VALUES (1951725, 102);
-INSERT INTO backend.takes (student_id, course_id) VALUES (2051001, 102);
-INSERT INTO backend.takes (student_id, course_id) VALUES (2051008, 102);
-INSERT INTO backend.takes (student_id, course_id) VALUES (1852461, 103);
-INSERT INTO backend.takes (student_id, course_id) VALUES (1951725, 103);
-INSERT INTO backend.takes (student_id, course_id) VALUES (1852461, 208);

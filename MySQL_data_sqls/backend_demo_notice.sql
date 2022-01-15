@@ -1,4 +1,0 @@
-INSERT INTO backend.notice (id, posted_id, topic, content, type, updated_time) VALUES (1, 101, '系统启用通知', '本系统今天起正式开放', 0, '2021-12-16 16:58:43');
-INSERT INTO backend.notice (id, posted_id, topic, content, type, updated_time) VALUES (24, 101, '测试通知1', '测试通知', 0, '2021-12-16 17:39:23');
-INSERT INTO backend.notice (id, posted_id, topic, content, type, updated_time) VALUES (25, 101, '测试content字段到底可以有多长的通知', '测试通知超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长还能再长一点吗？我想知道这里到底可以有多长，不知道设置这个字段的时候有没有设置长度限制，如果设置了的话就有点麻烦了，就是这段文字需要单独存入一个文件里，如果没有设置的话就好了，这样直接查询这个字段就可以了。', 0, '2021-12-16 17:39:25');
-INSERT INTO backend.notice (id, posted_id, topic, content, type, updated_time) VALUES (26, 101, '测试通知3', '测试通知', 0, '2021-12-16 17:39:28');
