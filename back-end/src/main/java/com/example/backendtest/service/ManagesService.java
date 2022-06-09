@@ -25,7 +25,7 @@ import java.util.Optional;
  */
 public class ManagesService {
 
-    private ManagesRepository managesRepository;
+    private final ManagesRepository managesRepository;
 
     public List<ManagesEntity> getAllByTeacherId(Integer teacherId) {
         Optional<List<ManagesEntity>> managesOptional = managesRepository.findAllByTeacherId(teacherId);

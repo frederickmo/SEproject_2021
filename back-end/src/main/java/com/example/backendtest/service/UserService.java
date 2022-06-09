@@ -30,10 +30,10 @@ import java.util.Optional;
 @Slf4j
 public class UserService {
 
-    private UserRepository userRepository;
-    private VerificationCodeRepository verificationCodeRepository;
+    private final UserRepository userRepository;
+    private final VerificationCodeRepository verificationCodeRepository;
 
-    private SignRepository signRepository;
+    private final SignRepository signRepository;
     private VerifyEmailUtil verifyEmailUtil;
 
     public JSONObject add(UserEntity user) {
