@@ -6,8 +6,8 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://119.3.77.66:3306/backend
-    username: backend_user
+    url: jdbc:mysql://47.113.222.67:3306/backend
+    username: universal
     password: 12345
 
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -82,9 +82,10 @@ file:
 
 
 #  upload-dir: /Users/dengruotao/Desktop/SEproject_2021/back-end/src/main/resources/static
-  upload-dir: /Users/frederickmo/documents/Github/SEproject_2021/back-end/src/main/resources/static
+#  upload-dir: /Users/frederickmo/documents/Github/SEproject_2021/back-end/src/main/resources/static
 #  upload-dir:/Users/86133/Documents/GitHub/SEproject_2021/back-end/src/main/resources/static
 #  upload-dir: /home/user/backend
+  upload-dir: /resources
 
 # Sa-Token Configuration
 sa-token:
